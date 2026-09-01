@@ -15,7 +15,8 @@ if (token) {
     bot = new Bot(token);
 
     bot.command('start', async (ctx) => {
-      const keyboard = new InlineKeyboard().webApp('🌸 Otwórz kwiaciarnię', webAppUrl);
+      const liveUrl = `${webAppUrl}?v=${Date.now()}`;
+      const keyboard = new InlineKeyboard().webApp('🌸 Otwórz kwiaciarnię', liveUrl);
       
       await ctx.reply(
         `🌸 **Witaj w Flora Boutique!**\n\n` +
