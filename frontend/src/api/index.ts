@@ -459,7 +459,12 @@ export const api = {
     customer_name: string;
     customer_username?: string;
     phone?: string;
+    address?: string;
     comment?: string;
+    delivery_date?: string;
+    delivery_time?: string;
+    is_surprise?: boolean;
+    need_call_recipient?: boolean;
     items: { id: number; title: string; price: number; quantity: number; image_url?: string }[];
     total_price: number;
   }): Promise<Order> {
@@ -482,7 +487,12 @@ export const api = {
       customer_name: payload.customer_name,
       customer_username: payload.customer_username || '',
       phone: payload.phone || '',
+      address: payload.address || '',
       comment: payload.comment || '',
+      delivery_date: payload.delivery_date || '',
+      delivery_time: payload.delivery_time || '',
+      is_surprise: !!payload.is_surprise,
+      need_call_recipient: !!payload.need_call_recipient,
       total_price: payload.total_price,
       status: 'pending',
       items: payload.items,

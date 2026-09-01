@@ -45,9 +45,14 @@ export interface Order {
   customer_name: string;
   customer_username?: string;
   phone?: string;
+  address?: string;
   comment?: string;
+  delivery_date?: string;
+  delivery_time?: string;
+  is_surprise?: boolean;
+  need_call_recipient?: boolean;
   total_price: number;
-  status: 'pending' | 'paid' | 'completed' | 'cancelled';
+  status: 'pending' | 'paid' | 'in_delivery' | 'completed' | 'cancelled';
   items?: OrderItem[];
   created_at: string;
 }
@@ -59,3 +64,5 @@ export interface TelegramUser {
   username?: string;
   language_code?: string;
 }
+
+export type UserRole = 'buyer' | 'admin' | 'courier';

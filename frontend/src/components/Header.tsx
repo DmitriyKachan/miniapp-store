@@ -1,9 +1,10 @@
 import React from 'react';
-import { ShoppingBag, ShieldCheck, User, Search, X, Globe, Sparkles } from 'lucide-react';
+import { ShoppingBag, ShieldCheck, User, Search, X, Globe, Sparkles, Truck } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../context/LanguageContext';
 import type { Language } from '../i18n/translations';
+import type { UserRole } from '../types';
 import { hapticImpact } from '../utils/telegram';
 
 interface HeaderProps {
@@ -14,20 +15,22 @@ interface HeaderProps {
 
 export const Header: React.FC<HeaderProps> = ({ onOpenCart, searchQuery, onSearchChange }) => {
   const { totalCount } = useCart();
-  const { mode, setMode, isAdmin, user } = useAuth();
+  const { mode, setMode, user } = useAuth();
   const { language, setLanguage, t } = useLanguage();
   const [showSearch, setShowSearch] = React.useState(false);
   const [showLangMenu, setShowLangMenu] = React.useState(false);
-
-  const toggleRole = () => {
-    hapticImpact('medium');
-    setMode(mode === 'buyer' ? 'admin' : 'buyer');
-  };
+  const [showRoleMenu, setShowRoleMenu] = React.useState(false);
 
   const selectLanguage = (lang: Language) => {
     hapticImpact('light');
     setLanguage(lang);
     setShowLangMenu(false);
+  };
+
+  const selectRole = (newRole: UserRole) => {
+    hapticImpact('medium');
+    setMode(newRole);
+    setShowRoleMenu(false);
   };
 
   const getLangFlag = (lang: Language) => {
@@ -37,6 +40,16 @@ export const Header: React.FC<HeaderProps> = ({ onOpenCart, searchQuery, onSearc
       default: return '🇷🇺 RU';
     }
   };
+
+  const getRoleLabel = (r: UserRole) => {
+    switch (r) {
+      case 'admin': return { label: 'Флорист 🌸', icon: ShieldCheck, color: 'text-rose-600 bg-rose-50 dark:bg-rose-950/50 border-rose-200' };
+      case 'courier': return { label: 'Курьер 🚗', icon: Truck, color: 'text-indigo-600 bg-indigo-50 dark:bg-indigo-950/50 border-indigo-200' };
+      default: return { label: 'Клиент 🛍', icon: User, color: 'text-gray-700 dark:text-gray-200 bg-gray-100 dark:bg-gray-800 border-gray-200' };
+    }
+  };
+
+  const currentRoleInfo = getRoleLabel(mode);
 
   return (
     <header className="sticky top-0 z-30 bg-white/90 dark:bg-[#18222d]/90 backdrop-blur-md border-b border-rose-100/60 dark:border-gray-800 transition-colors">
@@ -66,8 +79,9 @@ export const Header: React.FC<HeaderProps> = ({ onOpenCart, searchQuery, onSearc
               onClick={() => {
                 hapticImpact('light');
                 setShowLangMenu(!showLangMenu);
+                setShowRoleMenu(false);
               }}
-              className="flex items-center gap-1 px-2.5 py-1.5 rounded-full text-xs font-semibold bg-rose-50/70 dark:bg-gray-800 text-gray-700 dark:text-gray-200 hover:bg-rose-100 dark:hover:bg-gray-700 transition-all border border-rose-200/50 dark:border-gray-700/50"
+              className="flex items-center gap-1 px-2.5 py-1.5 rounded-full text-xs font-semibold bg-rose-50/70 dark:bg-gray-800 text-gray-700 dark:text-gray-200 hover:bg-rose-100 dark:hover:bg-gray-700 transition-all border border-rose-200/50 dark:border-gray-700/50 cursor-pointer"
             >
               <Globe className="w-3 h-3 text-rose-500" />
               <span>{getLangFlag(language)}</span>
@@ -83,7 +97,7 @@ export const Header: React.FC<HeaderProps> = ({ onOpenCart, searchQuery, onSearc
                   <button
                     key={item.key}
                     onClick={() => selectLanguage(item.key)}
-                    className={`w-full text-left px-3 py-1.5 text-xs font-medium flex items-center justify-between hover:bg-rose-50 dark:hover:bg-rose-900/40 transition-colors ${
+                    className={`w-full text-left px-3 py-1.5 text-xs font-medium flex items-center justify-between hover:bg-rose-50 dark:hover:bg-rose-900/40 transition-colors cursor-pointer ${
                       language === item.key
                         ? 'text-rose-600 dark:text-rose-400 font-bold'
                         : 'text-gray-700 dark:text-gray-300'
@@ -91,6 +105,47 @@ export const Header: React.FC<HeaderProps> = ({ onOpenCart, searchQuery, onSearc
                   >
                     <span>{item.label}</span>
                     {language === item.key && <span className="w-1.5 h-1.5 rounded-full bg-rose-500" />}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Role Switcher Pill (Buyer / Admin / Courier) */}
+          <div className="relative">
+            <button
+              onClick={() => {
+                hapticImpact('light');
+                setShowRoleMenu(!showRoleMenu);
+                setShowLangMenu(false);
+              }}
+              className={`flex items-center gap-1 px-2.5 py-1.5 rounded-full text-xs font-bold transition-all border cursor-pointer ${currentRoleInfo.color}`}
+            >
+              <currentRoleInfo.icon className="w-3.5 h-3.5" />
+              <span>{currentRoleInfo.label}</span>
+            </button>
+
+            {showRoleMenu && (
+              <div className="absolute right-0 mt-1 w-36 bg-white dark:bg-[#1f2c3b] rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700 py-1 z-50 animate-in fade-in zoom-in-95 space-y-0.5">
+                {[
+                  { key: 'buyer' as UserRole, label: 'Клиент 🛍', icon: User },
+                  { key: 'admin' as UserRole, label: 'Флорист 🌸', icon: ShieldCheck },
+                  { key: 'courier' as UserRole, label: 'Курьер 🚗', icon: Truck },
+                ].map((item) => (
+                  <button
+                    key={item.key}
+                    onClick={() => selectRole(item.key)}
+                    className={`w-full text-left px-3 py-2 text-xs font-semibold flex items-center justify-between hover:bg-rose-50 dark:hover:bg-gray-800 transition-colors cursor-pointer ${
+                      mode === item.key
+                        ? 'text-rose-600 dark:text-rose-400 font-bold bg-rose-50/50 dark:bg-rose-950/30'
+                        : 'text-gray-700 dark:text-gray-300'
+                    }`}
+                  >
+                    <div className="flex items-center gap-1.5">
+                      <item.icon className="w-3.5 h-3.5" />
+                      <span>{item.label}</span>
+                    </div>
+                    {mode === item.key && <span className="w-1.5 h-1.5 rounded-full bg-rose-500" />}
                   </button>
                 ))}
               </div>
@@ -106,34 +161,9 @@ export const Header: React.FC<HeaderProps> = ({ onOpenCart, searchQuery, onSearc
                 if (showSearch) onSearchChange('');
               }}
               aria-label="Search"
-              className="w-8 h-8 rounded-full flex items-center justify-center text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+              className="w-8 h-8 rounded-full flex items-center justify-center text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors cursor-pointer"
             >
               {showSearch ? <X className="w-4 h-4" /> : <Search className="w-4 h-4" />}
-            </button>
-          )}
-
-          {/* Admin / Buyer Mode Toggle Button */}
-          {isAdmin && (
-            <button
-              onClick={toggleRole}
-              title={mode === 'buyer' ? 'Admin Panel' : 'Buyer View'}
-              className={`flex items-center gap-1 px-2.5 py-1.5 rounded-full text-xs font-medium transition-all ${
-                mode === 'admin'
-                  ? 'bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/30 font-bold'
-                  : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
-              }`}
-            >
-              {mode === 'admin' ? (
-                <>
-                  <ShieldCheck className="w-3.5 h-3.5 text-amber-500" />
-                  <span>{t.roleAdmin.split('/')[0]}</span>
-                </>
-              ) : (
-                <>
-                  <User className="w-3.5 h-3.5" />
-                  <span>{t.roleBuyer}</span>
-                </>
-              )}
             </button>
           )}
 
@@ -144,7 +174,7 @@ export const Header: React.FC<HeaderProps> = ({ onOpenCart, searchQuery, onSearc
                 hapticImpact('medium');
                 onOpenCart();
               }}
-              className="relative w-8 h-8 rounded-full bg-rose-600 text-white flex items-center justify-center shadow-sm shadow-rose-500/25 active:scale-95 transition-transform"
+              className="relative w-8 h-8 rounded-full bg-rose-600 text-white flex items-center justify-center shadow-sm shadow-rose-500/25 active:scale-95 transition-transform cursor-pointer"
             >
               <ShoppingBag className="w-4 h-4" />
               {totalCount > 0 && (
@@ -173,7 +203,7 @@ export const Header: React.FC<HeaderProps> = ({ onOpenCart, searchQuery, onSearc
             {searchQuery && (
               <button
                 onClick={() => onSearchChange('')}
-                className="absolute right-2.5 top-1/2 -translate-y-1/2 p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 cursor-pointer"
               >
                 <X className="w-3.5 h-3.5" />
               </button>

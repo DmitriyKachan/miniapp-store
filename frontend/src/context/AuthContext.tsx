@@ -1,12 +1,12 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import type { TelegramUser } from '../types';
+import type { TelegramUser, UserRole } from '../types';
 import { getTelegramUser, initTelegram } from '../utils/telegram';
 import { api } from '../api';
 
 interface AuthContextType {
   user: TelegramUser | null;
-  mode: 'buyer' | 'admin';
-  setMode: (mode: 'buyer' | 'admin') => void;
+  mode: UserRole;
+  setMode: (mode: UserRole) => void;
   isAdmin: boolean;
   adminIds: string[];
 }
@@ -15,9 +15,9 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<TelegramUser | null>(null);
-  const [mode, setMode] = useState<'buyer' | 'admin'>('buyer');
+  const [mode, setMode] = useState<UserRole>('buyer');
   const [adminIds, setAdminIds] = useState<string[]>([]);
-  const [isAdmin, setIsAdmin] = useState<boolean>(true); // Default to enabled for demo/testing flexibility
+  const [isAdmin, setIsAdmin] = useState<boolean>(true);
 
   useEffect(() => {
     initTelegram();

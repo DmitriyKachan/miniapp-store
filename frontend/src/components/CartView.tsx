@@ -5,7 +5,21 @@ import { useLanguage } from '../context/LanguageContext';
 import { api, UPSELL_ACCESSORIES } from '../api';
 import type { Order, Product } from '../types';
 import { getLocalizedProduct } from '../i18n/translations';
-import { Trash2, Plus, Minus, ArrowLeft, CreditCard, ShoppingBag, AlertCircle, Sparkles, Check } from 'lucide-react';
+import {
+  Trash2,
+  Plus,
+  Minus,
+  ArrowLeft,
+  CreditCard,
+  ShoppingBag,
+  AlertCircle,
+  Sparkles,
+  Check,
+  Calendar,
+  Clock,
+  PhoneCall,
+  EyeOff,
+} from 'lucide-react';
 import { hapticImpact, hapticNotification } from '../utils/telegram';
 
 interface CartViewProps {
@@ -13,10 +27,21 @@ interface CartViewProps {
   onOrderSuccess: (order: Order) => void;
 }
 
+// Generate 30-minute time intervals from 09:00 to 21:30
+const TIME_SLOTS = [
+  '09:00', '09:30', '10:00', '10:30', '11:00', '11:30',
+  '12:00', '12:30', '13:00', '13:30', '14:00', '14:30',
+  '15:00', '15:30', '16:00', '16:30', '17:00', '17:30',
+  '18:00', '18:30', '19:00', '19:30', '20:00', '20:30',
+  '21:00', '21:30',
+];
+
 export const CartView: React.FC<CartViewProps> = ({ onClose, onOrderSuccess }) => {
   const { cart, addToCart, updateQuantity, removeFromCart, clearCart, totalPrice, totalCount } = useCart();
   const { user } = useAuth();
   const { t, language, formatCurrency } = useLanguage();
+
+  const todayStr = new Date().toISOString().split('T')[0];
 
   const [customerName, setCustomerName] = useState(
     user ? `${user.first_name || ''} ${user.last_name || ''}`.trim() : ''
@@ -24,6 +49,13 @@ export const CartView: React.FC<CartViewProps> = ({ onClose, onOrderSuccess }) =
   const [phone, setPhone] = useState('');
   const [address, setAddress] = useState('');
   const [cardMessage, setCardMessage] = useState('');
+
+  // Delivery timing & Surprise states
+  const [deliveryDate, setDeliveryDate] = useState(todayStr);
+  const [deliveryTime, setDeliveryTime] = useState('14:00');
+  const [isSurprise, setIsSurprise] = useState(false);
+  const [needCallRecipient, setNeedCallRecipient] = useState(false);
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
 
@@ -59,8 +91,14 @@ export const CartView: React.FC<CartViewProps> = ({ onClose, onOrderSuccess }) =
         };
       });
 
-      // Combine address and card message
+      // Format comment with special badges
       let fullComment = address.trim();
+      if (needCallRecipient) {
+        fullComment += '\n📞 [Уточнить точный адрес у получателя по телефону]';
+      }
+      if (isSurprise) {
+        fullComment += '\n🤫 [СЮРПРИЗ: Не раскрывать имя заказчика до вручения]';
+      }
       if (cardMessage.trim()) {
         fullComment += `\n💌 Bilecik: "${cardMessage.trim()}"`;
       }
@@ -70,7 +108,12 @@ export const CartView: React.FC<CartViewProps> = ({ onClose, onOrderSuccess }) =
         customer_name: customerName.trim(),
         customer_username: user?.username || '',
         phone: phone.trim(),
+        address: address.trim(),
         comment: fullComment,
+        delivery_date: deliveryDate,
+        delivery_time: deliveryTime,
+        is_surprise: isSurprise,
+        need_call_recipient: needCallRecipient,
         items: itemsPayload,
         total_price: totalPrice,
       });
@@ -237,7 +280,9 @@ export const CartView: React.FC<CartViewProps> = ({ onClose, onOrderSuccess }) =
                           {localizedAcc.title}
                         </p>
                         <p className="text-[10px] font-extrabold text-rose-600 dark:text-rose-400">
-                          {localizedAcc.price === 0 ? (language === 'pl' ? 'Gratis' : (language === 'ua' ? 'Безкоштовно' : 'Бесплатно')) : formatCurrency(localizedAcc.price)}
+                          {localizedAcc.price === 0
+                            ? language === 'pl' ? 'Gratis' : language === 'ua' ? 'Безкоштовно' : 'Бесплатно'
+                            : formatCurrency(localizedAcc.price)}
                         </p>
                       </div>
 
@@ -262,6 +307,89 @@ export const CartView: React.FC<CartViewProps> = ({ onClose, onOrderSuccess }) =
                     </div>
                   );
                 })}
+              </div>
+            </div>
+
+            {/* Delivery Timing & Date Picker Card */}
+            <div className="bg-white dark:bg-[#18222d] rounded-2xl border border-gray-100 dark:border-gray-800 p-3.5 sm:p-4 space-y-3 shadow-2xs">
+              <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-400 flex items-center gap-1.5">
+                <Calendar className="w-3.5 h-3.5 text-rose-500" />
+                <span>{t.deliveryTimingTitle}</span>
+              </h3>
+
+              <div className="grid grid-cols-2 gap-2.5">
+                <div>
+                  <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    {t.deliveryDateLabel}
+                  </label>
+                  <input
+                    type="date"
+                    required
+                    min={todayStr}
+                    value={deliveryDate}
+                    onChange={(e) => setDeliveryDate(e.target.value)}
+                    className="w-full px-3 py-2.5 bg-gray-50 dark:bg-[#233142]/60 rounded-xl text-xs sm:text-sm text-gray-900 dark:text-white border border-transparent focus:border-rose-500 focus:outline-none transition-colors"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    {t.deliveryTimeLabel}
+                  </label>
+                  <div className="relative">
+                    <select
+                      value={deliveryTime}
+                      onChange={(e) => setDeliveryTime(e.target.value)}
+                      className="w-full px-3 py-2.5 bg-gray-50 dark:bg-[#233142]/60 rounded-xl text-xs sm:text-sm text-gray-900 dark:text-white border border-transparent focus:border-rose-500 focus:outline-none transition-colors appearance-none pr-8"
+                    >
+                      {TIME_SLOTS.map((slot) => (
+                        <option key={slot} value={slot}>
+                          {slot}
+                        </option>
+                      ))}
+                    </select>
+                    <Clock className="w-3.5 h-3.5 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400" />
+                  </div>
+                </div>
+              </div>
+
+              {/* Special options (Surprise & Call Recipient) */}
+              <div className="space-y-2 pt-1 border-t border-gray-100 dark:border-gray-800">
+                <label className="flex items-start gap-2.5 cursor-pointer select-none">
+                  <input
+                    type="checkbox"
+                    checked={isSurprise}
+                    onChange={(e) => setIsSurprise(e.target.checked)}
+                    className="mt-0.5 w-4 h-4 text-rose-600 rounded focus:ring-rose-500 cursor-pointer"
+                  />
+                  <div>
+                    <span className="text-xs font-bold text-gray-900 dark:text-white flex items-center gap-1">
+                      <EyeOff className="w-3.5 h-3.5 text-purple-500" />
+                      <span>{t.surpriseDeliveryTitle}</span>
+                    </span>
+                    <p className="text-[11px] text-gray-500 dark:text-gray-400">
+                      {t.surpriseDeliveryDesc}
+                    </p>
+                  </div>
+                </label>
+
+                <label className="flex items-start gap-2.5 cursor-pointer select-none">
+                  <input
+                    type="checkbox"
+                    checked={needCallRecipient}
+                    onChange={(e) => setNeedCallRecipient(e.target.checked)}
+                    className="mt-0.5 w-4 h-4 text-rose-600 rounded focus:ring-rose-500 cursor-pointer"
+                  />
+                  <div>
+                    <span className="text-xs font-bold text-gray-900 dark:text-white flex items-center gap-1">
+                      <PhoneCall className="w-3.5 h-3.5 text-emerald-500" />
+                      <span>{t.needCallRecipientTitle}</span>
+                    </span>
+                    <p className="text-[11px] text-gray-500 dark:text-gray-400">
+                      {t.needCallRecipientDesc}
+                    </p>
+                  </div>
+                </label>
               </div>
             </div>
 
@@ -299,18 +427,20 @@ export const CartView: React.FC<CartViewProps> = ({ onClose, onOrderSuccess }) =
                   />
                 </div>
 
-                <div>
-                  <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    {t.addressComment}
-                  </label>
-                  <textarea
-                    rows={2}
-                    placeholder={t.addressCommentPlaceholder}
-                    value={address}
-                    onChange={(e) => setAddress(e.target.value)}
-                    className="w-full px-3.5 py-2 bg-gray-50 dark:bg-[#233142]/60 rounded-xl text-xs sm:text-sm text-gray-900 dark:text-white border border-transparent focus:border-rose-500 focus:outline-none transition-colors placeholder:text-gray-400 resize-none"
-                  />
-                </div>
+                {!needCallRecipient && (
+                  <div>
+                    <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+                      {t.addressComment}
+                    </label>
+                    <textarea
+                      rows={2}
+                      placeholder={t.addressCommentPlaceholder}
+                      value={address}
+                      onChange={(e) => setAddress(e.target.value)}
+                      className="w-full px-3.5 py-2 bg-gray-50 dark:bg-[#233142]/60 rounded-xl text-xs sm:text-sm text-gray-900 dark:text-white border border-transparent focus:border-rose-500 focus:outline-none transition-colors placeholder:text-gray-400 resize-none"
+                    />
+                  </div>
+                )}
 
                 <div>
                   <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">

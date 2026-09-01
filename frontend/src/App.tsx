@@ -9,10 +9,12 @@ import { ProductDetailModal } from './components/ProductDetailModal';
 import { CartView } from './components/CartView';
 import { OrderSuccessModal } from './components/OrderSuccessModal';
 import { AdminDashboard } from './components/admin/AdminDashboard';
+import { CourierDashboard } from './components/courier/CourierDashboard';
+import { AIFloristModal } from './components/AIFloristModal';
 import type { Category, Product, Order } from './types';
 import { api } from './api';
 import { getLocalizedProduct } from './i18n/translations';
-import { ShoppingBag, ArrowRight, RefreshCw, AlertCircle } from 'lucide-react';
+import { ShoppingBag, ArrowRight, RefreshCw, AlertCircle, Sparkles } from 'lucide-react';
 import { hapticImpact, getTelegramWebApp } from './utils/telegram';
 
 const ShopContent: React.FC = () => {
@@ -29,6 +31,7 @@ const ShopContent: React.FC = () => {
 
   // Modals & Navigation state
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [isAIFloristOpen, setIsAIFloristOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [successfulOrder, setSuccessfulOrder] = useState<Order | null>(null);
 
@@ -95,15 +98,49 @@ const ShopContent: React.FC = () => {
         onSearchChange={setSearchQuery}
       />
 
-      {/* Mode View Switcher */}
+      {/* Mode View Switcher: Admin / Courier / Buyer */}
       {mode === 'admin' ? (
         <AdminDashboard
           categories={categories}
           products={products}
           onRefreshData={loadData}
         />
+      ) : mode === 'courier' ? (
+        <CourierDashboard />
       ) : (
         <main className="max-w-4xl mx-auto w-full px-3 sm:px-4 py-3 flex-1 flex flex-col space-y-4">
+          
+          {/* AI-Florist Assistant Banner */}
+          <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-rose-500 via-pink-500 to-rose-600 text-white p-4 sm:p-5 shadow-lg shadow-rose-500/20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+            <div className="space-y-1 z-10">
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white/20 backdrop-blur-xs text-[11px] font-bold">
+                <Sparkles className="w-3.5 h-3.5 text-yellow-200" />
+                <span>Smart Assistant</span>
+              </div>
+              <h2 className="text-sm sm:text-base font-extrabold leading-tight">
+                {t.aiFloristBannerTitle}
+              </h2>
+              <p className="text-[11px] sm:text-xs text-rose-100 max-w-sm">
+                {t.aiFloristBannerSubtitle}
+              </p>
+            </div>
+
+            <button
+              onClick={() => {
+                hapticImpact('medium');
+                setIsAIFloristOpen(true);
+              }}
+              className="z-10 px-4 py-2.5 rounded-2xl bg-white text-rose-600 hover:bg-rose-50 font-extrabold text-xs sm:text-sm shadow-md active:scale-95 transition-all flex items-center gap-1.5 shrink-0 cursor-pointer"
+            >
+              <span>{t.aiFloristOpenButton}</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </button>
+
+            {/* Decorative background blurs */}
+            <div className="absolute -right-6 -top-6 w-32 h-32 bg-white/10 rounded-full blur-2xl pointer-events-none" />
+            <div className="absolute right-20 -bottom-8 w-24 h-24 bg-pink-400/20 rounded-full blur-xl pointer-events-none" />
+          </div>
+
           {/* Categories Horizontal Scroll */}
           <CategoryFilter
             categories={categories}
@@ -207,6 +244,18 @@ const ShopContent: React.FC = () => {
         <ProductDetailModal
           product={selectedProduct}
           onClose={() => setSelectedProduct(null)}
+        />
+      )}
+
+      {/* AI-Florist Modal */}
+      {isAIFloristOpen && (
+        <AIFloristModal
+          products={products}
+          onClose={() => setIsAIFloristOpen(false)}
+          onOpenProduct={(p) => {
+            setIsAIFloristOpen(false);
+            setSelectedProduct(p);
+          }}
         />
       )}
 

@@ -42,11 +42,13 @@ export interface TranslationDictionary {
   orderStatus: string;
   orderPending: string;
   orderPaid: string;
+  orderInDelivery: string;
   orderCompleted: string;
   orderCancelled: string;
   backToShopping: string;
   roleBuyer: string;
   roleAdmin: string;
+  roleCourier: string;
   adminProducts: string;
   adminCategories: string;
   adminOrders: string;
@@ -93,6 +95,63 @@ export interface TranslationDictionary {
   addToOrder: string;
   addedToOrder: string;
   publishedSuccess: string;
+
+  // Delivery Date & Time & Surprise options
+  deliveryTimingTitle: string;
+  deliveryDateLabel: string;
+  deliveryTimeLabel: string;
+  surpriseDeliveryTitle: string;
+  surpriseDeliveryDesc: string;
+  needCallRecipientTitle: string;
+  needCallRecipientDesc: string;
+
+  // AI Florist
+  aiFloristBannerTitle: string;
+  aiFloristBannerSubtitle: string;
+  aiFloristOpenButton: string;
+  aiFloristModalTitle: string;
+  aiFloristStep1: string;
+  aiFloristStep2: string;
+  aiFloristStep3: string;
+  aiFloristResultsTitle: string;
+  aiFloristResultsSubtitle: string;
+  aiFloristBack: string;
+  aiFloristNext: string;
+  aiFloristClose: string;
+  aiFloristRestart: string;
+
+  // Occasions
+  occLove: string;
+  occBirthday: string;
+  occMom: string;
+  occWedding: string;
+  occSorry: string;
+  occJustBecause: string;
+
+  // Budgets
+  budgetUnder200: string;
+  budget200To350: string;
+  budget350To500: string;
+  budgetVip: string;
+
+  // Palettes
+  palettePastel: string;
+  paletteRed: string;
+  paletteYellow: string;
+  paletteMixed: string;
+
+  // Courier Dashboard
+  courierDashboardTitle: string;
+  courierActiveDeliveries: string;
+  courierCompletedDeliveries: string;
+  courierNoDeliveries: string;
+  courierStartDelivery: string;
+  courierMarkDelivered: string;
+  courierOpenMap: string;
+  courierCallRecipient: string;
+  courierSurpriseBadge: string;
+  courierCallNeededBadge: string;
+  courierDeliveryTime: string;
 }
 
 export const translations: Record<Language, TranslationDictionary> = {
@@ -136,11 +195,13 @@ export const translations: Record<Language, TranslationDictionary> = {
     orderStatus: 'Статус:',
     orderPending: 'Принят флористом / Ожидает',
     orderPaid: 'Оплачен',
-    orderCompleted: 'Доставлен получателю',
+    orderInDelivery: 'Курьер в пути 🚗',
+    orderCompleted: 'Доставлен получателю 🎉',
     orderCancelled: 'Отменен',
     backToShopping: 'Вернуться в бутик',
     roleBuyer: 'Клиент',
     roleAdmin: 'Флорист / Админ',
+    roleCourier: 'Курьер 🚗',
     adminProducts: 'Букеты',
     adminCategories: 'Категории',
     adminOrders: 'Заказы',
@@ -187,6 +248,57 @@ export const translations: Record<Language, TranslationDictionary> = {
     addToOrder: '+ Добавить',
     addedToOrder: '✓ В заказе',
     publishedSuccess: 'Букет успешно опубликован в канал с кнопкой заказа!',
+
+    deliveryTimingTitle: '📅 Дата и время доставки цветов',
+    deliveryDateLabel: 'Дата доставки',
+    deliveryTimeLabel: 'Точное время вручения (с шагом 30 мин)',
+    surpriseDeliveryTitle: '🤫 Доставка-сюрприз (Анонимно)',
+    surpriseDeliveryDesc: 'Не называть имя заказчика до момента вручения букета',
+    needCallRecipientTitle: '📞 Уточнить точный адрес у получателя',
+    needCallRecipientDesc: 'Курьер вежливо свяжется с получателем и согласует адрес доставки',
+
+    aiFloristBannerTitle: '🌸 AI-Флорист: Подобрать букет за 15 секунд',
+    aiFloristBannerSubtitle: 'Ответьте на 3 вопроса и получите идеальную подборку под ваш бюджет и повод',
+    aiFloristOpenButton: 'Подобрать букет ✨',
+    aiFloristModalTitle: 'AI-Флорист • Подбор букета',
+    aiFloristStep1: '1. По какому поводу дарите цветы?',
+    aiFloristStep2: '2. Комфортный бюджет:',
+    aiFloristStep3: '3. Предпочитаемая цветовая гамма:',
+    aiFloristResultsTitle: '✨ Идеальные букеты для вас:',
+    aiFloristResultsSubtitle: 'Мы подобрали лучшие авторские композиции по вашим предпочтениям',
+    aiFloristBack: 'Назад',
+    aiFloristNext: 'Далее →',
+    aiFloristClose: 'Закрыть',
+    aiFloristRestart: 'Пройти заново ↺',
+
+    occLove: '❤️ Романтика / Любовь',
+    occBirthday: '🎂 День рождения',
+    occMom: '👩 Любимой Маме / Бабушке',
+    occWedding: '💍 Свадьба / Годовщина',
+    occSorry: '🥺 Извинения / Примирение',
+    occJustBecause: '✨ Просто так / Без повода',
+
+    budgetUnder200: 'До 200 zł (Уютный)',
+    budget200To350: '200 – 350 zł (Популярный)',
+    budget350To500: '350 – 500 zł (Пышный)',
+    budgetVip: 'От 500 zł (Royal VIP)',
+
+    palettePastel: '🌸 Нежная пастельная (розовый, крем)',
+    paletteRed: '🌹 Страстная красная / бордо',
+    paletteYellow: '🌻 Солнечная желтая / теплая',
+    paletteMixed: '🎨 Яркий разноцветный микс',
+
+    courierDashboardTitle: 'Кабинет курьера • Доставки',
+    courierActiveDeliveries: 'К доставке',
+    courierCompletedDeliveries: 'Доставлено',
+    courierNoDeliveries: 'На данный момент активных доставок нет 🌸',
+    courierStartDelivery: '🚗 Выехал к получателю',
+    courierMarkDelivered: '✅ Букет вручен!',
+    courierOpenMap: 'Навигатор (Google Maps)',
+    courierCallRecipient: 'Позвонить',
+    courierSurpriseBadge: '🤫 СЮРПРИЗ (Анонимно)',
+    courierCallNeededBadge: '📞 Уточнить адрес',
+    courierDeliveryTime: 'Время доставки:',
   },
   pl: {
     appName: 'Flora Boutique',
@@ -228,11 +340,13 @@ export const translations: Record<Language, TranslationDictionary> = {
     orderStatus: 'Status:',
     orderPending: 'Przyjęte przez florystę / Nowe',
     orderPaid: 'Opłacone',
-    orderCompleted: 'Dostarczone do odbiorcy',
+    orderInDelivery: 'Kurier w drodze 🚗',
+    orderCompleted: 'Dostarczone do odbiorcy 🎉',
     orderCancelled: 'Anulowane',
     backToShopping: 'Wróć do kwiaciarni',
     roleBuyer: 'Klient',
     roleAdmin: 'Florysta / Admin',
+    roleCourier: 'Kurier 🚗',
     adminProducts: 'Bukiety',
     adminCategories: 'Kategorie',
     adminOrders: 'Zamówienia',
@@ -279,6 +393,57 @@ export const translations: Record<Language, TranslationDictionary> = {
     addToOrder: '+ Dodaj',
     addedToOrder: '✓ W zamówieniu',
     publishedSuccess: 'Bukiet został pomyślnie opublikowany w kanale z przyciskiem zakupu!',
+
+    deliveryTimingTitle: '📅 Data i godzina doręczenia kwiatów',
+    deliveryDateLabel: 'Data doręczenia',
+    deliveryTimeLabel: 'Dokładna godzina dostawy (co 30 min)',
+    surpriseDeliveryTitle: '🤫 Dostawa-niespodzianka (Anonimowo)',
+    surpriseDeliveryDesc: 'Nie podawać imienia zamawiającego do momentu wręczenia',
+    needCallRecipientTitle: '📞 Ustal adres u odbiorcy',
+    needCallRecipientDesc: 'Kurier skontaktuje się z odbiorcą i ustali dogodny adres doręczenia',
+
+    aiFloristBannerTitle: '🌸 AI-Florysta: Dobierz bukiet w 15 sekund',
+    aiFloristBannerSubtitle: 'Odpowiedz na 3 pytania i otrzymaj idealny bukiet dopasowany do okazji i budżetu',
+    aiFloristOpenButton: 'Dobierz bukiet ✨',
+    aiFloristModalTitle: 'AI-Florysta • Dobór bukietu',
+    aiFloristStep1: '1. Na jaką okazję szukasz kwiatów?',
+    aiFloristStep2: '2. Twój budżet:',
+    aiFloristStep3: '3. Preferowana kolorystyka:',
+    aiFloristResultsTitle: '✨ Idealne bukiety dla Ciebie:',
+    aiFloristResultsSubtitle: 'Wybraliśmy najpiękniejsze kompozycje dopasowane do Twoich potrzeb',
+    aiFloristBack: 'Wstecz',
+    aiFloristNext: 'Dalej →',
+    aiFloristClose: 'Zamknij',
+    aiFloristRestart: 'Zacznij od nowa ↺',
+
+    occLove: '❤️ Romantyczna / Miłość',
+    occBirthday: '🎂 Urodziny / Imieniny',
+    occMom: '👩 Dla Mamy / Babci',
+    occWedding: '💍 Ślub / Rocznica',
+    occSorry: '🥺 Przeprosiny / Zgoda',
+    occJustBecause: '✨ Bez okazji / Niespodzianka',
+
+    budgetUnder200: 'Do 200 zł (Kameralny)',
+    budget200To350: '200 – 350 zł (Popularny)',
+    budget350To500: '350 – 500 zł (Okazały)',
+    budgetVip: 'Od 500 zł (Royal VIP)',
+
+    palettePastel: '🌸 Delikatna pastelowa (róż, krem)',
+    paletteRed: '🌹 Namiętna czerwona / bordo',
+    paletteYellow: '🌻 Słoneczna żółta / ciepła',
+    paletteMixed: '🎨 Kolorowy miks florystyczny',
+
+    courierDashboardTitle: 'Panel Kuriera • Dostawy',
+    courierActiveDeliveries: 'Do doręczenia',
+    courierCompletedDeliveries: 'Doręczone',
+    courierNoDeliveries: 'Brak aktywnych dostaw w tym momencie 🌸',
+    courierStartDelivery: '🚗 W drodze do odbiorcy',
+    courierMarkDelivered: '✅ Bukiet doręczony!',
+    courierOpenMap: 'Nawigacja (Google Maps)',
+    courierCallRecipient: 'Zadzwoń',
+    courierSurpriseBadge: '🤫 NIESPODZIANKA (Anonim)',
+    courierCallNeededBadge: '📞 Ustal adres',
+    courierDeliveryTime: 'Godzina dostawy:',
   },
   ua: {
     appName: 'Flora Boutique',
@@ -316,15 +481,17 @@ export const translations: Record<Language, TranslationDictionary> = {
     proceedToCheckout: 'Оформити та оплатити замовлення',
     orderSuccessTitle: 'Замовлення квітів успішно оформлено!',
     orderSuccessDesc: 'Наші флористи вже почали складати ваш свіжий букет. Ми доставимо його дбайливо та вчасно!',
-    orderNumber: 'Замовлення',
+    orderNumber: 'Заказ',
     orderStatus: 'Статус:',
     orderPending: 'Прийнято флористом / Очікує',
     orderPaid: 'Оплачено',
-    orderCompleted: 'Доставлено одержувачу',
+    orderInDelivery: "Кур'єр у дорозі 🚗",
+    orderCompleted: 'Доставлено одержувачу 🎉',
     orderCancelled: 'Скасовано',
     backToShopping: 'Повернутися до бутику',
     roleBuyer: 'Клієнт',
     roleAdmin: 'Флорист / Адмін',
+    roleCourier: "Кур'єр 🚗",
     adminProducts: 'Букети',
     adminCategories: 'Категорії',
     adminOrders: 'Закази',
@@ -371,6 +538,57 @@ export const translations: Record<Language, TranslationDictionary> = {
     addToOrder: '+ Додати',
     addedToOrder: '✓ У замовленні',
     publishedSuccess: 'Букет успішно опубліковано в канал із кнопкою замовлення!',
+
+    deliveryTimingTitle: '📅 Дата та час доставки квітів',
+    deliveryDateLabel: 'Дата доставки',
+    deliveryTimeLabel: 'Точний час вручення (з кроком 30 хв)',
+    surpriseDeliveryTitle: '🤫 Доставка-сюрприз (Анонімно)',
+    surpriseDeliveryDesc: 'Не називати ім’я замовника до моменту вручення',
+    needCallRecipientTitle: '📞 Уточнити адресу в одержувача',
+    needCallRecipientDesc: "Кур'єр ввічливо зателефонує одержувачу та узгодить адресу",
+
+    aiFloristBannerTitle: '🌸 AI-Флорист: Підібрати букет за 15 секунд',
+    aiFloristBannerSubtitle: 'Дайте відповідь на 3 запитання та отримайте ідеальну добірку квітів',
+    aiFloristOpenButton: 'Підібрати букет ✨',
+    aiFloristModalTitle: 'AI-Флорист • Підбір букету',
+    aiFloristStep1: '1. З якої нагоди даруєте квіти?',
+    aiFloristStep2: '2. Комфортний бюджет:',
+    aiFloristStep3: '3. Бажана колірна гама:',
+    aiFloristResultsTitle: '✨ Ідеальні букети для вас:',
+    aiFloristResultsSubtitle: 'Ми підібрали найкращі композиції за вашими вподобаннями',
+    aiFloristBack: 'Назад',
+    aiFloristNext: 'Далі →',
+    aiFloristClose: 'Закрити',
+    aiFloristRestart: 'Пройти знову ↺',
+
+    occLove: '❤️ Романтика / Кохання',
+    occBirthday: '🎂 День народження',
+    occMom: '👩 Улюбленій Мамі / Бабусі',
+    occWedding: '💍 Весілля / Річниця',
+    occSorry: '🥺 Вибачення / Примирення',
+    occJustBecause: '✨ Просто так / Без приводу',
+
+    budgetUnder200: 'До 200 zł (Затишний)',
+    budget200To350: '200 – 350 zł (Популярний)',
+    budget350To500: '350 – 500 zł (Пишний)',
+    budgetVip: 'Від 500 zł (Royal VIP)',
+
+    palettePastel: '🌸 Ніжна пастельна (рожевий, крем)',
+    paletteRed: '🌹 Пристрасна червона / бордо',
+    paletteYellow: '🌻 Сонячна жовта / тепла',
+    paletteMixed: '🎨 Яскравий різнокольоровий мікс',
+
+    courierDashboardTitle: "Кабінет кур'єра • Доставки",
+    courierActiveDeliveries: 'До вручення',
+    courierCompletedDeliveries: 'Вручено',
+    courierNoDeliveries: "Наразі немає активних доставок 🌸",
+    courierStartDelivery: "🚗 Виїхав до одержувача",
+    courierMarkDelivered: '✅ Букет вручено!',
+    courierOpenMap: 'Навігатор (Google Maps)',
+    courierCallRecipient: 'Зателефонувати',
+    courierSurpriseBadge: '🤫 СЮРПРИЗ (Анонімно)',
+    courierCallNeededBadge: '📞 Уточнити адресу',
+    courierDeliveryTime: 'Час доставки:',
   },
 };
 
