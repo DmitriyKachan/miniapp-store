@@ -318,8 +318,8 @@ export const CartView: React.FC<CartViewProps> = ({ onClose, onOrderSuccess }) =
               </h3>
 
               <div className="grid grid-cols-2 gap-2.5">
-                <div>
-                  <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+                <div className="flex flex-col">
+                  <label className="text-xs font-medium text-gray-700 dark:text-gray-300 mb-1.5 h-4 flex items-center">
                     {t.deliveryDateLabel}
                   </label>
                   <input
@@ -328,19 +328,19 @@ export const CartView: React.FC<CartViewProps> = ({ onClose, onOrderSuccess }) =
                     min={todayStr}
                     value={deliveryDate}
                     onChange={(e) => setDeliveryDate(e.target.value)}
-                    className="w-full px-3 py-2.5 bg-gray-50 dark:bg-[#233142]/60 rounded-xl text-xs sm:text-sm text-gray-900 dark:text-white border border-transparent focus:border-rose-500 focus:outline-none transition-colors"
+                    className="w-full h-11 px-3 bg-gray-50 dark:bg-[#233142]/60 rounded-xl text-xs sm:text-sm text-gray-900 dark:text-white border border-transparent focus:border-rose-500 focus:outline-none transition-colors"
                   />
                 </div>
 
-                <div>
-                  <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+                <div className="flex flex-col">
+                  <label className="text-xs font-medium text-gray-700 dark:text-gray-300 mb-1.5 h-4 flex items-center truncate" title={t.deliveryTimeLabel}>
                     {t.deliveryTimeLabel}
                   </label>
                   <div className="relative">
                     <select
                       value={deliveryTime}
                       onChange={(e) => setDeliveryTime(e.target.value)}
-                      className="w-full px-3 py-2.5 bg-gray-50 dark:bg-[#233142]/60 rounded-xl text-xs sm:text-sm text-gray-900 dark:text-white border border-transparent focus:border-rose-500 focus:outline-none transition-colors appearance-none pr-8"
+                      className="w-full h-11 px-3 bg-gray-50 dark:bg-[#233142]/60 rounded-xl text-xs sm:text-sm text-gray-900 dark:text-white border border-transparent focus:border-rose-500 focus:outline-none transition-colors appearance-none pr-8 cursor-pointer"
                     >
                       {TIME_SLOTS.map((slot) => (
                         <option key={slot} value={slot}>
@@ -354,20 +354,20 @@ export const CartView: React.FC<CartViewProps> = ({ onClose, onOrderSuccess }) =
               </div>
 
               {/* Special options (Surprise & Call Recipient) */}
-              <div className="space-y-2 pt-1 border-t border-gray-100 dark:border-gray-800">
+              <div className="space-y-2 pt-2 border-t border-gray-100 dark:border-gray-800">
                 <label className="flex items-start gap-2.5 cursor-pointer select-none">
                   <input
                     type="checkbox"
                     checked={isSurprise}
                     onChange={(e) => setIsSurprise(e.target.checked)}
-                    className="mt-0.5 w-4 h-4 text-rose-600 rounded focus:ring-rose-500 cursor-pointer"
+                    className="mt-0.5 w-4 h-4 text-rose-600 rounded focus:ring-rose-500 cursor-pointer shrink-0"
                   />
                   <div>
-                    <span className="text-xs font-bold text-gray-900 dark:text-white flex items-center gap-1">
-                      <EyeOff className="w-3.5 h-3.5 text-purple-500" />
+                    <span className="text-xs font-bold text-gray-900 dark:text-white flex items-center gap-1.5">
+                      <EyeOff className="w-3.5 h-3.5 text-purple-500 shrink-0" />
                       <span>{t.surpriseDeliveryTitle}</span>
                     </span>
-                    <p className="text-[11px] text-gray-500 dark:text-gray-400">
+                    <p className="text-[11px] text-gray-500 dark:text-gray-400 mt-0.5">
                       {t.surpriseDeliveryDesc}
                     </p>
                   </div>
@@ -378,14 +378,14 @@ export const CartView: React.FC<CartViewProps> = ({ onClose, onOrderSuccess }) =
                     type="checkbox"
                     checked={needCallRecipient}
                     onChange={(e) => setNeedCallRecipient(e.target.checked)}
-                    className="mt-0.5 w-4 h-4 text-rose-600 rounded focus:ring-rose-500 cursor-pointer"
+                    className="mt-0.5 w-4 h-4 text-rose-600 rounded focus:ring-rose-500 cursor-pointer shrink-0"
                   />
                   <div>
-                    <span className="text-xs font-bold text-gray-900 dark:text-white flex items-center gap-1">
-                      <PhoneCall className="w-3.5 h-3.5 text-emerald-500" />
+                    <span className="text-xs font-bold text-gray-900 dark:text-white flex items-center gap-1.5">
+                      <PhoneCall className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
                       <span>{t.needCallRecipientTitle}</span>
                     </span>
-                    <p className="text-[11px] text-gray-500 dark:text-gray-400">
+                    <p className="text-[11px] text-gray-500 dark:text-gray-400 mt-0.5">
                       {t.needCallRecipientDesc}
                     </p>
                   </div>
