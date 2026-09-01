@@ -1,4 +1,7 @@
 import dotenv from 'dotenv';
+import path from 'node:path';
+
+dotenv.config({ path: path.resolve('backend', '.env') });
 dotenv.config();
 
 const token = process.env.BOT_TOKEN;
