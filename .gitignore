@@ -1,0 +1,51 @@
+# Environment & Secrets (NEVER COMMIT!)
+.env
+*.env
+.env.local
+.env.*.local
+backend/.env
+
+# Dependencies
+node_modules/
+package-lock.json
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Production build artifacts
+dist/
+dist-ssr/
+frontend/dist/
+backend/dist/
+*.local
+
+# Database & SQLite files
+backend/data/*.sqlite
+backend/data/*.sqlite-shm
+backend/data/*.sqlite-wal
+*.sqlite
+*.sqlite3
+*.db
+
+# Uploads and temporary user files
+backend/uploads/*
+!backend/uploads/.gitkeep
+uploads/
+scratch/
+*.log
+
+# Binaries & executables
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Editor & OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.suo
+*.user
+*.user_uploaded/
