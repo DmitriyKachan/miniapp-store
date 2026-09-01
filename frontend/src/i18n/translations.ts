@@ -813,6 +813,188 @@ export const PRODUCT_TRANSLATIONS: Record<
         'Знамениті швейцарські шоколадні трюфелі з ніжною кремовою начинкою.',
     },
   },
+  12: {
+    pl: {
+      title: '51 Czerwonych Róż «Gorące Wyznanie»',
+      description: 'Niezapomniany bukiet z 51 wyselekcjonowanych czerwonych róż Red Naomi o długości 60 cm. Idealny na oświadczyny i rocznice.',
+    },
+    ru: {
+      title: '51 Алая Роза «Горячее Признание»',
+      description: 'Незабываемый букет из 51 отборной красной розы Red Naomi 60 см. Идеально для признания в любви и юбилеев.',
+    },
+    ua: {
+      title: '51 Червона Троянда «Палке Зізнання»',
+      description: 'Незабутній букет із 51 добірної червоної троянди Red Naomi 60 см. Ідеально для освідчення та річниці.',
+    },
+  },
+  13: {
+    pl: {
+      title: 'Bukiet «Niebieska Hortensja & Eustoma»',
+      description: 'Świeży błękitno-kremowy bukiet z holenderskiej hortensji, eustomy, frezji oraz pachnącego eukaliptusa.',
+    },
+    ru: {
+      title: 'Букет «Небесная Гортензия & Белая Эустома»',
+      description: 'Нежный небесно-кремовый букет из голландской гортензии, эустомы, белой фрезии и ароматного эвкалипта.',
+    },
+    ua: {
+      title: 'Букет «Небесна Гортензія & Біла Еустома»',
+      description: 'Ніжний блакитно-кремовий букет із голландської гортензії, еустоми, білої фрезії та евкаліпта.',
+    },
+  },
+  14: {
+    pl: {
+      title: 'Wiosenny Miks 35 Tulipanów «Amsterdam»',
+      description: 'Wesoły i pachnący miks świeżych holenderskich tulipanów w pastelowych i żółtych odcieniach.',
+    },
+    ru: {
+      title: 'Весенний микс из 35 тюльпанов «Амстердам»',
+      description: 'Жизнерадостный и ароматный микс свежих голландских тюльпанов в пастельных и солнечных тонах.',
+    },
+    ua: {
+      title: 'Весняний мікс із 35 тюльпанів «Амстердам»',
+      description: 'Життєрадісний та запашний мікс свіжих голландських тюльпанів у пастельних та сонячних відтінках.',
+    },
+  },
+  15: {
+    pl: {
+      title: 'Flower Box «Pasja & Złoto» 29 Róż',
+      description: 'Eleganckie czarne pudełko ze złotym tłoczeniem wypełnione 29 aksamitnymi bordowymi różami.',
+    },
+    ru: {
+      title: 'Flower Box «Страсть & Золото» из 29 роз',
+      description: 'Элегантная черная бархатная коробка с золотым тиснением и 29 бархатными бордовыми розами.',
+    },
+    ua: {
+      title: 'Flower Box «Пристрасть & Золото» з 29 троянд',
+      description: 'Елегантна чорна оксамитова коробка із золотим тисненням та 29 оксамитовими бордовими трояндами.',
+    },
+  },
+  16: {
+    pl: {
+      title: 'Królewski Kosz 101 Róż «Imperator»',
+      description: 'Imponujący wiklinowy kosz gigant ze 101 różami premium. Symbol najwyższego luksusu.',
+    },
+    ru: {
+      title: 'Королевская корзина 101 роза «Imperator»',
+      description: 'Впечатляющая гигантская плетеная корзина со 101 премиальной розой. Символ высшей роскоши.',
+    },
+    ua: {
+      title: 'Королівський кошик 101 троянда «Imperator»',
+      description: 'Вражаючий гігантський плетений кошик зі 101 преміальною трояндою. Символ найвищої розкоші.',
+    },
+  },
+  17: {
+    pl: {
+      title: 'Bukiet Autorski «Lawendowy Zmierzch»',
+      description: 'Subtelny bukiet w fioletowo-różowej tonacji z lewkonii, róż gałązkowych, limonium i zatrwianu.',
+    },
+    ru: {
+      title: 'Авторский букет «Лавандовый Закат»',
+      description: 'Утонченный букет в лавандово-розовых тонах из кустовых роз, маттиолы, лимониума и эвкалипта.',
+    },
+    ua: {
+      title: 'Авторський букет «Лавандовий Захід»',
+      description: 'Витончений букет у лавандово-рожевих тонах із кущових троянд, матіоли, лімоніуму та евкаліпта.',
+    },
+  },
+  18: {
+    pl: {
+      title: 'Mono Bukiet 15 Róż «Misty Bubbles»',
+      description: 'Urocze kuliste róże piwoniowe o głębokim fioletowo-różowym odcieniu z delikatnym zapachem.',
+    },
+    ru: {
+      title: 'Монобукет из 15 роз «Misty Bubbles»',
+      description: 'Очаровательные пионовидные кустовые розы насыщенного фиолетово-розового оттенка.',
+    },
+    ua: {
+      title: 'Монобукет із 15 троянд «Misty Bubbles»',
+      description: 'Чарівні півонієподібні кущові троянди насиченого фіолетово-рожевого відтінку.',
+    },
+  },
+  19: {
+    pl: {
+      title: 'Bukiet «Śmietankowe Lody»',
+      description: 'Kremowo-waniliowy bukiet z francuskich róż garden, gipsówki i białych alstromerii.',
+    },
+    ru: {
+      title: 'Букет «Сливочный Пломбир»',
+      description: 'Нежный сливочно-ванильный букет из французских роз, гипсофилы и белоснежных альстромерий.',
+    },
+    ua: {
+      title: 'Букет «Вершковий Пломбір»',
+      description: 'Ніжний вершково-ванільний букет із французьких троянд, гіпсофіли та білих альстромерій.',
+    },
+  },
+  20: {
+    pl: {
+      title: 'Flower Box «Słoneczne Promienie»',
+      description: 'Jasny Flower Box ze słonecznikami, rumiankami i żółtymi goździkami. Poprawia humor od pierwszego wejrzenia.',
+    },
+    ru: {
+      title: 'Flower Box «Солнечные Лучи»',
+      description: 'Яркий солнечный бокс с подсолнухами, ромашками и желтыми гвоздиками. Дарит заряд позитива.',
+    },
+    ua: {
+      title: 'Flower Box «Сонячні Промені»',
+      description: 'Яскравий сонячний бокс із соняшниками, ромашками та жовтими гвоздиками. Дарує море позитиву.',
+    },
+  },
+  21: {
+    pl: {
+      title: 'Mono Bukiet 101 Róż «Aqua Romance»',
+      description: 'Olśniewający bukiet 101 różowych róż holenderskich dla najważniejszej osoby w życiu.',
+    },
+    ru: {
+      title: 'Монобукет 101 роза «Aqua Romance»',
+      description: 'Ослепительный королевский букет из 101 нежно-розовой розы для особенного человека.',
+    },
+    ua: {
+      title: 'Монобукет 101 троянда «Aqua Romance»',
+      description: 'Спустошливо гарний королівський букет із 101 ніжно-рожевої троянди для особливої людини.',
+    },
+  },
+  22: {
+    pl: {
+      title: 'Kompozycja «Leśna Baśń» w Drewnie',
+      description: 'Naturalna kompozycja w ręcznie robionej drewnianej skrzyneczce z mchem, mini-różami i szyszkami.',
+    },
+    ru: {
+      title: 'Композиция «Лесная Сказка» в Дереве',
+      description: 'Эко-композиция в натуральном деревянном кашпо ручной работы со мхом, розами и хлопком.',
+    },
+    ua: {
+      title: 'Композиція «Лісова Казка» у Дереві',
+      description: 'Еко-композиція у натуральному дерев\'яному кашпо ручної роботи з мохом, трояндами та бавовною.',
+    },
+  },
+  23: {
+    pl: {
+      title: 'Bukiet «Czysta Inspiracja» z Lilii i Róż',
+      description: 'Klasyczny biały bukiet z pachnących lilii orientalnych, białych róż avalanche i eukaliptusa.',
+    },
+    ru: {
+      title: 'Букет «Чистое Вдохновение» из роз и лилий',
+      description: 'Классический белоснежный букет из восточных лилий, роз Avalanche и эвкалипта.',
+    },
+    ua: {
+      title: 'Букет «Чисте Натхнення» з троянд та лілій',
+      description: 'Класичний білосніжний букет зі східних лілій, троянд Avalanche та евкаліпта.',
+    },
+  },
+  24: {
+    pl: {
+      title: 'Bukiet 11 Hortensji «Obłok Czułości»',
+      description: 'Puszyste pastelowe hortensje w odcieniach różu, błękitu i bieli. Ogromna objętość!',
+    },
+    ru: {
+      title: 'Букет из 11 гортензий «Облако Нежности»',
+      description: 'Пышные воздушные гортензии в пастельных оттенках розового, голубого и белого. Вау-эффект гарантирован!',
+    },
+    ua: {
+      title: 'Букет з 11 гортензій «Хмаринка Ніжності»',
+      description: 'Пишні повітряні гортензії у пастельних відтінках рожевого, блакитного та білого. Вау-ефект гарантовано!',
+    },
+  },
   101: {
     pl: {
       title: 'Bilecik z Twoją dedykacją',

@@ -44,28 +44,76 @@ export const AIFloristModal: React.FC<AIFloristModalProps> = ({ products, onClos
     { id: 'mixed', label: t.paletteMixed, color: 'from-purple-200 via-pink-200 to-amber-200' },
   ];
 
-  // Filter recommendations based on budget and context
+  // Smart Recommendation Scoring Algorithm
   const getRecommendations = (): Product[] => {
     const budgetConf = budgets.find((b) => b.id === selectedBudget) || budgets[1];
     
-    // Filter products within budget range
-    let filtered = products.filter(
-      (p) => p.price >= budgetConf.min && p.price <= budgetConf.max
-    );
+    // Only consider flower bouquets and compositions (exclude accessories and plants unless appropriate)
+    const flowerProducts = products.filter((p) => p.category_id <= 3);
 
-    // If too few in range, fallback to top products sorted by relevance
-    if (filtered.length === 0) {
-      filtered = [...products].sort((a, b) => Math.abs(a.price - budgetConf.min) - Math.abs(b.price - budgetConf.min));
-    }
+    const scored = flowerProducts.map((product) => {
+      let score = 0;
+      const text = `${product.title} ${product.description}`.toLowerCase();
 
-    // Sort or tailor by palette
-    if (selectedPalette === 'red') {
-      filtered = filtered.sort((a) => (a.title.toLowerCase().includes('róż') || a.title.toLowerCase().includes('czerwon') ? -1 : 1));
-    } else if (selectedPalette === 'yellow') {
-      filtered = filtered.sort((a) => (a.title.toLowerCase().includes('słonecz') || a.title.toLowerCase().includes('żółt') ? -1 : 1));
-    }
+      // 1. Budget Score (up to 40 points)
+      if (product.price >= budgetConf.min && product.price <= budgetConf.max) {
+        score += 40;
+      } else {
+        const diff = Math.abs(product.price - (budgetConf.min + budgetConf.max) / 2);
+        score += Math.max(0, 30 - diff / 15);
+      }
 
-    return filtered.slice(0, 3);
+      // 2. Palette Score (up to 30 points)
+      if (selectedPalette === 'red') {
+        if (text.includes('czerwon') || text.includes('красн') || text.includes('червон') || text.includes('pasja') || text.includes('страст') || text.includes('bordo') || text.includes('red')) {
+          score += 30;
+        }
+      } else if (selectedPalette === 'yellow') {
+        if (text.includes('słonecz') || text.includes('подсолнух') || text.includes('соняшник') || text.includes('żółt') || text.includes('желт') || text.includes('жовт') || text.includes('tulipan') || text.includes('тюльпан')) {
+          score += 30;
+        }
+      } else if (selectedPalette === 'pastel') {
+        if (text.includes('różow') || text.includes('розов') || text.includes('рожев') || text.includes('pudrow') || text.includes('пудров') || text.includes('pastel') || text.includes('krem') || text.includes('piwon') || text.includes('пион') || text.includes('eustom')) {
+          score += 30;
+        }
+      } else if (selectedPalette === 'mixed') {
+        if (text.includes('miks') || text.includes('микс') || text.includes('мікс') || text.includes('lawend') || text.includes('лаванд') || text.includes('prowans') || text.includes('прованс') || text.includes('hortensj') || text.includes('гортенз')) {
+          score += 30;
+        }
+      }
+
+      // 3. Occasion Score (up to 30 points)
+      if (selectedOccasion === 'love') {
+        if (text.includes('róż') || text.includes('роз') || text.includes('троянд') || text.includes('velvet') || text.includes('love') || text.includes('serce') || text.includes('romantic')) {
+          score += 25;
+        }
+      } else if (selectedOccasion === 'wedding') {
+        if (text.includes('luxury') || text.includes('101') || text.includes('51') || text.includes('imperator') || text.includes('luksus') || text.includes('śmietankow')) {
+          score += 25;
+        }
+      } else if (selectedOccasion === 'mom') {
+        if (text.includes('kosz') || text.includes('корзин') || text.includes('кошик') || text.includes('prowans') || text.includes('hortensj') || text.includes('гортенз') || text.includes('baśń') || text.includes('сказка')) {
+          score += 25;
+        }
+      } else if (selectedOccasion === 'birthday') {
+        if (text.includes('flower box') || text.includes('bubbles') || text.includes('box') || text.includes('poranek') || text.includes('magia') || text.includes('obłok')) {
+          score += 25;
+        }
+      } else if (selectedOccasion === 'sorry') {
+        if (text.includes('czyst') || text.includes('lili') || text.includes('лилии') || text.includes('лілій') || text.includes('mondial') || text.includes('inspiracj')) {
+          score += 25;
+        }
+      } else if (selectedOccasion === 'just') {
+        if (text.includes('słonecz') || text.includes('tulipan') || text.includes('promien') || text.includes('lawend')) {
+          score += 25;
+        }
+      }
+
+      return { product, score };
+    });
+
+    scored.sort((a, b) => b.score - a.score);
+    return scored.slice(0, 4).map((s) => s.product);
   };
 
   const handleNext = () => {

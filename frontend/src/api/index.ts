@@ -12,7 +12,7 @@ const INITIAL_CATEGORIES: Category[] = [
   { id: 5, name: 'Dodatki & Akcesoria', icon: 'Smile', sort_order: 5 },
 ];
 
-// Flower boutique initial products
+// Flower boutique rich initial products
 const INITIAL_PRODUCTS: Product[] = [
   {
     id: 1,
@@ -124,6 +124,136 @@ const INITIAL_PRODUCTS: Product[] = [
     image_url: 'https://images.unsplash.com/photo-1549007994-cb92caebd54b?w=700&auto=format&fit=crop&q=80',
     in_stock: 1,
   },
+  {
+    id: 12,
+    category_id: 2,
+    category_name: 'Róże & Mono',
+    title: '51 Czerwonych Róż «Gorące Wyznanie»',
+    description: 'Niezapomniany bukiet z 51 wyselekcjonowanych czerwonych róż Red Naomi o długości 60 cm. Idealny na oświadczyny i rocznice.',
+    price: 590,
+    image_url: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=700&auto=format&fit=crop&q=80',
+    in_stock: 1,
+  },
+  {
+    id: 13,
+    category_id: 1,
+    category_name: 'Bukiety Autorskie',
+    title: 'Bukiet «Niebieska Hortensja & Eustoma»',
+    description: 'Świeży błękitno-kremowy bukiet z holenderskiej hortensji, eustomy, frezji oraz pachnącego eukaliptusa.',
+    price: 240,
+    image_url: 'https://images.unsplash.com/photo-1563241527-3004b7be0ffd?w=700&auto=format&fit=crop&q=80',
+    in_stock: 1,
+  },
+  {
+    id: 14,
+    category_id: 2,
+    category_name: 'Róże & Mono',
+    title: 'Wiosenny Miks 35 Tulipanów «Amsterdam»',
+    description: 'Wesoły i pachnący miks świeżych holenderskich tulipanów w pastelowych i żółtych odcieniach.',
+    price: 175,
+    image_url: 'https://images.unsplash.com/photo-1520763185298-1b434c919102?w=700&auto=format&fit=crop&q=80',
+    in_stock: 1,
+  },
+  {
+    id: 15,
+    category_id: 3,
+    category_name: 'Flower Box & Kosze',
+    title: 'Flower Box «Pasja & Złoto» 29 Róż',
+    description: 'Eleganckie czarne pudełko ze złotym tłoczeniem wypełnione 29 aksamitnymi bordowymi różami.',
+    price: 360,
+    image_url: 'https://images.unsplash.com/photo-1589244159943-460088ed5c92?w=700&auto=format&fit=crop&q=80',
+    in_stock: 1,
+  },
+  {
+    id: 16,
+    category_id: 3,
+    category_name: 'Flower Box & Kosze',
+    title: 'Królewski Kosz 101 Róż «Imperator»',
+    description: 'Imponujący wiklinowy kosz gigant ze 101 różami premium. Symbol najwyższego luksusu.',
+    price: 890,
+    image_url: 'https://images.unsplash.com/photo-1567696911980-2eed69a46042?w=700&auto=format&fit=crop&q=80',
+    in_stock: 1,
+  },
+  {
+    id: 17,
+    category_id: 1,
+    category_name: 'Bukiety Autorskie',
+    title: 'Bukiet Autorski «Lawendowy Zmierzch»',
+    description: 'Subtelny bukiet w fioletowo-różowej tonacji z lewkonii, róż gałązkowych, limonium i zatrwianu.',
+    price: 195,
+    image_url: 'https://images.unsplash.com/photo-1508610048659-a06b669e3321?w=700&auto=format&fit=crop&q=80',
+    in_stock: 1,
+  },
+  {
+    id: 18,
+    category_id: 2,
+    category_name: 'Róże & Mono',
+    title: 'Mono Bukiet 15 Róż «Misty Bubbles»',
+    description: 'Urocze kuliste róże piwoniowe o głębokim fioletowo-różowym odcieniu z delikatnym zapachem.',
+    price: 210,
+    image_url: 'https://images.unsplash.com/photo-1582794543139-8ac9cb0f7b11?w=700&auto=format&fit=crop&q=80',
+    in_stock: 1,
+  },
+  {
+    id: 19,
+    category_id: 1,
+    category_name: 'Bukiety Autorskie',
+    title: 'Bukiet «Śmietankowe Lody»',
+    description: 'Kremowo-waniliowy bukiet z francuskich róż garden, gipsówki i białych alstromerii.',
+    price: 310,
+    image_url: 'https://images.unsplash.com/photo-1526047932273-341f2a7631f9?w=700&auto=format&fit=crop&q=80',
+    in_stock: 1,
+  },
+  {
+    id: 20,
+    category_id: 3,
+    category_name: 'Flower Box & Kosze',
+    title: 'Flower Box «Słoneczne Promienie»',
+    description: 'Jasny Flower Box ze słonecznikami, rumiankami i żółtymi goździkami. Poprawia humor od pierwszego wejrzenia.',
+    price: 165,
+    image_url: 'https://images.unsplash.com/photo-1561181286-d3fee7d55364?w=700&auto=format&fit=crop&q=80',
+    in_stock: 1,
+  },
+  {
+    id: 21,
+    category_id: 2,
+    category_name: 'Róże & Mono',
+    title: 'Mono Bukiet 101 Róż «Aqua Romance»',
+    description: 'Olśniewający bukiet 101 różowych róż holenderskich dla najważniejszej osoby w życiu.',
+    price: 950,
+    image_url: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=700&auto=format&fit=crop&q=80',
+    in_stock: 1,
+  },
+  {
+    id: 22,
+    category_id: 3,
+    category_name: 'Flower Box & Kosze',
+    title: 'Kompozycja «Leśna Baśń» w Drewnie',
+    description: 'Naturalna kompozycja w ręcznie robionej drewnianej skrzyneczce z mchem, mini-różami i szyszkami.',
+    price: 260,
+    image_url: 'https://images.unsplash.com/photo-1525310072745-f49212b5ac6d?w=700&auto=format&fit=crop&q=80',
+    in_stock: 1,
+  },
+  {
+    id: 23,
+    category_id: 1,
+    category_name: 'Bukiety Autorskie',
+    title: 'Bukiet «Czysta Inspiracja» z Lilii i Róż',
+    description: 'Klasyczny biały bukiet z pachnących lilii orientalnych, białych róż avalanche i eukaliptusa.',
+    price: 280,
+    image_url: 'https://images.unsplash.com/photo-1563241527-3004b7be0ffd?w=700&auto=format&fit=crop&q=80',
+    in_stock: 1,
+  },
+  {
+    id: 24,
+    category_id: 2,
+    category_name: 'Róże & Mono',
+    title: 'Bukiet 11 Hortensji «Obłok Czułości»',
+    description: 'Puszyste pastelowe hortensje w odcieniach różu, błękitu i bieli. Ogromna objętość!',
+    price: 340,
+    image_url: 'https://images.unsplash.com/photo-1591886960571-74d43a9d4166?w=700&auto=format&fit=crop&q=80',
+    in_stock: 1,
+  },
 ];
 
 // Upsell accessories recommended in cart
@@ -181,9 +311,9 @@ export const UPSELL_ACCESSORIES: Product[] = [
 ];
 
 const STORAGE_KEYS = {
-  CATEGORIES: 'tg_flower_categories_v3',
-  PRODUCTS: 'tg_flower_products_v3',
-  ORDERS: 'tg_flower_orders_v3',
+  CATEGORIES: 'tg_flower_categories_v5',
+  PRODUCTS: 'tg_flower_products_v5',
+  ORDERS: 'tg_flower_orders_v5',
   CHANNEL_SETTINGS: 'tg_flower_channel_v2',
 };
 
@@ -261,7 +391,7 @@ export const api = {
     const categories = getLocal<Category[]>(STORAGE_KEYS.CATEGORIES, INITIAL_CATEGORIES);
     const updated = categories.map((c) => (c.id === id ? { ...c, ...payload } : c));
     setLocal(STORAGE_KEYS.CATEGORIES, updated);
-    return updated.find((c) => c.id === id) || (payload as Category);
+    return updated.find((c) => c.id === id)!;
   },
 
   async deleteCategory(id: number): Promise<void> {
@@ -270,33 +400,41 @@ export const api = {
     } catch {}
 
     const categories = getLocal<Category[]>(STORAGE_KEYS.CATEGORIES, INITIAL_CATEGORIES);
-    const products = getLocal<Product[]>(STORAGE_KEYS.PRODUCTS, INITIAL_PRODUCTS);
-
-    setLocal(STORAGE_KEYS.CATEGORIES, categories.filter((c) => c.id !== id));
-    setLocal(STORAGE_KEYS.PRODUCTS, products.filter((p) => p.category_id !== id));
+    setLocal(
+      STORAGE_KEYS.CATEGORIES,
+      categories.filter((c) => c.id !== id)
+    );
   },
 
   // Products
-  async getProducts(params?: { category_id?: number; search?: string; in_stock_only?: boolean }): Promise<Product[]> {
+  async getProducts(params?: {
+    category_id?: number;
+    in_stock_only?: boolean;
+    search?: string;
+  }): Promise<Product[]> {
+    let products: Product[] = [];
+
     try {
       const query = new URLSearchParams();
-      if (params?.category_id) query.set('category_id', String(params.category_id));
-      if (params?.search) query.set('search', params.search);
-      if (params?.in_stock_only) query.set('in_stock_only', 'true');
+      if (params?.category_id) query.append('category_id', String(params.category_id));
+      if (params?.in_stock_only) query.append('in_stock_only', '1');
+      if (params?.search) query.append('search', params.search);
 
       const res = await fetch(`${API_BASE}/products?${query.toString()}`);
       if (res.ok) {
         const data = await res.json();
         if (data.success && Array.isArray(data.data) && data.data.length > 0) {
-          setLocal(STORAGE_KEYS.PRODUCTS, data.data);
-          return data.data;
+          products = data.data;
+          setLocal(STORAGE_KEYS.PRODUCTS, products);
         }
       }
     } catch {}
 
-    let products = getLocal<Product[]>(STORAGE_KEYS.PRODUCTS, INITIAL_PRODUCTS);
-    const categories = getLocal<Category[]>(STORAGE_KEYS.CATEGORIES, INITIAL_CATEGORIES);
+    if (products.length === 0) {
+      products = getLocal<Product[]>(STORAGE_KEYS.PRODUCTS, INITIAL_PRODUCTS);
+    }
 
+    const categories = await this.getCategories();
     products = products.map((p) => {
       const cat = categories.find((c) => c.id === p.category_id);
       return { ...p, category_name: cat?.name || p.category_name || '' };
@@ -368,43 +506,16 @@ export const api = {
     } catch {}
 
     const products = getLocal<Product[]>(STORAGE_KEYS.PRODUCTS, INITIAL_PRODUCTS);
-    const categories = getLocal<Category[]>(STORAGE_KEYS.CATEGORIES, INITIAL_CATEGORIES);
-
-    const updated = products.map((p) => {
-      if (p.id === id) {
-        const merged = { ...p, ...payload };
-        if (payload.category_id) {
-          const cat = categories.find((c) => c.id === payload.category_id);
-          merged.category_name = cat?.name || p.category_name;
-        }
-        return merged;
-      }
-      return p;
-    });
+    const updated = products.map((p) => (p.id === id ? { ...p, ...payload } : p));
     setLocal(STORAGE_KEYS.PRODUCTS, updated);
-    return updated.find((p) => p.id === id) || (payload as Product);
+    return updated.find((p) => p.id === id)!;
   },
 
-  async toggleProductStock(id: number): Promise<{ id: number; in_stock: number }> {
-    try {
-      const res = await fetch(`${API_BASE}/products/${id}/stock`, { method: 'PATCH' });
-      if (res.ok) {
-        const data = await res.json();
-        if (data.success) return data.data;
-      }
-    } catch {}
-
+  async toggleProductStock(id: number): Promise<Product> {
     const products = getLocal<Product[]>(STORAGE_KEYS.PRODUCTS, INITIAL_PRODUCTS);
-    let newStock = 0;
-    const updated = products.map((p) => {
-      if (p.id === id) {
-        newStock = p.in_stock === 1 ? 0 : 1;
-        return { ...p, in_stock: newStock };
-      }
-      return p;
-    });
-    setLocal(STORAGE_KEYS.PRODUCTS, updated);
-    return { id, in_stock: newStock };
+    const prod = products.find((p) => p.id === id);
+    const newStock = prod ? (prod.in_stock === 1 ? 0 : 1) : 1;
+    return this.updateProduct(id, { in_stock: newStock });
   },
 
   async deleteProduct(id: number): Promise<void> {
@@ -413,7 +524,55 @@ export const api = {
     } catch {}
 
     const products = getLocal<Product[]>(STORAGE_KEYS.PRODUCTS, INITIAL_PRODUCTS);
-    setLocal(STORAGE_KEYS.PRODUCTS, products.filter((p) => p.id !== id));
+    setLocal(
+      STORAGE_KEYS.PRODUCTS,
+      products.filter((p) => p.id !== id)
+    );
+  },
+
+  // Telegram Group & Channel Publishing
+  async publishToChannel(product: Product, channelUsername: string): Promise<{ success: boolean; message: string }> {
+    const rawTarget = channelUsername.trim();
+    if (!rawTarget) {
+      throw new Error('Укажите @username или ID группы');
+    }
+
+    setLocal(STORAGE_KEYS.CHANNEL_SETTINGS, rawTarget);
+
+    try {
+      const res = await fetch(`${API_BASE}/products/publish-to-channel`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          channel_username: rawTarget,
+          product_id: product.id,
+          title: product.title,
+          price: product.price,
+          description: product.description,
+          image_url: product.image_url,
+        }),
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        if (data.success) {
+          return { success: true, message: 'Опубликовано через бэкенд' };
+        } else {
+          throw new Error(data.error || 'Ошибка публикации');
+        }
+      }
+    } catch (e: any) {
+      console.warn('Backend publish failed, info:', e.message);
+    }
+
+    return {
+      success: true,
+      message: `Товар сохранен. Настройте канал ${rawTarget} в Telegram.`,
+    };
+  },
+
+  getSavedChannel(): string {
+    return getLocal<string>(STORAGE_KEYS.CHANNEL_SETTINGS, DEFAULT_GROUP_ID);
   },
 
   // Upload image
@@ -421,10 +580,15 @@ export const api = {
     try {
       const formData = new FormData();
       formData.append('image', file);
-      const res = await fetch(`${API_BASE}/upload`, { method: 'POST', body: formData });
+
+      const res = await fetch(`${API_BASE}/products/upload`, {
+        method: 'POST',
+        body: formData,
+      });
+
       if (res.ok) {
         const data = await res.json();
-        if (data.success) return data;
+        if (data.success) return data.data;
       }
     } catch {}
 
@@ -519,53 +683,14 @@ export const api = {
     const orders = getLocal<Order[]>(STORAGE_KEYS.ORDERS, []);
     const updated = orders.map((o) => (o.id === id ? { ...o, status } : o));
     setLocal(STORAGE_KEYS.ORDERS, updated);
-    return updated.find((o) => o.id === id) || ({} as Order);
+    return updated.find((o) => o.id === id)!;
   },
 
-  // Telegram Channel / Group Publishing (SECURE: routed via backend endpoint)
-  async publishToChannel(
-    product: Product,
-    channelUsernameOrId?: string
-  ): Promise<{ success: boolean; message: string }> {
-    const raw = (channelUsernameOrId || DEFAULT_GROUP_ID).trim();
-    setLocal(STORAGE_KEYS.CHANNEL_SETTINGS, raw);
-
-    try {
-      const res = await fetch(`${API_BASE}/products/publish-to-channel`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          product,
-          channel: raw,
-        }),
-      });
-      if (res.ok) {
-        const data = await res.json();
-        return data;
-      }
-    } catch (err: any) {
-      console.warn('Backend publish error:', err);
-    }
-
-    return {
-      success: true,
-      message: 'Запрос на публикацию отправлен! (Убедитесь, что сервер бота запущен)',
-    };
-  },
-
-  async getHealth(): Promise<{ status: string; adminIds: string[] }> {
+  async getHealth(): Promise<{ status: string; adminIds?: string[] }> {
     try {
       const res = await fetch(`${API_BASE}/health`);
       if (res.ok) return await res.json();
     } catch {}
-    return { status: 'ok', adminIds: [] };
-  },
-
-  getSavedChannel(): string {
-    return getLocal<string>(STORAGE_KEYS.CHANNEL_SETTINGS, DEFAULT_GROUP_ID);
-  },
-
-  setSavedChannel(channel: string): void {
-    setLocal(STORAGE_KEYS.CHANNEL_SETTINGS, channel);
+    return { status: 'offline' };
   },
 };
