@@ -1,3 +1,5 @@
+import type { Category, Product } from '../types';
+
 export type Language = 'ru' | 'pl' | 'ua';
 
 export interface TranslationDictionary {
@@ -371,3 +373,325 @@ export const translations: Record<Language, TranslationDictionary> = {
     publishedSuccess: 'Букет успішно опубліковано в канал із кнопкою замовлення!',
   },
 };
+
+// Localized mapping for Categories
+export const CATEGORY_TRANSLATIONS: Record<number, Record<Language, string>> = {
+  1: {
+    pl: 'Bukiety Autorskie',
+    ru: 'Авторские букеты',
+    ua: 'Авторські букети',
+  },
+  2: {
+    pl: 'Róże & Mono',
+    ru: 'Розы и монобукеты',
+    ua: 'Троянди та монобукети',
+  },
+  3: {
+    pl: 'Flower Box & Kosze',
+    ru: 'Цветочные коробки и корзины',
+    ua: 'Квіткові коробки та кошики',
+  },
+  4: {
+    pl: 'Rośliny & Doniczki',
+    ru: 'Комнатные растения и кашпо',
+    ua: 'Кімнатні рослини та кашпо',
+  },
+  5: {
+    pl: 'Dodatki & Akcesoria',
+    ru: 'Подарки и аксессуары',
+    ua: 'Подарунки та аксесуари',
+  },
+};
+
+// Localized mapping for Products
+export const PRODUCT_TRANSLATIONS: Record<
+  number,
+  Record<Language, { title: string; description: string }>
+> = {
+  1: {
+    pl: {
+      title: 'Bukiet «Różowa Magia» Premium',
+      description:
+        'Puszysta kompozycja z róż gałązkowych, kremowej eustomy, chryzantem pastelowych, goździków i pachnącego eukaliptusa w eleganckim matowym papierze z jedwabną wstążką.',
+    },
+    ru: {
+      title: 'Букет «Розовая Магия» Премиум',
+      description:
+        'Пышная авторская композиция из кустовых роз, кремовой эустомы, пастельных хризантем, гвоздик и эвкалипта в дизайнерской матовой упаковке с шелковой лентой.',
+    },
+    ua: {
+      title: 'Букет «Рожева Магія» Преміум',
+      description:
+        'Пишна авторська композиція з кущових троянд, кремової еустоми, пастельних хризантем, гвоздик та евкаліпта у дизайнерському матовому пакуванні з шовковою стрічкою.',
+    },
+  },
+  2: {
+    pl: {
+      title: 'Bukiet «Słoneczny Poranek» XL',
+      description:
+        'Energetyczny bukiet ze słoneczników, żółtych róż ogrodowych, rumianku, alstromerii oraz zieleni dekoracyjnej. Rozświetli każdy dzień!',
+    },
+    ru: {
+      title: 'Букет «Солнечное Утро» XL',
+      description:
+        'Яркий и жизнерадостный букет из подсолнухов, садовых желтых роз, ромашек, альстромерий и декоративной зелени. Дарит тепло и улыбки!',
+    },
+    ua: {
+      title: 'Букет «Сонячний Ранок» XL',
+      description:
+        'Яскравий та життєрадісний букет із соняшників, садових жовтих троянд, ромашок, альстромерій та свіжої зелені. Дарує тепло та радість!',
+    },
+  },
+  3: {
+    pl: {
+      title: 'Bukiet «Piwoniowy Sen» Grand Luxury',
+      description:
+        'Ekskluzywny bukiet z holenderskich piwonii Sarah Bernhardt, hortensji różowej, róż Madame Red i eukaliptusa Populus. Rozmiar XXL.',
+    },
+    ru: {
+      title: 'Букет «Пионовый Сон» Grand Luxury',
+      description:
+        'Эксклюзивный королевский букет из голландских пионов Sarah Bernhardt, пышной розовой гортензии, роз Madame Red и эвкалипта. Размер XXL.',
+    },
+    ua: {
+      title: 'Букет «Півонієвий Сон» Grand Luxury',
+      description:
+        'Ексклюзивний королівський букет із голландських півоній Sarah Bernhardt, пишної рожевої гортензії, троянд Madame Red та евкаліпта. Розмір XXL.',
+    },
+  },
+  4: {
+    pl: {
+      title: 'Mono Bukiet 25 Czerwonych Róż Red Naomi',
+      description:
+        'Klasyczne, aksamitne czerwone róże premium o długości 60 cm z polskich szklarni. Związane czerwoną satynową wstążką.',
+    },
+    ru: {
+      title: 'Монобукет из 25 красных роз Red Naomi',
+      description:
+        'Классические бархатные красные розы премиум-класса (60 см). Идеальный символ любви и страсти, перевязанный атласной лентой.',
+    },
+    ua: {
+      title: 'Монобукет із 25 червоних троянд Red Naomi',
+      description:
+        'Класичні оксамитові червоні троянди преміум-класу (60 см). Ідеальний символ кохання, перев\'язаний червоною атласною стрічкою.',
+    },
+  },
+  5: {
+    pl: {
+      title: 'Mono Bukiet 19 Róż Pudrowych Mondial',
+      description:
+        'Delikatne kremowo-pudrowe róże wielkokwiatowe w minimalistycznym opakowaniu. Idealne na wyznanie uczuć.',
+    },
+    ru: {
+      title: 'Монобукет из 19 пудровых роз Mondial',
+      description:
+        'Изысканные крупнобутонные розы нежно-пудрового кремового оттенка в лаконичной матовой бумаге.',
+    },
+    ua: {
+      title: 'Монобукет із 19 пудрових троянд Mondial',
+      description:
+        'Вишукані троянди з великими бутонами ніжно-пудрового кремового відтінку в лаконічному матовому пакуванні.',
+    },
+  },
+  6: {
+    pl: {
+      title: 'Flower Box «Pudrowy Aksamit» Velvet',
+      description:
+        'Kompozycja w welurowym okrągłym pudle ze specjalną gąbką florystyczną nasączoną wodą. Kwiaty nie wymagają wazonu!',
+    },
+    ru: {
+      title: 'Flower Box «Пудровый Бархат» Velvet',
+      description:
+        'Композиция в элегантной круглой бархатной коробке на флористической губке с водой. Цветы не требуют вазы и долго сохраняют свежесть!',
+    },
+    ua: {
+      title: 'Flower Box «Пудровий Оксамит» Velvet',
+      description:
+        'Композиція в елегантній круглій оксамитовій коробці на флористичній губці з водою. Квіти не потребують вази та довго стоять!',
+    },
+  },
+  7: {
+    pl: {
+      title: 'Kosz Wiklinowy «Prowansja»',
+      description:
+        'Rustykalny wiklinowy kosz pełen eustomy, lawendy, hortensji oraz róż gałązkowych. Trwałość do 10 dni.',
+    },
+    ru: {
+      title: 'Плетеный корзинный букет «Прованс»',
+      description:
+        'Ароматная и воздушная композиция в натуральной плетеной корзине: эустома, лаванда, гортензия и кустовые розы. Стойкость до 10 дней.',
+    },
+    ua: {
+      title: 'Плетений кошиковий букет «Прованс»',
+      description:
+        'Ароматна та повітряна композиція у натуральному плетеному кошику: еустома, лаванда, гортензія та кущові троянди. Стійкість до 10 днів.',
+    },
+  },
+  8: {
+    pl: {
+      title: 'Storczyk Orchidea Phalaenopsis 2-pędowa',
+      description:
+        'Długokwitnąca biała orchidea w designerskiej ceramicznej osłonce. Idealna roślina do domu i biura.',
+    },
+    ru: {
+      title: 'Двухствольная орхидея фаленопсис Premium',
+      description:
+        'Долгоцветущая белоснежная орхидея в дизайнерском керамическом кашпо. Прекрасное живое украшение для дома и офиса.',
+    },
+    ua: {
+      title: 'Двостовбурна орхідея фаленопсис Premium',
+      description:
+        'Довгоквітуча білосніжна орхідея у дизайнерському керамічному кашпо. Прекрасна жива прикраса для дому та офісу.',
+    },
+  },
+  9: {
+    pl: {
+      title: 'Monstera Deliciosa Dziurawa XL',
+      description:
+        'Królowa roślin domowych o spektakularnych, powcinanych liściach. Wysokość ok. 65 cm.',
+    },
+    ru: {
+      title: 'Монстера деликатесная (Deliciosa) XL',
+      description:
+        'Королева комнатных растений с крупными резными глянцевыми листьями. Высота около 65 см.',
+    },
+    ua: {
+      title: 'Монстера делікатесна (Deliciosa) XL',
+      description:
+        'Королева кімнатних рослин із великим різьбленим глянцевим листям. Висота близько 65 см.',
+    },
+  },
+  10: {
+    pl: {
+      title: 'Szklany Wazon Cylindryczny 25cm',
+      description:
+        'Grube, przezroczyste szkło idealnie pasujące do bukietów średnich i dużych.',
+    },
+    ru: {
+      title: 'Стеклянная цилиндрическая ваза 25 см',
+      description:
+        'Премиальное прозрачное толстое стекло, идеально подходящее для любых букетов.',
+    },
+    ua: {
+      title: 'Скляна циліндрична ваза 25 см',
+      description:
+        'Преміальне прозоре товсте скло, яке ідеально підходить для будь-яких букетів.',
+    },
+  },
+  11: {
+    pl: {
+      title: 'Praliny Czekoladowe Lindt Lindor 200g',
+      description:
+        'Kultowe szwajcarskie praliny z rozpływającym się kremowym nadzieniem.',
+    },
+    ru: {
+      title: 'Шоколадные конфеты Lindt Lindor 200 г',
+      description:
+        'Знаменитые швейцарские шоколадные трюфели с тающей кремовой начинкой.',
+    },
+    ua: {
+      title: 'Шоколадні цукерки Lindt Lindor 200 г',
+      description:
+        'Знамениті швейцарські шоколадні трюфелі з ніжною кремовою начинкою.',
+    },
+  },
+  101: {
+    pl: {
+      title: 'Bilecik z Twoją dedykacją',
+      description:
+        'Elegancki kartonik, w którym odręcznie wykaligrafujemy Twoje życzenia.',
+    },
+    ru: {
+      title: 'Фирменная открытка с вашим текстом',
+      description:
+        'Бесплатная открытка, в которую флорист каллиграфически впишет ваши пожелания.',
+    },
+    ua: {
+      title: 'Фірмова листівка з вашим текстом',
+      description:
+        'Безкоштовна листівка, в яку флорист каліграфічно впише ваші побажання.',
+    },
+  },
+  102: {
+    pl: {
+      title: 'Odżywka do kwiatów Chrysal (3 szt)',
+      description:
+        'Przedłuża świeżość i trwałość ciętych kwiatów nawet o tydzień.',
+    },
+    ru: {
+      title: 'Подкормка для цветов Chrysal (3 шт)',
+      description:
+        'Продлевает свежесть и стойкость срезанных цветов в вазе до двух недель.',
+    },
+    ua: {
+      title: 'Підживка для квітів Chrysal (3 шт)',
+      description:
+        'Подовжує свіжість та стійкість зрізаних квітів у вазі до двох тижнів.',
+    },
+  },
+  103: {
+    pl: {
+      title: 'Balon Foliowy z Helem «Serce»',
+      description:
+        'Czerwony lub różowy balon z helem na wstążce przywiązany do bukietu.',
+    },
+    ru: {
+      title: 'Воздушный шар с гелием «Сердце»',
+      description:
+        'Фольгированное алое или нежно-розовое сердце на шелковой ленте к букету.',
+    },
+    ua: {
+      title: 'Повітряна куля з гелієм «Серце»',
+      description:
+        'Фольговане яскраво-червоне або ніжне серце на шовковій стрічці до букету.',
+    },
+  },
+};
+
+export function getLocalizedCategoryName(category: Category, lang: Language): string {
+  if (lang === 'ru' && category.name_ru) return category.name_ru;
+  if (lang === 'pl' && category.name_pl) return category.name_pl;
+  if (lang === 'ua' && category.name_ua) return category.name_ua;
+
+  const translation = CATEGORY_TRANSLATIONS[category.id];
+  if (translation && translation[lang]) {
+    return translation[lang];
+  }
+
+  return category.name;
+}
+
+export function getLocalizedProduct(product: Product, lang: Language): Product {
+  let title = product.title;
+  let description = product.description;
+
+  if (lang === 'ru') {
+    if (product.title_ru) title = product.title_ru;
+    if (product.description_ru) description = product.description_ru;
+  } else if (lang === 'pl') {
+    if (product.title_pl) title = product.title_pl;
+    if (product.description_pl) description = product.description_pl;
+  } else if (lang === 'ua') {
+    if (product.title_ua) title = product.title_ua;
+    if (product.description_ua) description = product.description_ua;
+  }
+
+  const mapTranslation = PRODUCT_TRANSLATIONS[product.id];
+  if (mapTranslation && mapTranslation[lang]) {
+    title = mapTranslation[lang].title;
+    description = mapTranslation[lang].description;
+  }
+
+  const catTranslation = CATEGORY_TRANSLATIONS[product.category_id];
+  const category_name =
+    catTranslation && catTranslation[lang]
+      ? catTranslation[lang]
+      : product.category_name;
+
+  return {
+    ...product,
+    title,
+    description,
+    category_name,
+  };
+}

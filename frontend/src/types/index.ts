@@ -1,6 +1,9 @@
 export interface Category {
   id: number;
   name: string;
+  name_ru?: string;
+  name_pl?: string;
+  name_ua?: string;
   icon: string;
   sort_order: number;
 }
@@ -10,7 +13,13 @@ export interface Product {
   category_id: number;
   category_name?: string;
   title: string;
+  title_ru?: string;
+  title_pl?: string;
+  title_ua?: string;
   description: string;
+  description_ru?: string;
+  description_pl?: string;
+  description_ua?: string;
   price: number;
   image_url: string;
   in_stock: number;
@@ -32,23 +41,21 @@ export interface OrderItem {
 
 export interface Order {
   id: number;
-  telegram_user_id: string;
+  telegram_user_id?: string;
   customer_name: string;
-  customer_username: string;
-  phone: string;
-  comment: string;
+  customer_username?: string;
+  phone?: string;
+  comment?: string;
   total_price: number;
   status: 'pending' | 'paid' | 'completed' | 'cancelled';
-  items_json?: string;
-  items: OrderItem[];
+  items?: OrderItem[];
   created_at: string;
 }
 
 export interface TelegramUser {
   id: number;
-  first_name: string;
+  first_name?: string;
   last_name?: string;
   username?: string;
   language_code?: string;
-  is_premium?: boolean;
 }

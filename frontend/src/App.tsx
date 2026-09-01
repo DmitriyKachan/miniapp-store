@@ -11,13 +11,14 @@ import { OrderSuccessModal } from './components/OrderSuccessModal';
 import { AdminDashboard } from './components/admin/AdminDashboard';
 import type { Category, Product, Order } from './types';
 import { api } from './api';
+import { getLocalizedProduct } from './i18n/translations';
 import { ShoppingBag, ArrowRight, RefreshCw, AlertCircle } from 'lucide-react';
 import { hapticImpact, getTelegramWebApp } from './utils/telegram';
 
 const ShopContent: React.FC = () => {
   const { mode } = useAuth();
   const { totalCount, totalPrice } = useCart();
-  const { t, formatCurrency } = useLanguage();
+  const { t, language, formatCurrency } = useLanguage();
 
   const [categories, setCategories] = useState<Category[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
@@ -73,15 +74,17 @@ const ShopContent: React.FC = () => {
     loadData();
   }, [loadData]);
 
-  const filteredProducts = products.filter((p) => {
-    const matchesCategory =
-      selectedCategoryId === null || p.category_id === selectedCategoryId;
-    const matchesSearch =
-      !searchQuery.trim() ||
-      p.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      p.description.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesCategory && matchesSearch;
-  });
+  const filteredProducts = products
+    .map((p) => getLocalizedProduct(p, language))
+    .filter((p) => {
+      const matchesCategory =
+        selectedCategoryId === null || p.category_id === selectedCategoryId;
+      const matchesSearch =
+        !searchQuery.trim() ||
+        p.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        p.description.toLowerCase().includes(searchQuery.toLowerCase());
+      return matchesCategory && matchesSearch;
+    });
 
   return (
     <div className="min-h-screen bg-[#fcf9f9] dark:bg-[#0f141c] text-gray-900 dark:text-gray-100 flex flex-col font-sans transition-colors pb-24">
@@ -117,7 +120,7 @@ const ShopContent: React.FC = () => {
               </div>
               <button
                 onClick={loadData}
-                className="px-3 py-1 bg-rose-600 text-white rounded-lg font-medium hover:bg-rose-700 flex items-center gap-1"
+                className="px-3 py-1 bg-rose-600 text-white rounded-lg font-medium hover:bg-rose-700 flex items-center gap-1 cursor-pointer"
               >
                 <RefreshCw className="w-3 h-3" />
                 <span>{t.retry}</span>
