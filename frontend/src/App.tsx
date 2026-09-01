@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { CartProvider, useCart } from './context/CartContext';
 import { LanguageProvider, useLanguage } from './context/LanguageContext';
+import { NotificationProvider } from './context/NotificationContext';
 import { Header } from './components/Header';
 import { CategoryFilter } from './components/CategoryFilter';
 import { ProductCard } from './components/ProductCard';
@@ -284,11 +285,13 @@ const ShopContent: React.FC = () => {
 export default function App() {
   return (
     <LanguageProvider>
-      <AuthProvider>
-        <CartProvider>
-          <ShopContent />
-        </CartProvider>
-      </AuthProvider>
+      <NotificationProvider>
+        <AuthProvider>
+          <CartProvider>
+            <ShopContent />
+          </CartProvider>
+        </AuthProvider>
+      </NotificationProvider>
     </LanguageProvider>
   );
 }

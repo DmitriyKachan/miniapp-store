@@ -119,18 +119,21 @@ export const Header: React.FC<HeaderProps> = ({ onOpenCart, searchQuery, onSearc
                 setShowRoleMenu(!showRoleMenu);
                 setShowLangMenu(false);
               }}
-              className={`flex items-center gap-1 px-2.5 py-1.5 rounded-full text-xs font-bold transition-all border cursor-pointer ${currentRoleInfo.color}`}
+              className={`px-2.5 py-1 rounded-xl text-xs font-bold flex items-center gap-1.5 border transition-all cursor-pointer ${currentRoleInfo.color}`}
             >
               <currentRoleInfo.icon className="w-3.5 h-3.5" />
               <span>{currentRoleInfo.label}</span>
             </button>
 
             {showRoleMenu && (
-              <div className="absolute right-0 mt-1 w-36 bg-white dark:bg-[#1f2c3b] rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700 py-1 z-50 animate-in fade-in zoom-in-95 space-y-0.5">
+              <div className="absolute left-0 sm:right-0 sm:left-auto mt-2 w-36 bg-white dark:bg-[#18222d] rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700 py-1.5 z-50 animate-in fade-in zoom-in-95 duration-150">
+                <div className="px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-gray-400">
+                  Режим просмотра:
+                </div>
                 {[
-                  { key: 'buyer' as UserRole, label: 'Клиент 🛍', icon: User },
-                  { key: 'admin' as UserRole, label: 'Флорист 🌸', icon: ShieldCheck },
-                  { key: 'courier' as UserRole, label: 'Курьер 🚗', icon: Truck },
+                  { key: 'buyer' as UserRole, label: 'Клиент', icon: User },
+                  { key: 'admin' as UserRole, label: 'Флорист', icon: ShieldCheck },
+                  { key: 'courier' as UserRole, label: 'Курьер', icon: Truck },
                 ].map((item) => (
                   <button
                     key={item.key}

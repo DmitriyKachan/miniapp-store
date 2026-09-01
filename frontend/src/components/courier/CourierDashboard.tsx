@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import type { Order } from '../../types';
+import type { Order, OrderStatus } from '../../types';
 import { api } from '../../api';
 import { useLanguage } from '../../context/LanguageContext';
+import { useNotification } from '../../context/NotificationContext';
 import {
   Truck,
   MapPin,
@@ -12,13 +13,16 @@ import {
   CheckCircle2,
   Navigation,
   RefreshCw,
+  Sparkles,
+  User,
 } from 'lucide-react';
-import { hapticImpact, hapticNotification } from '../../utils/telegram';
+import { hapticImpact } from '../../utils/telegram';
 
 export const CourierDashboard: React.FC = () => {
   const { t, formatCurrency } = useLanguage();
+  const { showNotification } = useNotification();
   const [orders, setOrders] = useState<Order[]>([]);
-  const [activeTab, setActiveTab] = useState<'active' | 'completed'>('active');
+  const [activeTab, setActiveTab] = useState<'to_deliver' | 'completed'>('to_deliver');
   const [isLoading, setIsLoading] = useState(true);
 
   const loadOrders = useCallback(async () => {
@@ -37,21 +41,47 @@ export const CourierDashboard: React.FC = () => {
     loadOrders();
   }, [loadOrders]);
 
-  const handleUpdateStatus = async (orderId: number, status: Order['status']) => {
+  const handleUpdateStatus = async (orderId: number, status: OrderStatus) => {
     try {
       hapticImpact('medium');
       await api.updateOrderStatus(orderId, status);
-      hapticNotification('success');
       loadOrders();
+
+      if (status === 'in_delivery') {
+        showNotification(
+          `Курьер принял заказ #${orderId}`,
+          'Букет забран из мастерской, курьер выехал к получателю',
+          'courier'
+        );
+        showNotification(
+          `Ваш букет уже едет к вам!`,
+          `Курьер выехал по указанному адресу доставки.`,
+          'client'
+        );
+      } else if (status === 'completed') {
+        showNotification(
+          `Заказ #${orderId} успешно доставлен!`,
+          'Курьер подтвердил вручение букета получателю.',
+          'courier'
+        );
+        showNotification(
+          `Букет успешно доставлен!`,
+          'Получатель принял цветы. Спасибо за ваш заказ!',
+          'client'
+        );
+      }
     } catch (err: any) {
       alert(err.message || 'Error updating status');
     }
   };
 
-  const activeOrders = orders.filter((o) => o.status !== 'completed' && o.status !== 'cancelled');
+  // Orders relevant to courier
+  const activeOrders = orders.filter(
+    (o) => o.status === 'ready_for_pickup' || o.status === 'in_delivery' || o.status === 'assembling' || o.status === 'pending'
+  );
   const completedOrders = orders.filter((o) => o.status === 'completed');
 
-  const displayedOrders = activeTab === 'active' ? activeOrders : completedOrders;
+  const displayedOrders = activeTab === 'to_deliver' ? activeOrders : completedOrders;
 
   return (
     <div className="max-w-4xl mx-auto w-full px-3 sm:px-4 py-3 space-y-4 animate-in fade-in duration-200">
@@ -63,10 +93,10 @@ export const CourierDashboard: React.FC = () => {
             <div className="w-8 h-8 rounded-xl bg-indigo-500/30 border border-indigo-400/40 flex items-center justify-center text-indigo-300">
               <Truck className="w-4 h-4" />
             </div>
-            <h2 className="text-base sm:text-lg font-extrabold">{t.courierDashboardTitle}</h2>
+            <h2 className="text-base sm:text-lg font-extrabold">Кабинет курьера</h2>
           </div>
           <p className="text-xs text-indigo-200/80">
-            {activeOrders.length} активных доставок • Будьте вежливы с получателями 🌸
+            {activeOrders.filter((o) => o.status === 'ready_for_pickup' || o.status === 'in_delivery').length} готово к доставке • Своевременное вручение
           </p>
         </div>
 
@@ -87,15 +117,15 @@ export const CourierDashboard: React.FC = () => {
         <button
           onClick={() => {
             hapticImpact('light');
-            setActiveTab('active');
+            setActiveTab('to_deliver');
           }}
           className={`flex-1 py-2 text-xs font-bold rounded-xl transition-all cursor-pointer ${
-            activeTab === 'active'
+            activeTab === 'to_deliver'
               ? 'bg-white dark:bg-[#18222d] text-gray-900 dark:text-white shadow-2xs'
               : 'text-gray-600 dark:text-gray-400'
           }`}
         >
-          {t.courierActiveDeliveries} ({activeOrders.length})
+          К доставке ({activeOrders.length})
         </button>
         <button
           onClick={() => {
@@ -108,7 +138,7 @@ export const CourierDashboard: React.FC = () => {
               : 'text-gray-600 dark:text-gray-400'
           }`}
         >
-          {t.courierCompletedDeliveries} ({completedOrders.length})
+          Доставлено ({completedOrders.length})
         </button>
       </div>
 
@@ -126,6 +156,7 @@ export const CourierDashboard: React.FC = () => {
         <div className="space-y-3">
           {displayedOrders.map((order) => {
             const isCurrentlyInDelivery = order.status === 'in_delivery';
+            const isReadyForPickup = order.status === 'ready_for_pickup';
             const cleanAddress = (order.address || order.comment || '').split('\n')[0].replace(/^(📞|🤫|💌).*$/, '').trim();
 
             return (
@@ -133,7 +164,9 @@ export const CourierDashboard: React.FC = () => {
                 key={order.id}
                 className={`p-4 rounded-3xl border transition-all space-y-3.5 ${
                   isCurrentlyInDelivery
-                    ? 'bg-indigo-50/50 dark:bg-indigo-950/20 border-indigo-300 dark:border-indigo-800 shadow-md ring-1 ring-indigo-500/30'
+                    ? 'bg-indigo-50/60 dark:bg-indigo-950/30 border-indigo-300 dark:border-indigo-800 shadow-md ring-1 ring-indigo-500/30'
+                    : isReadyForPickup
+                    ? 'bg-amber-50/50 dark:bg-amber-950/20 border-amber-300 dark:border-amber-800'
                     : 'bg-white dark:bg-[#18222d] border-gray-100 dark:border-gray-800 shadow-2xs'
                 }`}
               >
@@ -146,17 +179,25 @@ export const CourierDashboard: React.FC = () => {
                     <span
                       className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold ${
                         order.status === 'in_delivery'
-                          ? 'bg-indigo-500 text-white shadow-xs animate-pulse'
+                          ? 'bg-indigo-600 text-white shadow-xs animate-pulse'
+                          : order.status === 'ready_for_pickup'
+                          ? 'bg-amber-500 text-white font-extrabold'
+                          : order.status === 'assembling'
+                          ? 'bg-purple-500 text-white'
                           : order.status === 'completed'
-                          ? 'bg-emerald-500 text-white'
-                          : 'bg-amber-500 text-white'
+                          ? 'bg-emerald-600 text-white'
+                          : 'bg-gray-400 text-white'
                       }`}
                     >
                       {order.status === 'in_delivery'
-                        ? t.orderInDelivery
+                        ? 'В пути к получателю'
+                        : order.status === 'ready_for_pickup'
+                        ? 'Готов к забору'
+                        : order.status === 'assembling'
+                        ? 'Флорист собирает'
                         : order.status === 'completed'
-                        ? t.orderCompleted
-                        : t.orderPending}
+                        ? 'Доставлен получателю'
+                        : 'Новый заказ'}
                     </span>
                   </div>
 
@@ -165,11 +206,11 @@ export const CourierDashboard: React.FC = () => {
                   </span>
                 </div>
 
-                {/* Timing & Special Badges */}
+                {/* Timing & Badges without duplicate emojis */}
                 <div className="flex items-center gap-2 flex-wrap">
                   {(order.delivery_date || order.delivery_time) && (
                     <div className="px-2.5 py-1 rounded-xl bg-gray-100 dark:bg-[#233142] text-[11px] font-bold text-gray-800 dark:text-gray-200 flex items-center gap-1.5">
-                      <Clock className="w-3.5 h-3.5 text-indigo-500" />
+                      <Clock className="w-3.5 h-3.5 text-indigo-500 shrink-0" />
                       <span>
                         {order.delivery_date || 'Сегодня'} • {order.delivery_time || '14:00'}
                       </span>
@@ -177,24 +218,25 @@ export const CourierDashboard: React.FC = () => {
                   )}
 
                   {order.is_surprise && (
-                    <div className="px-2.5 py-1 rounded-xl bg-purple-50 dark:bg-purple-950/50 text-purple-700 dark:text-purple-300 text-[11px] font-bold flex items-center gap-1 border border-purple-200 dark:border-purple-800">
-                      <EyeOff className="w-3.5 h-3.5" />
-                      <span>{t.courierSurpriseBadge}</span>
+                    <div className="px-2.5 py-1 rounded-xl bg-purple-50 dark:bg-purple-950/50 text-purple-700 dark:text-purple-300 text-[11px] font-bold flex items-center gap-1.5 border border-purple-200 dark:border-purple-800">
+                      <EyeOff className="w-3.5 h-3.5 shrink-0" />
+                      <span>Сюрприз (Анонимно)</span>
                     </div>
                   )}
 
                   {order.need_call_recipient && (
-                    <div className="px-2.5 py-1 rounded-xl bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 text-[11px] font-bold flex items-center gap-1 border border-emerald-200 dark:border-emerald-800">
-                      <PhoneCall className="w-3.5 h-3.5" />
-                      <span>{t.courierCallNeededBadge}</span>
+                    <div className="px-2.5 py-1 rounded-xl bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 text-[11px] font-bold flex items-center gap-1.5 border border-emerald-200 dark:border-emerald-800">
+                      <PhoneCall className="w-3.5 h-3.5 shrink-0" />
+                      <span>Уточнить адрес</span>
                     </div>
                   )}
                 </div>
 
-                {/* Recipient details & Address */}
+                {/* Recipient details & Address without duplicate icons */}
                 <div className="space-y-1.5 text-xs">
                   <div className="flex items-center gap-2 text-gray-800 dark:text-gray-200 font-semibold">
-                    <span>👤 {order.customer_name}</span>
+                    <User className="w-3.5 h-3.5 text-gray-400 shrink-0" />
+                    <span>{order.customer_name}</span>
                     {order.customer_username && (
                       <span className="text-gray-400 text-[11px]">(@{order.customer_username})</span>
                     )}
@@ -239,9 +281,9 @@ export const CourierDashboard: React.FC = () => {
                     <a
                       href={`tel:${order.phone.replace(/\s+/g, '')}`}
                       onClick={() => hapticImpact('light')}
-                      className="py-2.5 px-3 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border border-emerald-500/20 text-xs font-bold flex items-center justify-center gap-1.5 active:scale-95 transition-all text-center"
+                      className="py-2.5 px-3 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border border-emerald-500/20 text-xs font-bold flex items-center justify-center gap-1.5 active:scale-95 transition-all text-center cursor-pointer"
                     >
-                      <Phone className="w-3.5 h-3.5" />
+                      <Phone className="w-3.5 h-3.5 shrink-0" />
                       <span>Позвонить</span>
                     </a>
                   ) : (
@@ -254,9 +296,9 @@ export const CourierDashboard: React.FC = () => {
                       target="_blank"
                       rel="noopener noreferrer"
                       onClick={() => hapticImpact('light')}
-                      className="py-2.5 px-3 rounded-xl bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 border border-blue-500/20 text-xs font-bold flex items-center justify-center gap-1.5 active:scale-95 transition-all text-center"
+                      className="py-2.5 px-3 rounded-xl bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 border border-blue-500/20 text-xs font-bold flex items-center justify-center gap-1.5 active:scale-95 transition-all text-center cursor-pointer"
                     >
-                      <Navigation className="w-3.5 h-3.5" />
+                      <Navigation className="w-3.5 h-3.5 shrink-0" />
                       <span>Google Maps</span>
                     </a>
                   ) : (
@@ -264,26 +306,31 @@ export const CourierDashboard: React.FC = () => {
                   )}
                 </div>
 
-                {/* Bottom Delivery Status Controller */}
-                {order.status !== 'completed' && (
-                  <div className="pt-1">
-                    {order.status !== 'in_delivery' ? (
-                      <button
-                        onClick={() => handleUpdateStatus(order.id, 'in_delivery')}
-                        className="w-full py-3 px-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-2 shadow-md shadow-indigo-500/20 active:scale-[0.98] transition-all cursor-pointer"
-                      >
-                        <Truck className="w-4 h-4" />
-                        <span>{t.courierStartDelivery}</span>
-                      </button>
-                    ) : (
-                      <button
-                        onClick={() => handleUpdateStatus(order.id, 'completed')}
-                        className="w-full py-3.5 px-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs sm:text-sm font-bold flex items-center justify-center gap-2 shadow-md shadow-emerald-500/25 active:scale-[0.98] transition-all cursor-pointer"
-                      >
-                        <CheckCircle2 className="w-4 h-4" />
-                        <span>{t.courierMarkDelivered}</span>
-                      </button>
-                    )}
+                {/* Bottom Delivery Lifecycle Flow Action Buttons */}
+                {order.status === 'ready_for_pickup' && (
+                  <button
+                    onClick={() => handleUpdateStatus(order.id, 'in_delivery')}
+                    className="w-full py-3 px-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-2 shadow-md shadow-indigo-500/20 active:scale-[0.98] transition-all cursor-pointer"
+                  >
+                    <Truck className="w-4 h-4" />
+                    <span>Забрать букет и выехать к клиенту</span>
+                  </button>
+                )}
+
+                {order.status === 'in_delivery' && (
+                  <button
+                    onClick={() => handleUpdateStatus(order.id, 'completed')}
+                    className="w-full py-3.5 px-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs sm:text-sm font-bold flex items-center justify-center gap-2 shadow-md shadow-emerald-500/25 active:scale-[0.98] transition-all cursor-pointer"
+                  >
+                    <CheckCircle2 className="w-4 h-4" />
+                    <span>Букет успешно вручен получателю!</span>
+                  </button>
+                )}
+
+                {(order.status === 'pending' || order.status === 'assembling') && (
+                  <div className="py-2 px-3 bg-gray-100 dark:bg-[#233142] text-gray-500 text-xs rounded-xl flex items-center justify-center gap-1.5">
+                    <Sparkles className="w-3.5 h-3.5 text-purple-500 animate-spin" />
+                    <span>Флорист еще собирает букет. Ожидайте готовности к забору.</span>
                   </div>
                 )}
               </div>

@@ -1,10 +1,10 @@
 import { Router, Request, Response } from 'express';
 import { db, Order } from '../db.js';
-import { notifyNewOrder } from '../bot.js';
+import { notifyNewOrder, notifyOrderStatusChange } from '../bot.js';
 
 const router = Router();
 
-// GET all orders (for admin)
+// GET all orders
 router.get('/', (req: Request, res: Response) => {
   try {
     const stmt = db.prepare('SELECT * FROM orders ORDER BY id DESC');
@@ -96,7 +96,6 @@ router.post('/', async (req: Request, res: Response) => {
 
     const newOrder = db.prepare('SELECT * FROM orders WHERE id = ?').get(result.lastInsertRowid) as unknown as Order;
 
-    // Send Telegram notification if bot is configured
     notifyNewOrder(newOrder, items).catch((err) => {
       console.warn('Telegram notification failed:', err);
     });
@@ -119,13 +118,17 @@ router.patch('/:id/status', (req: Request, res: Response) => {
     const id = Number(req.params.id);
     const { status } = req.body;
 
-    const allowed = ['pending', 'paid', 'completed', 'cancelled'];
+    const allowed = ['pending', 'assembling', 'ready_for_pickup', 'in_delivery', 'completed', 'cancelled', 'paid'];
     if (!allowed.includes(status)) {
       return res.status(400).json({ success: false, error: 'Недопустимый статус' });
     }
 
     db.prepare('UPDATE orders SET status = ? WHERE id = ?').run(status, id);
     const updated = db.prepare('SELECT * FROM orders WHERE id = ?').get(id) as unknown as Order;
+
+    if (updated) {
+      notifyOrderStatusChange(updated, status).catch(() => {});
+    }
 
     res.json({ success: true, data: updated });
   } catch (error: any) {

@@ -94,7 +94,7 @@ export async function notifyNewOrder(order: Order, items: any[]) {
     `💬 **Uwagi i dostawa:** ${order.comment || '—'}\n\n` +
     `📦 **Pozycje:**\n${itemsList}\n\n` +
     `💰 **Łącznie:** **${order.total_price} zł**\n` +
-    `📌 **Status:** W realizacji`;
+    `📌 **Status:** Nowe (Oczekuje na florystę)`;
 
   // Send to admin chat if configured
   if (adminChatId) {
@@ -113,11 +113,65 @@ export async function notifyNewOrder(order: Order, items: any[]) {
         `✅ **Twoje zamówienie #${order.id} zostało przyjęte!**\n\n` +
         `📦 **Skład:**\n${itemsList}\n\n` +
         `💰 **Do zapłaty:** **${order.total_price} zł**\n` +
-        `Nasi floryści już przygotowują świeże kwiaty!`,
+        `Nasi floryści wkrótce rozpoczną układanie bukietu!`,
         { parse_mode: 'Markdown' }
       );
     } catch (e: any) {
       console.warn('Failed to send Telegram notification to customer:', e.message);
     }
+  }
+}
+
+export async function notifyOrderStatusChange(order: Order, newStatus: string) {
+  if (!bot) return;
+
+  let statusTitle = '';
+  let statusDesc = '';
+
+  switch (newStatus) {
+    case 'assembling':
+      statusTitle = '🌸 Florysta układa bukiet';
+      statusDesc = 'Twój bukiet jest właśnie starannie układany z najświeższych kwiatów!';
+      break;
+    case 'ready_for_pickup':
+      statusTitle = '📦 Bukiet gotowy do odbioru';
+      statusDesc = 'Kompozycja kwiatowa została przygotowana i czeka na kuriera.';
+      break;
+    case 'in_delivery':
+      statusTitle = '🚗 Kurier w drodze';
+      statusDesc = 'Kurier odebrał Twój bukiet i jedzie pod wskazany adres!';
+      break;
+    case 'completed':
+      statusTitle = '🎉 Bukiet doręczony!';
+      statusDesc = 'Kwiaty zostały pomyślnie wręczone odbiorcy. Dziękujemy za zaufanie!';
+      break;
+    case 'cancelled':
+      statusTitle = '❌ Zamówienie anulowane';
+      statusDesc = 'Zamówienie zostało anulowane.';
+      break;
+    default:
+      statusTitle = `Status: ${newStatus}`;
+      statusDesc = 'Status Twojego zamówienia został zaktualizowany.';
+  }
+
+  const message =
+    `📋 **Aktualizacja zamówienia #${order.id}**\n\n` +
+    `📌 **${statusTitle}**\n` +
+    `${statusDesc}\n\n` +
+    `👤 **Odbiorca:** ${order.customer_name}\n` +
+    `💰 **Kwota:** ${order.total_price} zł`;
+
+  // Send to admin chat
+  if (adminChatId) {
+    try {
+      await bot.api.sendMessage(adminChatId, `🔔 [ADMIN/FLORYSTA/KURIER]\n${message}`, { parse_mode: 'Markdown' });
+    } catch {}
+  }
+
+  // Send to customer
+  if (order.telegram_user_id && order.telegram_user_id !== adminChatId) {
+    try {
+      await bot.api.sendMessage(order.telegram_user_id, message, { parse_mode: 'Markdown' });
+    } catch {}
   }
 }

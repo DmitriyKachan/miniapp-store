@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../context/LanguageContext';
+import { useNotification } from '../context/NotificationContext';
 import { api, UPSELL_ACCESSORIES } from '../api';
 import type { Order, Product } from '../types';
 import { getLocalizedProduct } from '../i18n/translations';
@@ -40,6 +41,7 @@ export const CartView: React.FC<CartViewProps> = ({ onClose, onOrderSuccess }) =
   const { cart, addToCart, updateQuantity, removeFromCart, clearCart, totalPrice, totalCount } = useCart();
   const { user } = useAuth();
   const { t, language, formatCurrency } = useLanguage();
+  const { showNotification } = useNotification();
 
   const todayStr = new Date().toISOString().split('T')[0];
 
@@ -118,7 +120,17 @@ export const CartView: React.FC<CartViewProps> = ({ onClose, onOrderSuccess }) =
         total_price: totalPrice,
       });
 
-      hapticNotification('success');
+      showNotification(
+        `Новый заказ #${newOrder.id}!`,
+        `Клиент ${customerName} оформил заказ на ${formatCurrency(totalPrice)}. Флорист может начинать сборку!`,
+        'florist'
+      );
+      showNotification(
+        `Заказ #${newOrder.id} успешно оформлен!`,
+        `Спасибо! Флористы уже приступили к подготовке букета.`,
+        'client'
+      );
+
       clearCart();
       onOrderSuccess(newOrder);
     } catch (err: any) {

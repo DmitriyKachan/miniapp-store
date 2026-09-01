@@ -39,6 +39,14 @@ export interface OrderItem {
   image_url?: string;
 }
 
+export type OrderStatus =
+  | 'pending'
+  | 'assembling'
+  | 'ready_for_pickup'
+  | 'in_delivery'
+  | 'completed'
+  | 'cancelled';
+
 export interface Order {
   id: number;
   telegram_user_id?: string;
@@ -52,7 +60,7 @@ export interface Order {
   is_surprise?: boolean;
   need_call_recipient?: boolean;
   total_price: number;
-  status: 'pending' | 'paid' | 'in_delivery' | 'completed' | 'cancelled';
+  status: OrderStatus;
   items?: OrderItem[];
   created_at: string;
 }
