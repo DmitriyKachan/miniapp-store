@@ -431,7 +431,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
               {/* Telegram Native Inline Button */}
               <div className="pt-1">
                 <div className="w-full py-2 bg-sky-500/20 text-sky-300 text-xs font-bold text-center rounded-xl border border-sky-500/40">
-                  🛍 Zamów ten bukiet • {publishModal.product.price} zł
+                  🛍 Замовити цей букет • {formatCurrency(publishModal.product.price)}
                 </div>
               </div>
             </div>

@@ -45,21 +45,21 @@ export const Header: React.FC<HeaderProps> = ({ onOpenCart, searchQuery, onSearc
     switch (r) {
       case 'admin':
         return {
-          label: 'Флорист',
+          label: t.roleAdmin,
           icon: ShieldCheck,
           color: 'text-rose-700 dark:text-rose-300 bg-rose-500/10 border-rose-500/25',
           dot: 'bg-rose-500',
         };
       case 'courier':
         return {
-          label: 'Курьер',
+          label: t.roleCourier,
           icon: Truck,
           color: 'text-indigo-700 dark:text-indigo-300 bg-indigo-500/10 border-indigo-500/25',
           dot: 'bg-indigo-500',
         };
       default:
         return {
-          label: 'Витрина',
+          label: t.roleBuyer,
           icon: User,
           color: 'text-stone-700 dark:text-stone-200 bg-stone-500/10 border-stone-300/30 dark:border-stone-700/50',
           dot: 'bg-rose-500',
@@ -69,6 +69,13 @@ export const Header: React.FC<HeaderProps> = ({ onOpenCart, searchQuery, onSearc
 
   const currentRoleInfo = getRoleLabel(mode);
 
+  const getGreeting = () => {
+    if (!user?.first_name) return t.subtitle;
+    if (language === 'ua') return `Вітаємо, ${user.first_name}!`;
+    if (language === 'pl') return `Witaj, ${user.first_name}!`;
+    return `Привет, ${user.first_name}!`;
+  };
+
   return (
     <header className="sticky top-0 z-30 bg-white/80 dark:bg-[#0b0f17]/85 backdrop-blur-xl border-b border-rose-100/60 dark:border-white/5 transition-all">
       <div className="max-w-4xl mx-auto px-3.5 sm:px-6 py-2.5 flex items-center justify-between gap-2.5">
@@ -76,7 +83,7 @@ export const Header: React.FC<HeaderProps> = ({ onOpenCart, searchQuery, onSearc
         {/* Left: Brand / Flower Boutique info */}
         <div className="flex items-center gap-2.5">
           <div className="relative group">
-            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-gradient-to-tr from-rose-500 via-pink-500 to-amber-300 flex items-center justify-center text-white shadow-md shadow-rose-500/20 group-hover:scale-105 transition-transform duration-300">
+            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-gradient-to-tr from-rose-600 via-pink-500 to-amber-300 flex items-center justify-center text-white shadow-md shadow-rose-500/20 group-hover:scale-105 transition-transform duration-300">
               <Sparkles className="w-5 h-5 text-white animate-pulse" />
             </div>
             <div className="absolute -inset-1 rounded-2xl bg-gradient-to-tr from-rose-500 to-pink-500 opacity-20 blur-sm group-hover:opacity-40 transition-opacity pointer-events-none" />
@@ -87,11 +94,11 @@ export const Header: React.FC<HeaderProps> = ({ onOpenCart, searchQuery, onSearc
                 {t.appName}
               </h1>
               <span className="hidden sm:inline-block px-1.5 py-0.5 rounded text-[9px] font-bold tracking-widest uppercase bg-rose-100 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400">
-                Atelier
+                Lviv
               </span>
             </div>
             <p className="text-[11px] text-rose-600/80 dark:text-rose-400 font-medium truncate mt-0.5">
-              {user?.first_name ? `Witaj, ${user.first_name}` : t.subtitle}
+              {getGreeting()}
             </p>
           </div>
         </div>

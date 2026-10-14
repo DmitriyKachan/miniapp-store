@@ -29,10 +29,10 @@ interface CartViewProps {
   onOrderSuccess: (order: Order) => void;
 }
 
-// Generate 30-minute time intervals from 09:00 to 21:30
+// Delivery time intervals from 10:00 to 20:00 (Flowers Lviv studio schedule)
 const TIME_SLOTS = [
-  '09:00', '10:00', '11:00', '12:00', '13:00', '14:00',
-  '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00'
+  '10:00', '11:00', '12:00', '13:00', '14:00',
+  '15:00', '16:00', '17:00', '18:00', '19:00', '20:00'
 ];
 
 export const CartView: React.FC<CartViewProps> = ({ onClose, onOrderSuccess }) => {
@@ -355,7 +355,7 @@ export const CartView: React.FC<CartViewProps> = ({ onClose, onOrderSuccess }) =
                       : 'bg-stone-50 dark:bg-slate-800 text-stone-700 dark:text-stone-300 border-stone-200/60 dark:border-white/5'
                   }`}
                 >
-                  Dziś ({todayStr.slice(5)})
+                  {t.today} ({todayStr.slice(5)})
                 </button>
                 <button
                   type="button"
@@ -366,7 +366,7 @@ export const CartView: React.FC<CartViewProps> = ({ onClose, onOrderSuccess }) =
                       : 'bg-stone-50 dark:bg-slate-800 text-stone-700 dark:text-stone-300 border-stone-200/60 dark:border-white/5'
                   }`}
                 >
-                  Jutro ({tomorrowStr.slice(5)})
+                  {t.tomorrow} ({tomorrowStr.slice(5)})
                 </button>
               </div>
 
@@ -492,6 +492,10 @@ export const CartView: React.FC<CartViewProps> = ({ onClose, onOrderSuccess }) =
                       onChange={(e) => setAddress(e.target.value)}
                       className="w-full px-4 py-2.5 bg-stone-50 dark:bg-slate-800/80 rounded-2xl text-xs sm:text-sm text-stone-900 dark:text-white border border-stone-200/60 dark:border-white/5 focus:border-rose-500 focus:outline-none transition-colors placeholder:text-stone-400 resize-none"
                     />
+                    <div className="mt-2 p-2.5 rounded-xl bg-amber-50/80 dark:bg-amber-950/30 border border-amber-200/50 dark:border-amber-800/30 text-[11px] text-amber-800 dark:text-amber-200 flex items-center gap-1.5 font-medium">
+                      <span>📍</span>
+                      <span>{t.pickupInfo}</span>
+                    </div>
                   </div>
                 )}
 
@@ -513,7 +517,9 @@ export const CartView: React.FC<CartViewProps> = ({ onClose, onOrderSuccess }) =
               <div className="bg-white dark:bg-[#141a24] rounded-3xl border border-stone-200/60 dark:border-white/5 p-4 sm:p-5 space-y-2.5 shadow-xs">
                 <div className="flex justify-between text-xs text-stone-500 dark:text-stone-400">
                   <span>{t.itemsInOrder}</span>
-                  <span className="font-bold text-stone-700 dark:text-stone-300">{totalCount} szt.</span>
+                  <span className="font-bold text-stone-700 dark:text-stone-300">
+                    {totalCount} {language === 'ua' ? 'шт.' : language === 'pl' ? 'szt.' : 'шт.'}
+                  </span>
                 </div>
                 <div className="flex justify-between text-xs text-stone-500 dark:text-stone-400">
                   <span>{t.delivery}</span>

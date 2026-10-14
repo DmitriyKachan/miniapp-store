@@ -11,12 +11,11 @@ import { CartView } from './components/CartView';
 import { OrderSuccessModal } from './components/OrderSuccessModal';
 import { AdminDashboard } from './components/admin/AdminDashboard';
 import { CourierDashboard } from './components/courier/CourierDashboard';
-import { AIFloristModal } from './components/AIFloristModal';
 import type { Category, Product, Order } from './types';
 import { api } from './api';
 import { getLocalizedProduct } from './i18n/translations';
-import { ShoppingBag, ArrowRight, RefreshCw, AlertCircle, Sparkles } from 'lucide-react';
-import { hapticImpact, getTelegramWebApp } from './utils/telegram';
+import { ShoppingBag, ArrowRight, RefreshCw, AlertCircle, MapPin, Clock, Truck, ExternalLink } from 'lucide-react';
+import { hapticImpact, getTelegramWebApp, openExternalLink } from './utils/telegram';
 
 const ShopContent: React.FC = () => {
   const { mode } = useAuth();
@@ -32,7 +31,6 @@ const ShopContent: React.FC = () => {
 
   // Modals & Navigation state
   const [isCartOpen, setIsCartOpen] = useState(false);
-  const [isAIFloristOpen, setIsAIFloristOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [successfulOrder, setSuccessfulOrder] = useState<Order | null>(null);
 
@@ -111,35 +109,50 @@ const ShopContent: React.FC = () => {
       ) : (
         <main className="max-w-4xl mx-auto w-full px-3.5 sm:px-6 py-4 flex-1 flex flex-col space-y-4">
           
-          {/* AI-Florist Assistant Luxury Banner */}
-          <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-rose-700 via-pink-600 to-rose-600 text-white p-5 sm:p-6 shadow-xl shadow-rose-600/20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border border-rose-400/30">
-            <div className="space-y-1.5 z-10 max-w-md">
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/20 backdrop-blur-md text-[10px] font-black tracking-widest uppercase text-white shadow-xs">
-                <Sparkles className="w-3.5 h-3.5 text-amber-300 animate-pulse" />
-                <span>AI Florist Concierge</span>
+          {/* Flowers Lviv Brand & Atelier Showcase Banner */}
+          <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-rose-900 via-rose-800 to-pink-900 text-white p-5 sm:p-6 shadow-xl shadow-rose-900/25 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border border-rose-400/25">
+            <div className="space-y-2 z-10 max-w-lg">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/15 backdrop-blur-md text-[10px] font-black tracking-widest uppercase text-white shadow-xs">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                <span>Flowers Lviv Atelier</span>
               </div>
-              <h2 className="text-base sm:text-lg font-black tracking-tight leading-snug">
-                {t.aiFloristBannerTitle}
+              <h2 className="text-base sm:text-xl font-black tracking-tight leading-snug">
+                {language === 'ua'
+                  ? 'Свіжі авторські букети та доставка квітів по Львову'
+                  : language === 'pl'
+                  ? 'Świeże bukiety autorskie i dostawa kwiatów we Lwowie'
+                  : 'Свежие авторские букеты и доставка цветов по Львову'}
               </h2>
-              <p className="text-xs text-rose-100 leading-relaxed font-normal">
-                {t.aiFloristBannerSubtitle}
-              </p>
+              <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-rose-100 font-medium">
+                <span className="flex items-center gap-1.5">
+                  <MapPin className="w-3.5 h-3.5 text-amber-300 shrink-0" />
+                  <span>вул. Топольна, 4В</span>
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <Clock className="w-3.5 h-3.5 text-amber-300 shrink-0" />
+                  <span>10:00 – 20:00</span>
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <Truck className="w-3.5 h-3.5 text-amber-300 shrink-0" />
+                  <span>від 60 хв</span>
+                </span>
+              </div>
             </div>
 
             <button
               onClick={() => {
-                hapticImpact('medium');
-                setIsAIFloristOpen(true);
+                hapticImpact('light');
+                openExternalLink('https://www.instagram.com/flowers___lviv/');
               }}
-              className="z-10 px-5 py-3 rounded-2xl bg-white text-rose-700 hover:bg-rose-50 font-black text-xs sm:text-sm shadow-xl active:scale-95 transition-all flex items-center gap-2 shrink-0 cursor-pointer"
+              className="z-10 px-4 py-2.5 rounded-2xl bg-gradient-to-r from-amber-400 to-pink-400 text-stone-950 hover:brightness-105 font-black text-xs sm:text-sm shadow-xl active:scale-95 transition-all flex items-center gap-2 shrink-0 cursor-pointer"
             >
-              <span>{t.aiFloristOpenButton}</span>
-              <ArrowRight className="w-4 h-4 text-rose-600" />
+              <span>@flowers___lviv</span>
+              <ExternalLink className="w-3.5 h-3.5 text-stone-950" />
             </button>
 
             {/* Decorative background glows */}
-            <div className="absolute -right-8 -top-8 w-40 h-40 bg-white/15 rounded-full blur-3xl pointer-events-none" />
-            <div className="absolute right-28 -bottom-10 w-32 h-32 bg-amber-400/20 rounded-full blur-2xl pointer-events-none" />
+            <div className="absolute -right-8 -top-8 w-44 h-44 bg-rose-500/20 rounded-full blur-3xl pointer-events-none" />
+            <div className="absolute right-32 -bottom-10 w-36 h-36 bg-amber-400/20 rounded-full blur-2xl pointer-events-none" />
           </div>
 
           {/* Categories Horizontal Scroll */}
@@ -247,18 +260,6 @@ const ShopContent: React.FC = () => {
         <ProductDetailModal
           product={selectedProduct}
           onClose={() => setSelectedProduct(null)}
-        />
-      )}
-
-      {/* AI-Florist Modal */}
-      {isAIFloristOpen && (
-        <AIFloristModal
-          products={products}
-          onClose={() => setIsAIFloristOpen(false)}
-          onOpenProduct={(p) => {
-            setIsAIFloristOpen(false);
-            setSelectedProduct(p);
-          }}
         />
       )}
 

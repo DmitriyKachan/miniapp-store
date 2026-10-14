@@ -69,3 +69,14 @@ export function hapticSelection() {
     }
   }
 }
+
+export function openExternalLink(url: string) {
+  const webApp = getTelegramWebApp();
+  if (webApp && typeof webApp.openLink === 'function') {
+    try {
+      webApp.openLink(url);
+      return;
+    } catch {}
+  }
+  window.open(url, '_blank', 'noopener,noreferrer');
+}

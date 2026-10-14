@@ -19,7 +19,7 @@ import {
 import { hapticImpact } from '../../utils/telegram';
 
 export const CourierDashboard: React.FC = () => {
-  const { t, formatCurrency } = useLanguage();
+  const { t, language, formatCurrency } = useLanguage();
   const { showNotification } = useNotification();
   const [orders, setOrders] = useState<Order[]>([]);
   const [activeTab, setActiveTab] = useState<'to_deliver' | 'completed'>('to_deliver');
@@ -93,10 +93,10 @@ export const CourierDashboard: React.FC = () => {
             <div className="w-9 h-9 rounded-2xl bg-indigo-500/20 border border-indigo-400/40 flex items-center justify-center text-indigo-300">
               <Truck className="w-4.5 h-4.5" />
             </div>
-            <h2 className="text-base sm:text-lg font-black tracking-tight">Strefa Kuriera (Express)</h2>
+            <h2 className="text-base sm:text-lg font-black tracking-tight">{t.courierDashboardTitle}</h2>
           </div>
           <p className="text-xs text-indigo-200/80 font-medium">
-            {activeOrders.filter((o) => o.status === 'ready_for_pickup' || o.status === 'in_delivery').length} gotowe do natychmiastowego doręczenia
+            {activeOrders.filter((o) => o.status === 'ready_for_pickup' || o.status === 'in_delivery').length} {language === 'ua' ? 'готові до швидкої доставки по Львову' : 'gotowe do doręczenia we Lwowie'}
           </p>
         </div>
 

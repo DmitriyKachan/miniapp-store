@@ -111,13 +111,13 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product,
             <div className="p-2.5 rounded-2xl bg-rose-50/70 dark:bg-rose-950/20 border border-rose-100 dark:border-rose-900/30 flex items-center gap-2">
               <Sparkles className="w-4 h-4 text-rose-500 shrink-0" />
               <span className="text-[11px] font-bold text-stone-800 dark:text-rose-200">
-                Świeża dostawa
+                {t.fastDeliveryBadge}
               </span>
             </div>
             <div className="p-2.5 rounded-2xl bg-amber-50/70 dark:bg-amber-950/20 border border-amber-100 dark:border-amber-900/30 flex items-center gap-2">
               <Droplets className="w-4 h-4 text-amber-500 shrink-0" />
               <span className="text-[11px] font-bold text-stone-800 dark:text-amber-200">
-                Odżywka gratis
+                {t.chrysalFreeBadge}
               </span>
             </div>
           </div>
@@ -125,7 +125,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product,
           {localized.description && (
             <div className="space-y-1.5 pt-1">
               <h4 className="text-[11px] font-bold uppercase tracking-wider text-stone-400 dark:text-stone-500">
-                Opis kompozycji
+                {language === 'ua' ? 'Склад та опис букету' : language === 'pl' ? 'Skład i opis bukietu' : 'Состав и описание букета'}
               </h4>
               <p className="text-xs sm:text-sm text-stone-600 dark:text-stone-300 leading-relaxed whitespace-pre-line">
                 {localized.description}
@@ -141,11 +141,11 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product,
               }`}
             />
             <span className="text-xs font-semibold text-stone-600 dark:text-stone-300">
-              {localized.in_stock ? 'Dostępny w kwiaciarni' : t.outOfStock}
+              {localized.in_stock ? t.inStock : t.outOfStock}
             </span>
             {currentInCart > 0 && (
               <span className="ml-auto text-xs font-bold text-rose-600 dark:text-rose-400 bg-rose-50 dark:bg-rose-950/50 px-2.5 py-1 rounded-xl">
-                {t.inCart}: {currentInCart} szt.
+                {t.inCart}: {currentInCart}
               </span>
             )}
           </div>

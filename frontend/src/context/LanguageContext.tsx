@@ -12,23 +12,23 @@ interface LanguageContextType {
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
-const LANG_STORAGE_KEY = 'tg_shop_language_v1';
+const LANG_STORAGE_KEY = 'tg_flowers_lviv_lang_v2';
 
 export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [language, setLanguageState] = useState<Language>(() => {
     try {
       const saved = localStorage.getItem(LANG_STORAGE_KEY) as Language;
-      if (saved && ['ru', 'pl', 'ua'].includes(saved)) return saved;
+      if (saved && ['ua', 'pl', 'ru'].includes(saved)) return saved;
       
       const tgUser = getTelegramUser();
       if (tgUser?.language_code) {
         const code = tgUser.language_code.toLowerCase();
         if (code.startsWith('pl')) return 'pl';
-        if (code.startsWith('uk') || code.startsWith('ua')) return 'ua';
         if (code.startsWith('ru')) return 'ru';
+        if (code.startsWith('uk') || code.startsWith('ua')) return 'ua';
       }
     } catch {}
-    return 'ru'; // Default to Russian as requested
+    return 'ua'; // Default to Ukrainian for Flowers Lviv
   });
 
   const setLanguage = (lang: Language) => {
@@ -38,13 +38,10 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     } catch {}
   };
 
-  const t = translations[language] || translations.ru;
+  const t = translations[language] || translations.ua;
 
   const formatCurrency = (amount: number): string => {
-    return `${Number(amount).toLocaleString('pl-PL', {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    })} zł`;
+    return `${Math.round(amount).toLocaleString('uk-UA')} ₴`;
   };
 
   return (

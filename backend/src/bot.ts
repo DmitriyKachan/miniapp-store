@@ -16,12 +16,18 @@ if (token) {
 
     bot.command('start', async (ctx) => {
       const liveUrl = `${webAppUrl}?v=${Date.now()}`;
-      const keyboard = new InlineKeyboard().webApp('🌸 Otwórz kwiaciarnię', liveUrl);
+      const keyboard = new InlineKeyboard()
+        .webApp('🌸 Відкрити вітрину Flowers Lviv', liveUrl)
+        .row()
+        .url('📸 Instagram @flowers___lviv', 'https://www.instagram.com/flowers___lviv/');
       
       await ctx.reply(
-        `🌸 **Witaj w Flora Boutique!**\n\n` +
-        `Świeże kwiaty, autorskie bukiety i wyjątkowe upominki z dostawą pod same drzwi.\n\n` +
-        `👇 Kliknij poniższy przycisk, aby otworzyć katalog:`,
+        `🌸 **Вітаємо у студії квітів Flowers Lviv!**\n\n` +
+        `Свіжі квіти щодня, розкішні авторські букети, троянди та композиції з швидкою доставкою по Львову від 60 хв.\n\n` +
+        `📍 **Салон / Самовивіз:** м. Львів, вул. Топольна, 4В\n` +
+        `⏰ **Графік роботи:** Щодня з 10:00 до 20:00\n` +
+        `📸 **Instagram:** [@flowers___lviv](https://www.instagram.com/flowers___lviv/)\n\n` +
+        `👇 Натисніть кнопку нижче, щоб переглянути букети та оформити замовлення:`,
         {
           parse_mode: 'Markdown',
           reply_markup: keyboard,
@@ -31,7 +37,7 @@ if (token) {
 
     bot.start({
       onStart: (info) => {
-        console.log(`🤖 Telegram Bot @${info.username} started successfully!`);
+        console.log(`🤖 Telegram Bot @${info.username} started successfully for Flowers Lviv!`);
       },
     }).catch((err) => {
       console.warn('⚠️ Telegram Bot polling error (check BOT_TOKEN):', err.message);
@@ -59,12 +65,17 @@ export async function publishProductToChannel(product: Product, channelIdOrUsern
 
   const deepLink = `https://t.me/miniappzpbot/shop?startapp=p_${product.id}`;
   const storeLink = `https://t.me/miniappzpbot/shop`;
-  const caption = `🌸 <b>${product.title}</b>\n\n${product.description || ''}\n\n💰 <b>Cena: ${product.price} zł</b>\n🚚 <i>Darmowa dostawa od 250 zł • Poczuj świeżość kwiatów!</i>`;
+  const caption =
+    `🌸 <b>${product.title}</b>\n\n` +
+    `${product.description || ''}\n\n` +
+    `💰 <b>Ціна: ${Math.round(product.price)} ₴</b>\n` +
+    `🚚 <i>Доставка по Львову від 60 хв • Самовивіз: вул. Топольна, 4В</i>\n` +
+    `📸 <i>Instagram: @flowers___lviv</i>`;
 
   const keyboard = new InlineKeyboard()
-    .url(`🛍 Zamów ten bukiet • ${product.price} zł`, deepLink)
+    .url(`🛍 Замовити букет • ${Math.round(product.price)} ₴`, deepLink)
     .row()
-    .url('🌸 Otwórz całą kwiaciarnię', storeLink);
+    .url('🌸 Відкрити каталог Flowers Lviv', storeLink);
 
   if (product.image_url && product.image_url.startsWith('http')) {
     return await bot.api.sendPhoto(chatId, product.image_url, {
@@ -84,17 +95,17 @@ export async function notifyNewOrder(order: Order, items: any[]) {
   if (!bot) return;
 
   const itemsList = items
-    .map((item, idx) => `${idx + 1}. **${item.title}** x${item.quantity} — ${item.price * item.quantity} zł`)
+    .map((item, idx) => `${idx + 1}. **${item.title}** x${item.quantity} — ${Math.round(item.price * item.quantity)} ₴`)
     .join('\n');
 
   const text =
-    `🎉 **Nowe zamówienie #${order.id}!**\n\n` +
-    `👤 **Klient:** ${order.customer_name || 'Brak danych'} ${order.customer_username ? `(@${order.customer_username})` : ''}\n` +
-    `📞 **Telefon:** ${order.phone || 'Brak'}\n` +
-    `💬 **Uwagi i dostawa:** ${order.comment || '—'}\n\n` +
-    `📦 **Pozycje:**\n${itemsList}\n\n` +
-    `💰 **Łącznie:** **${order.total_price} zł**\n` +
-    `📌 **Status:** Nowe (Oczekuje na florystę)`;
+    `🎉 **Нове замовлення Flowers Lviv #${order.id}!**\n\n` +
+    `👤 **Клієнт:** ${order.customer_name || 'Не вказано'} ${order.customer_username ? `(@${order.customer_username})` : ''}\n` +
+    `📞 **Телефон:** ${order.phone || 'Не вказано'}\n` +
+    `💬 **Адреса / Коментар:** ${order.comment || '—'}\n\n` +
+    `📦 **Склад замовлення:**\n${itemsList}\n\n` +
+    `💰 **Разом до сплати:** **${Math.round(order.total_price)} ₴**\n` +
+    `📌 **Статус:** Нове (Очікує підтвердження флористом на Топольній)`;
 
   // Send to admin chat if configured
   if (adminChatId) {
