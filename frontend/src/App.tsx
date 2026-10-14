@@ -91,7 +91,7 @@ const ShopContent: React.FC = () => {
     });
 
   return (
-    <div className="min-h-screen bg-[#fcf9f9] dark:bg-[#0f141c] text-gray-900 dark:text-gray-100 flex flex-col font-sans transition-colors pb-24">
+    <div className="min-h-screen bg-[#faf7f5] dark:bg-[#0b0f17] text-stone-900 dark:text-stone-100 flex flex-col font-sans transition-colors pb-28">
       {/* Top Header */}
       <Header
         onOpenCart={() => setIsCartOpen(true)}
@@ -109,19 +109,19 @@ const ShopContent: React.FC = () => {
       ) : mode === 'courier' ? (
         <CourierDashboard />
       ) : (
-        <main className="max-w-4xl mx-auto w-full px-3 sm:px-4 py-3 flex-1 flex flex-col space-y-4">
+        <main className="max-w-4xl mx-auto w-full px-3.5 sm:px-6 py-4 flex-1 flex flex-col space-y-4">
           
-          {/* AI-Florist Assistant Banner */}
-          <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-rose-500 via-pink-500 to-rose-600 text-white p-4 sm:p-5 shadow-lg shadow-rose-500/20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-            <div className="space-y-1 z-10">
-              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white/20 backdrop-blur-xs text-[11px] font-bold">
-                <Sparkles className="w-3.5 h-3.5 text-yellow-200" />
-                <span>Smart Assistant</span>
+          {/* AI-Florist Assistant Luxury Banner */}
+          <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-rose-700 via-pink-600 to-rose-600 text-white p-5 sm:p-6 shadow-xl shadow-rose-600/20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border border-rose-400/30">
+            <div className="space-y-1.5 z-10 max-w-md">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/20 backdrop-blur-md text-[10px] font-black tracking-widest uppercase text-white shadow-xs">
+                <Sparkles className="w-3.5 h-3.5 text-amber-300 animate-pulse" />
+                <span>AI Florist Concierge</span>
               </div>
-              <h2 className="text-sm sm:text-base font-extrabold leading-tight">
+              <h2 className="text-base sm:text-lg font-black tracking-tight leading-snug">
                 {t.aiFloristBannerTitle}
               </h2>
-              <p className="text-[11px] sm:text-xs text-rose-100 max-w-sm">
+              <p className="text-xs text-rose-100 leading-relaxed font-normal">
                 {t.aiFloristBannerSubtitle}
               </p>
             </div>
@@ -131,15 +131,15 @@ const ShopContent: React.FC = () => {
                 hapticImpact('medium');
                 setIsAIFloristOpen(true);
               }}
-              className="z-10 px-4 py-2.5 rounded-2xl bg-white text-rose-600 hover:bg-rose-50 font-extrabold text-xs sm:text-sm shadow-md active:scale-95 transition-all flex items-center gap-1.5 shrink-0 cursor-pointer"
+              className="z-10 px-5 py-3 rounded-2xl bg-white text-rose-700 hover:bg-rose-50 font-black text-xs sm:text-sm shadow-xl active:scale-95 transition-all flex items-center gap-2 shrink-0 cursor-pointer"
             >
               <span>{t.aiFloristOpenButton}</span>
-              <ArrowRight className="w-3.5 h-3.5" />
+              <ArrowRight className="w-4 h-4 text-rose-600" />
             </button>
 
-            {/* Decorative background blurs */}
-            <div className="absolute -right-6 -top-6 w-32 h-32 bg-white/10 rounded-full blur-2xl pointer-events-none" />
-            <div className="absolute right-20 -bottom-8 w-24 h-24 bg-pink-400/20 rounded-full blur-xl pointer-events-none" />
+            {/* Decorative background glows */}
+            <div className="absolute -right-8 -top-8 w-40 h-40 bg-white/15 rounded-full blur-3xl pointer-events-none" />
+            <div className="absolute right-28 -bottom-10 w-32 h-32 bg-amber-400/20 rounded-full blur-2xl pointer-events-none" />
           </div>
 
           {/* Categories Horizontal Scroll */}
@@ -158,9 +158,9 @@ const ShopContent: React.FC = () => {
               </div>
               <button
                 onClick={loadData}
-                className="px-3 py-1 bg-rose-600 text-white rounded-lg font-medium hover:bg-rose-700 flex items-center gap-1 cursor-pointer"
+                className="px-3.5 py-1.5 bg-rose-600 text-white rounded-xl font-bold hover:bg-rose-700 flex items-center gap-1.5 cursor-pointer"
               >
-                <RefreshCw className="w-3 h-3" />
+                <RefreshCw className="w-3.5 h-3.5" />
                 <span>{t.retry}</span>
               </button>
             </div>
@@ -168,39 +168,41 @@ const ShopContent: React.FC = () => {
 
           {/* Loading Indicator */}
           {isLoading ? (
-            <div className="py-24 flex flex-col items-center justify-center space-y-3">
-              <div className="w-8 h-8 border-3 border-rose-600 border-t-transparent rounded-full animate-spin" />
-              <p className="text-xs text-gray-400">{t.loadingCatalog}</p>
+            <div className="py-28 flex flex-col items-center justify-center space-y-3">
+              <div className="w-9 h-9 border-3 border-rose-600 border-t-transparent rounded-full animate-spin" />
+              <p className="text-xs text-stone-400 font-medium">{t.loadingCatalog}</p>
             </div>
           ) : filteredProducts.length === 0 ? (
             /* Empty State */
-            <div className="py-20 text-center space-y-3">
-              <div className="w-14 h-14 rounded-2xl bg-rose-50 dark:bg-[#18222d] flex items-center justify-center text-rose-400 mx-auto">
-                <ShoppingBag className="w-7 h-7" />
+            <div className="py-24 text-center space-y-3.5 bg-white dark:bg-[#141a24] rounded-3xl border border-stone-200/60 dark:border-white/5 p-8 shadow-xs">
+              <div className="w-16 h-16 rounded-3xl bg-rose-500/10 dark:bg-rose-950/40 flex items-center justify-center text-rose-500 mx-auto">
+                <ShoppingBag className="w-8 h-8" />
               </div>
-              <h3 className="text-base font-bold text-gray-900 dark:text-white">
-                {t.emptyProductsTitle}
-              </h3>
-              <p className="text-xs text-gray-500 max-w-xs mx-auto">
-                {searchQuery
-                  ? `${t.emptyProductsDesc}: «${searchQuery}»`
-                  : t.emptyProductsDesc}
-              </p>
+              <div className="space-y-1">
+                <h3 className="text-base font-black text-stone-900 dark:text-white">
+                  {t.emptyProductsTitle}
+                </h3>
+                <p className="text-xs text-stone-500 max-w-xs mx-auto leading-relaxed">
+                  {searchQuery
+                    ? `${t.emptyProductsDesc}: «${searchQuery}»`
+                    : t.emptyProductsDesc}
+                </p>
+              </div>
               {(searchQuery || selectedCategoryId !== null) && (
                 <button
                   onClick={() => {
                     setSearchQuery('');
                     setSelectedCategoryId(null);
                   }}
-                  className="mt-2 text-xs font-semibold text-rose-600 dark:text-rose-400 hover:underline cursor-pointer"
+                  className="mt-2 px-4 py-2 bg-stone-100 dark:bg-slate-800 text-xs font-bold text-rose-600 dark:text-rose-400 rounded-xl hover:bg-rose-50 transition-colors cursor-pointer"
                 >
                   {t.resetFilters}
                 </button>
               )}
             </div>
           ) : (
-            /* Products Grid */
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2.5 sm:gap-3">
+            /* Products Grid with optimal responsive spacing */
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 sm:gap-4">
               {filteredProducts.map((product) => (
                 <ProductCard
                   key={product.id}
@@ -215,23 +217,23 @@ const ShopContent: React.FC = () => {
 
       {/* Floating Bottom Cart Bar */}
       {mode === 'buyer' && totalCount > 0 && !isCartOpen && (
-        <div className="fixed bottom-4 left-4 right-4 max-w-md mx-auto z-40 animate-in slide-in-from-bottom-6 duration-300">
+        <div className="fixed bottom-5 left-4 right-4 max-w-md mx-auto z-40 animate-in slide-in-from-bottom-8 duration-300">
           <button
             onClick={() => {
               hapticImpact('medium');
               setIsCartOpen(true);
             }}
-            className="w-full bg-gradient-to-r from-rose-600 to-pink-600 hover:from-rose-700 hover:to-pink-700 text-white p-4 rounded-2xl shadow-xl shadow-rose-500/25 flex items-center justify-between active:scale-[0.99] transition-all cursor-pointer"
+            className="w-full bg-gradient-to-r from-rose-600 via-pink-600 to-rose-600 hover:from-rose-500 hover:to-pink-500 text-white p-4 rounded-3xl shadow-2xl shadow-rose-600/35 flex items-center justify-between active:scale-[0.99] transition-all cursor-pointer border border-white/20"
           >
-            <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-xl bg-white/20 flex items-center justify-center font-bold text-xs">
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-2xl bg-white/25 flex items-center justify-center font-black text-xs backdrop-blur-xs">
                 {totalCount}
               </div>
-              <span className="text-sm font-semibold">{t.cart}</span>
+              <span className="text-sm font-bold tracking-tight">{t.cart}</span>
             </div>
 
             <div className="flex items-center gap-2">
-              <span className="text-sm font-extrabold tracking-wide">
+              <span className="text-base font-black tracking-tight">
                 {formatCurrency(totalPrice)}
               </span>
               <ArrowRight className="w-4 h-4" />

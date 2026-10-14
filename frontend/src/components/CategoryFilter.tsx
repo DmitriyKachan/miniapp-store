@@ -20,21 +20,21 @@ export const CategoryFilter: React.FC<CategoryFilterProps> = ({
   const { t, language } = useLanguage();
 
   return (
-    <div className="py-2 overflow-x-auto no-scrollbar scroll-smooth">
-      <div className="flex items-center gap-2 px-1 min-w-max">
+    <div className="py-1 overflow-x-auto no-scrollbar scroll-smooth">
+      <div className="flex items-center gap-2 px-0.5 min-w-max">
         {/* "All" button */}
         <button
           onClick={() => {
             hapticSelection();
             onSelectCategory(null);
           }}
-          className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold tracking-wide transition-all shadow-xs cursor-pointer ${
+          className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs font-bold tracking-tight transition-all duration-200 cursor-pointer active:scale-95 ${
             selectedCategoryId === null
-              ? 'bg-rose-600 text-white shadow-rose-500/25'
-              : 'bg-white dark:bg-[#18222d] text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-[#233142] border border-gray-100 dark:border-gray-800'
+              ? 'bg-gradient-to-r from-rose-600 to-pink-600 text-white shadow-md shadow-rose-500/25 ring-2 ring-rose-500/30'
+              : 'bg-white dark:bg-[#141a24] text-stone-700 dark:text-stone-300 hover:bg-stone-50 dark:hover:bg-slate-800 border border-stone-200/60 dark:border-white/5 shadow-2xs'
           }`}
         >
-          <LayoutGrid className="w-3.5 h-3.5" />
+          <LayoutGrid className={`w-3.5 h-3.5 ${selectedCategoryId === null ? 'text-white' : 'text-rose-500'}`} />
           <span>{t.allCategories}</span>
         </button>
 
@@ -49,13 +49,16 @@ export const CategoryFilter: React.FC<CategoryFilterProps> = ({
                 hapticSelection();
                 onSelectCategory(category.id);
               }}
-              className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold tracking-wide transition-all shadow-xs cursor-pointer ${
+              className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs font-bold tracking-tight transition-all duration-200 cursor-pointer active:scale-95 ${
                 isSelected
-                  ? 'bg-rose-600 text-white shadow-rose-500/25'
-                  : 'bg-white dark:bg-[#18222d] text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-[#233142] border border-gray-100 dark:border-gray-800'
+                  ? 'bg-gradient-to-r from-rose-600 to-pink-600 text-white shadow-md shadow-rose-500/25 ring-2 ring-rose-500/30'
+                  : 'bg-white dark:bg-[#141a24] text-stone-700 dark:text-stone-300 hover:bg-stone-50 dark:hover:bg-slate-800 border border-stone-200/60 dark:border-white/5 shadow-2xs'
               }`}
             >
-              <CategoryIcon name={category.icon} className="w-3.5 h-3.5" />
+              <CategoryIcon
+                name={category.icon}
+                className={`w-3.5 h-3.5 ${isSelected ? 'text-white' : 'text-rose-500'}`}
+              />
               <span>{localizedName}</span>
             </button>
           );

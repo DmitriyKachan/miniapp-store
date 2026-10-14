@@ -143,11 +143,11 @@ export const OrdersList: React.FC = () => {
         <div className="flex items-center gap-1.5 min-w-max">
           {[
             { key: 'all', label: t.allCategories },
-            { key: 'pending', label: 'Новые' },
-            { key: 'assembling', label: 'Сборка' },
-            { key: 'ready_for_pickup', label: 'Готовы к забору' },
-            { key: 'in_delivery', label: 'В доставке' },
-            { key: 'completed', label: 'Доставлены' },
+            { key: 'pending', label: 'Nowe' },
+            { key: 'assembling', label: 'Układanie' },
+            { key: 'ready_for_pickup', label: 'Do odbioru' },
+            { key: 'in_delivery', label: 'W dostawie' },
+            { key: 'completed', label: 'Doręczone' },
           ].map((tab) => (
             <button
               key={tab.key}
@@ -155,10 +155,10 @@ export const OrdersList: React.FC = () => {
                 hapticImpact('light');
                 setStatusFilter(tab.key);
               }}
-              className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+              className={`px-3.5 py-2 rounded-2xl text-xs font-bold transition-all cursor-pointer active:scale-95 ${
                 statusFilter === tab.key
-                  ? 'bg-rose-600 text-white shadow-xs'
-                  : 'bg-white dark:bg-[#18222d] text-gray-600 dark:text-gray-300 border border-gray-100 dark:border-gray-800'
+                  ? 'bg-rose-600 text-white shadow-md shadow-rose-500/25'
+                  : 'bg-white dark:bg-[#141a24] text-stone-600 dark:text-stone-300 border border-stone-200/60 dark:border-white/5 hover:border-stone-300'
               }`}
             >
               {tab.label}
@@ -171,71 +171,71 @@ export const OrdersList: React.FC = () => {
             hapticImpact('light');
             fetchOrders();
           }}
-          className="text-xs font-bold text-rose-600 dark:text-rose-400 hover:underline shrink-0 flex items-center gap-1 cursor-pointer"
+          className="text-xs font-bold text-rose-600 dark:text-rose-400 hover:underline shrink-0 flex items-center gap-1.5 cursor-pointer px-2 py-1"
         >
           <RefreshCw className="w-3.5 h-3.5" />
-          <span>Обновить</span>
+          <span>Odśwież</span>
         </button>
       </div>
 
       {isLoading ? (
-        <div className="py-12 flex items-center justify-center">
-          <div className="w-6 h-6 border-2 border-rose-500 border-t-transparent rounded-full animate-spin" />
+        <div className="py-16 flex items-center justify-center">
+          <div className="w-7 h-7 border-3 border-rose-500 border-t-transparent rounded-full animate-spin" />
         </div>
       ) : filteredOrders.length === 0 ? (
-        <div className="py-12 text-center text-gray-400 text-xs bg-white dark:bg-[#18222d] rounded-2xl border border-gray-100 dark:border-gray-800">
+        <div className="py-16 text-center text-stone-400 text-xs bg-white dark:bg-[#141a24] rounded-3xl border border-stone-200/60 dark:border-white/5">
           {t.adminNoOrders}
         </div>
       ) : (
-        <div className="space-y-3">
+        <div className="space-y-3.5">
           {filteredOrders.map((order) => {
             const isExpanded = expandedId === order.id;
             return (
               <div
                 key={order.id}
-                className="bg-white dark:bg-[#18222d] rounded-2xl border border-gray-100 dark:border-gray-800 shadow-xs overflow-hidden transition-all space-y-2"
+                className="bg-white dark:bg-[#141a24] rounded-3xl border border-stone-200/60 dark:border-white/5 shadow-xs overflow-hidden transition-all space-y-2 hover:border-stone-300 dark:hover:border-white/10"
               >
                 {/* Header Row */}
                 <div
                   onClick={() => setExpandedId(isExpanded ? null : order.id)}
-                  className="p-4 flex items-center justify-between gap-3 cursor-pointer hover:bg-gray-50/50 dark:hover:bg-[#233142]/40 transition-colors"
+                  className="p-4 sm:p-5 flex items-center justify-between gap-3 cursor-pointer hover:bg-stone-50/60 dark:hover:bg-slate-800/40 transition-colors"
                 >
                   <div className="space-y-1 min-w-0">
                     <div className="flex items-center gap-2">
-                      <span className="font-bold text-sm text-gray-900 dark:text-white">
+                      <span className="font-black text-sm text-stone-900 dark:text-white">
                         {t.orderNumber} #{order.id}
                       </span>
                       {getStatusBadge(order.status)}
                     </div>
-                    <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
-                      {order.customer_name || 'Клиент'} • {new Date(order.created_at).toLocaleString('pl-PL')}
+                    <p className="text-xs text-stone-500 dark:text-stone-400 truncate font-medium">
+                      {order.customer_name || 'Klient'} • {new Date(order.created_at).toLocaleString('pl-PL')}
                     </p>
                   </div>
 
                   <div className="flex items-center gap-3 shrink-0">
-                    <span className="font-extrabold text-sm text-rose-600 dark:text-rose-400">
+                    <span className="font-black text-sm sm:text-base text-rose-600 dark:text-rose-400">
                       {formatCurrency(order.total_price)}
                     </span>
                     {isExpanded ? (
-                      <ChevronUp className="w-4 h-4 text-gray-400" />
+                      <ChevronUp className="w-4 h-4 text-stone-400" />
                     ) : (
-                      <ChevronDown className="w-4 h-4 text-gray-400" />
+                      <ChevronDown className="w-4 h-4 text-stone-400" />
                     )}
                   </div>
                 </div>
 
                 {/* Primary Florist Workflow Action Buttons */}
-                <div className="px-4 pb-3 flex items-center gap-2 flex-wrap">
+                <div className="px-4 sm:px-5 pb-3.5 flex items-center gap-2 flex-wrap">
                   {order.status === 'pending' && (
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
                         handleStatusChange(order.id, 'assembling');
                       }}
-                      className="flex-1 py-2.5 px-3 bg-purple-600 hover:bg-purple-700 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 shadow-sm active:scale-98 transition-all cursor-pointer"
+                      className="flex-1 py-3 px-4 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white rounded-2xl text-xs font-black flex items-center justify-center gap-2 shadow-md shadow-purple-500/20 active:scale-98 transition-all cursor-pointer"
                     >
-                      <Sparkles className="w-3.5 h-3.5" />
-                      <span>Принять заказ и начать сборку</span>
+                      <Sparkles className="w-4 h-4" />
+                      <span>Przyjmij zamówienie i zacznij układanie</span>
                     </button>
                   )}
 
@@ -245,62 +245,62 @@ export const OrdersList: React.FC = () => {
                         e.stopPropagation();
                         handleStatusChange(order.id, 'ready_for_pickup');
                       }}
-                      className="flex-1 py-2.5 px-3 bg-amber-600 hover:bg-amber-700 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 shadow-sm active:scale-98 transition-all cursor-pointer"
+                      className="flex-1 py-3 px-4 bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-500 hover:to-orange-500 text-white rounded-2xl text-xs font-black flex items-center justify-center gap-2 shadow-md shadow-amber-500/20 active:scale-98 transition-all cursor-pointer"
                     >
-                      <PackageCheck className="w-3.5 h-3.5" />
-                      <span>Букет собран, готов к выдаче курьеру</span>
+                      <PackageCheck className="w-4 h-4" />
+                      <span>Bukiet gotowy! Powiadom kuriera o odbiorze</span>
                     </button>
                   )}
 
                   {order.status === 'ready_for_pickup' && (
-                    <div className="flex-1 py-2 px-3 bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-300 rounded-xl text-xs font-semibold flex items-center gap-2 border border-amber-200 dark:border-amber-800">
-                      <Truck className="w-3.5 h-3.5" />
-                      <span>Букет ожидает забора курьером для доставки</span>
+                    <div className="flex-1 py-2.5 px-4 bg-amber-500/10 text-amber-700 dark:text-amber-300 rounded-2xl text-xs font-bold flex items-center gap-2 border border-amber-500/20">
+                      <Truck className="w-4 h-4" />
+                      <span>Bukiet oczekuje na odbiór przez kuriera w atelier</span>
                     </div>
                   )}
                 </div>
 
                 {/* Expanded Details */}
                 {isExpanded && (
-                  <div className="p-4 border-t border-gray-100 dark:border-gray-800 bg-gray-50/50 dark:bg-[#151c24] space-y-3 text-xs">
+                  <div className="p-4 sm:p-5 border-t border-stone-100 dark:border-white/5 bg-stone-50/70 dark:bg-slate-800/40 space-y-3.5 text-xs">
                     {/* Customer info */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-gray-600 dark:text-gray-300">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-stone-600 dark:text-stone-300">
                       <div className="flex items-center gap-2">
-                        <User className="w-3.5 h-3.5 text-gray-400" />
-                        <span>{order.customer_name} {order.customer_username && `(@${order.customer_username})`}</span>
+                        <User className="w-3.5 h-3.5 text-stone-400" />
+                        <span className="font-bold">{order.customer_name} {order.customer_username && `(@${order.customer_username})`}</span>
                       </div>
                       {order.phone && (
                         <div className="flex items-center gap-2">
-                          <Phone className="w-3.5 h-3.5 text-gray-400" />
-                          <span>{order.phone}</span>
+                          <Phone className="w-3.5 h-3.5 text-stone-400" />
+                          <span className="font-semibold">{order.phone}</span>
                         </div>
                       )}
                       {(order.delivery_date || order.delivery_time) && (
                         <div className="flex items-center gap-2 sm:col-span-2">
                           <Clock className="w-3.5 h-3.5 text-rose-500" />
-                          <span>Доставка: {order.delivery_date || 'Сегодня'} к {order.delivery_time || '14:00'}</span>
+                          <span className="font-bold">Termin: {order.delivery_date || 'Dziś'} o godz. {order.delivery_time || '14:00'}</span>
                         </div>
                       )}
                       {order.comment && (
-                        <div className="flex items-start gap-2 sm:col-span-2">
-                          <MessageSquare className="w-3.5 h-3.5 text-gray-400 mt-0.5" />
-                          <span className="italic">{order.comment}</span>
+                        <div className="flex items-start gap-2 sm:col-span-2 p-2.5 bg-white dark:bg-[#141a24] rounded-2xl border border-stone-200/50 dark:border-white/5">
+                          <MessageSquare className="w-3.5 h-3.5 text-stone-400 mt-0.5 shrink-0" />
+                          <span className="italic leading-relaxed">{order.comment}</span>
                         </div>
                       )}
                     </div>
 
                     {/* Ordered Items Breakdown */}
                     <div className="space-y-1.5 pt-1">
-                      <h5 className="font-semibold text-gray-700 dark:text-gray-300">{t.adminOrderItems}</h5>
+                      <h5 className="font-black uppercase tracking-wider text-[10px] text-stone-400 dark:text-stone-500">{t.adminOrderItems}</h5>
                       {order.items && order.items.map((item, idx) => (
                         <div
                           key={idx}
-                          className="flex items-center justify-between p-2 rounded-lg bg-white dark:bg-[#18222d] border border-gray-200/50 dark:border-gray-700/50"
+                          className="flex items-center justify-between p-2.5 rounded-xl bg-white dark:bg-[#141a24] border border-stone-200/50 dark:border-white/5"
                         >
-                          <span className="font-medium text-gray-800 dark:text-gray-200">
+                          <span className="font-bold text-stone-800 dark:text-stone-200">
                             {item.title} × {item.quantity}
                           </span>
-                          <span className="font-bold text-gray-900 dark:text-white">
+                          <span className="font-black text-stone-900 dark:text-white">
                             {formatCurrency(item.price * item.quantity)}
                           </span>
                         </div>
@@ -308,25 +308,25 @@ export const OrdersList: React.FC = () => {
                     </div>
 
                     {/* Manual Status Changer */}
-                    <div className="pt-2 flex items-center justify-between gap-2 flex-wrap border-t border-gray-200 dark:border-gray-700/60">
-                      <span className="font-medium text-gray-500">Ручная смена статуса:</span>
+                    <div className="pt-2.5 flex items-center justify-between gap-2 flex-wrap border-t border-stone-200/60 dark:border-white/5">
+                      <span className="font-bold text-stone-500">Status ręczny:</span>
                       <div className="flex gap-1.5 flex-wrap">
                         {(['pending', 'assembling', 'ready_for_pickup', 'in_delivery', 'completed', 'cancelled'] as const).map((st) => (
                           <button
                             key={st}
                             onClick={() => handleStatusChange(order.id, st)}
-                            className={`px-2.5 py-1 rounded-lg text-[10px] font-bold transition-all cursor-pointer ${
+                            className={`px-3 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-wider transition-all cursor-pointer ${
                               order.status === st
-                                ? 'bg-rose-600 text-white'
-                                : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300'
+                                ? 'bg-rose-600 text-white shadow-xs'
+                                : 'bg-stone-200/80 dark:bg-slate-700 text-stone-700 dark:text-stone-300 hover:bg-stone-300'
                             }`}
                           >
-                            {st === 'pending' && 'Новый'}
-                            {st === 'assembling' && 'Сборка'}
-                            {st === 'ready_for_pickup' && 'Готов'}
-                            {st === 'in_delivery' && 'В пути'}
-                            {st === 'completed' && 'Доставлен'}
-                            {st === 'cancelled' && 'Отменен'}
+                            {st === 'pending' && 'Nowy'}
+                            {st === 'assembling' && 'Układanie'}
+                            {st === 'ready_for_pickup' && 'Gotowy'}
+                            {st === 'in_delivery' && 'W trasie'}
+                            {st === 'completed' && 'Doręczony'}
+                            {st === 'cancelled' && 'Anulowany'}
                           </button>
                         ))}
                       </div>

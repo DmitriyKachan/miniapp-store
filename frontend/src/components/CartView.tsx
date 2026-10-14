@@ -14,12 +14,13 @@ import {
   CreditCard,
   ShoppingBag,
   AlertCircle,
-  Sparkles,
   Check,
   Calendar,
   Clock,
   PhoneCall,
   EyeOff,
+  Gift,
+  ChevronRight,
 } from 'lucide-react';
 import { hapticImpact, hapticNotification } from '../utils/telegram';
 
@@ -30,11 +31,8 @@ interface CartViewProps {
 
 // Generate 30-minute time intervals from 09:00 to 21:30
 const TIME_SLOTS = [
-  '09:00', '09:30', '10:00', '10:30', '11:00', '11:30',
-  '12:00', '12:30', '13:00', '13:30', '14:00', '14:30',
-  '15:00', '15:30', '16:00', '16:30', '17:00', '17:30',
-  '18:00', '18:30', '19:00', '19:30', '20:00', '20:30',
-  '21:00', '21:30',
+  '09:00', '10:00', '11:00', '12:00', '13:00', '14:00',
+  '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00'
 ];
 
 export const CartView: React.FC<CartViewProps> = ({ onClose, onOrderSuccess }) => {
@@ -44,6 +42,9 @@ export const CartView: React.FC<CartViewProps> = ({ onClose, onOrderSuccess }) =
   const { showNotification } = useNotification();
 
   const todayStr = new Date().toISOString().split('T')[0];
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  const tomorrowStr = tomorrow.toISOString().split('T')[0];
 
   const [customerName, setCustomerName] = useState(
     user ? `${user.first_name || ''} ${user.last_name || ''}`.trim() : ''
@@ -142,26 +143,28 @@ export const CartView: React.FC<CartViewProps> = ({ onClose, onOrderSuccess }) =
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-[#f8fafc] dark:bg-[#0f141c] flex flex-col animate-in slide-in-from-right duration-200">
+    <div className="fixed inset-0 z-50 bg-[#faf7f5] dark:bg-[#0b0f17] flex flex-col animate-in slide-in-from-right duration-250">
       {/* Top Navigation */}
-      <div className="sticky top-0 z-10 bg-white/90 dark:bg-[#18222d]/90 backdrop-blur-md border-b border-gray-100 dark:border-gray-800 px-4 py-3 flex items-center justify-between">
+      <div className="sticky top-0 z-20 bg-white/85 dark:bg-[#141a24]/85 backdrop-blur-xl border-b border-stone-200/60 dark:border-white/5 px-4 py-3 flex items-center justify-between">
         <button
           onClick={() => {
             hapticImpact('light');
             onClose();
           }}
-          className="flex items-center gap-1.5 text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-200 hover:text-rose-600 dark:hover:text-rose-400 transition-colors cursor-pointer"
+          className="flex items-center gap-1.5 text-xs sm:text-sm font-bold text-stone-700 dark:text-stone-200 hover:text-rose-600 dark:hover:text-rose-400 transition-colors cursor-pointer"
         >
           <ArrowLeft className="w-4 h-4" />
           <span>{t.backToCatalog}</span>
         </button>
 
-        <h2 className="text-sm sm:text-base font-bold text-gray-900 dark:text-white flex items-center gap-1.5">
-          <span>{t.cart}</span>
-          <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-rose-50 dark:bg-rose-950/50 text-rose-600 dark:text-rose-400">
+        <div className="flex items-center gap-2">
+          <span className="text-sm font-extrabold text-stone-900 dark:text-white uppercase tracking-wider">
+            {t.cart}
+          </span>
+          <span className="text-xs font-black px-2 py-0.5 rounded-full bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20">
             {totalCount}
           </span>
-        </h2>
+        </div>
 
         {cart.length > 0 ? (
           <button
@@ -169,29 +172,33 @@ export const CartView: React.FC<CartViewProps> = ({ onClose, onOrderSuccess }) =
               hapticImpact('medium');
               clearCart();
             }}
-            className="text-xs font-medium text-red-500 hover:text-red-600 transition-colors cursor-pointer"
+            className="text-xs font-semibold text-rose-500 hover:text-rose-600 transition-colors cursor-pointer"
           >
             {t.clearCart}
           </button>
         ) : (
-          <div className="w-10" />
+          <div className="w-12" />
         )}
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 overflow-y-auto p-3 sm:p-4 max-w-xl mx-auto w-full space-y-4">
+      <div className="flex-1 overflow-y-auto p-4 sm:p-6 max-w-xl mx-auto w-full space-y-5 pb-36 no-scrollbar">
         {cart.length === 0 ? (
-          <div className="py-20 flex flex-col items-center justify-center text-center space-y-3">
-            <div className="w-16 h-16 rounded-3xl bg-rose-50 dark:bg-[#18222d] flex items-center justify-center text-rose-500">
-              <ShoppingBag className="w-8 h-8" />
+          <div className="py-24 flex flex-col items-center justify-center text-center space-y-4">
+            <div className="w-20 h-20 rounded-3xl bg-rose-500/10 dark:bg-rose-950/30 border border-rose-500/20 flex items-center justify-center text-rose-500 shadow-inner">
+              <ShoppingBag className="w-9 h-9" />
             </div>
-            <h3 className="text-lg font-bold text-gray-900 dark:text-white">{t.cartEmptyTitle}</h3>
-            <p className="text-xs text-gray-500 max-w-xs leading-relaxed">
-              {t.cartEmptyDesc}
-            </p>
+            <div className="space-y-1">
+              <h3 className="text-lg sm:text-xl font-black text-stone-900 dark:text-white">
+                {t.cartEmptyTitle}
+              </h3>
+              <p className="text-xs text-stone-500 max-w-xs leading-relaxed">
+                {t.cartEmptyDesc}
+              </p>
+            </div>
             <button
               onClick={onClose}
-              className="mt-2 px-6 py-2.5 bg-rose-600 text-white rounded-xl text-xs font-semibold shadow-sm hover:bg-rose-700 transition-colors cursor-pointer"
+              className="mt-3 px-7 py-3 bg-gradient-to-r from-rose-600 to-pink-600 text-white rounded-2xl text-xs font-bold shadow-lg shadow-rose-500/25 hover:from-rose-500 hover:to-pink-500 transition-all cursor-pointer active:scale-95"
             >
               {t.goToCatalog}
             </button>
@@ -199,16 +206,19 @@ export const CartView: React.FC<CartViewProps> = ({ onClose, onOrderSuccess }) =
         ) : (
           <>
             {/* Cart Items List */}
-            <div className="space-y-2">
+            <div className="space-y-2.5">
+              <div className="text-[11px] uppercase font-bold tracking-wider text-stone-400 dark:text-stone-500 px-1">
+                Wybrane kompozycje
+              </div>
               {cart.map((item) => {
                 const localized = getLocalizedProduct(item.product, language);
                 return (
                   <div
                     key={item.product.id}
-                    className="p-3 bg-white dark:bg-[#18222d] rounded-2xl border border-gray-100 dark:border-gray-800 shadow-2xs flex items-center gap-3"
+                    className="p-3.5 bg-white dark:bg-[#141a24] rounded-2xl border border-stone-200/60 dark:border-white/5 shadow-xs flex items-center gap-3.5 transition-all hover:border-rose-200 dark:hover:border-rose-900/40"
                   >
                     {/* Item Image */}
-                    <div className="w-14 h-14 rounded-xl bg-gray-100 dark:bg-[#233142] overflow-hidden shrink-0">
+                    <div className="w-16 h-16 rounded-xl bg-stone-100 dark:bg-slate-800 overflow-hidden shrink-0 border border-stone-100 dark:border-white/5">
                       {localized.image_url ? (
                         <img
                           src={localized.image_url}
@@ -216,36 +226,36 @@ export const CartView: React.FC<CartViewProps> = ({ onClose, onOrderSuccess }) =
                           className="w-full h-full object-cover"
                         />
                       ) : (
-                        <div className="w-full h-full flex items-center justify-center text-xs text-gray-400">
-                          🌸 Kwiaty
+                        <div className="w-full h-full flex items-center justify-center text-xs text-stone-400">
+                          🌸 Flora
                         </div>
                       )}
                     </div>
 
                     {/* Title and Price */}
                     <div className="flex-1 min-w-0">
-                      <h4 className="text-xs sm:text-sm font-semibold text-gray-900 dark:text-white line-clamp-1">
+                      <h4 className="text-xs sm:text-sm font-bold text-stone-900 dark:text-white line-clamp-1">
                         {localized.title}
                       </h4>
-                      <p className="text-xs font-bold text-rose-600 dark:text-rose-400 mt-0.5">
+                      <p className="text-xs font-extrabold text-rose-600 dark:text-rose-400 mt-1">
                         {formatCurrency(localized.price)}
                       </p>
                     </div>
 
                     {/* Quantity Stepper */}
-                    <div className="flex items-center gap-1.5 bg-gray-50 dark:bg-[#233142]/60 rounded-xl p-1 shrink-0">
+                    <div className="flex items-center gap-1 bg-stone-100 dark:bg-slate-800/80 rounded-xl p-1 shrink-0 border border-stone-200/40 dark:border-white/5">
                       <button
                         onClick={() => updateQuantity(item.product.id, item.quantity - 1)}
-                        className="w-6 h-6 rounded-lg bg-white dark:bg-[#18222d] text-gray-700 dark:text-gray-300 flex items-center justify-center shadow-2xs active:scale-90 transition-transform cursor-pointer"
+                        className="w-7 h-7 rounded-lg bg-white dark:bg-[#141a24] text-stone-700 dark:text-stone-300 flex items-center justify-center shadow-xs active:scale-90 transition-transform cursor-pointer"
                       >
                         <Minus className="w-3 h-3" />
                       </button>
-                      <span className="text-xs font-bold text-gray-900 dark:text-white w-4 text-center">
+                      <span className="text-xs font-black text-stone-900 dark:text-white w-5 text-center">
                         {item.quantity}
                       </span>
                       <button
                         onClick={() => updateQuantity(item.product.id, item.quantity + 1)}
-                        className="w-6 h-6 rounded-lg bg-rose-600 text-white flex items-center justify-center shadow-2xs active:scale-90 transition-transform cursor-pointer"
+                        className="w-7 h-7 rounded-lg bg-rose-600 text-white flex items-center justify-center shadow-xs active:scale-90 transition-transform cursor-pointer"
                       >
                         <Plus className="w-3 h-3" />
                       </button>
@@ -254,7 +264,7 @@ export const CartView: React.FC<CartViewProps> = ({ onClose, onOrderSuccess }) =
                     {/* Delete Button */}
                     <button
                       onClick={() => removeFromCart(item.product.id)}
-                      className="p-1.5 text-gray-400 hover:text-red-500 transition-colors shrink-0 cursor-pointer"
+                      className="p-1.5 text-stone-400 hover:text-red-500 transition-colors shrink-0 cursor-pointer"
                       title="Usuń"
                     >
                       <Trash2 className="w-4 h-4" />
@@ -265,35 +275,35 @@ export const CartView: React.FC<CartViewProps> = ({ onClose, onOrderSuccess }) =
             </div>
 
             {/* UPSELL RECOMMENDATIONS: "Coś do bukietu? 🎁" */}
-            <div className="bg-gradient-to-br from-rose-50/70 to-pink-50/50 dark:from-rose-950/20 dark:to-pink-950/10 rounded-2xl border border-rose-100 dark:border-rose-900/30 p-3.5 space-y-2.5">
-              <div className="flex items-center gap-1.5 text-rose-700 dark:text-rose-400">
-                <Sparkles className="w-4 h-4" />
+            <div className="bg-gradient-to-br from-rose-500/5 via-pink-500/5 to-amber-500/5 rounded-3xl border border-rose-200/60 dark:border-rose-900/30 p-4 space-y-3">
+              <div className="flex items-center gap-2 text-rose-600 dark:text-rose-400">
+                <Gift className="w-4 h-4" />
                 <div>
-                  <h4 className="text-xs font-bold">{t.upsellTitle}</h4>
-                  <p className="text-[10px] text-gray-500 dark:text-gray-400">{t.upsellSubtitle}</p>
+                  <h4 className="text-xs font-black uppercase tracking-wider">{t.upsellTitle}</h4>
+                  <p className="text-[11px] text-stone-500 dark:text-stone-400">{t.upsellSubtitle}</p>
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
                 {UPSELL_ACCESSORIES.map((acc) => {
                   const localizedAcc = getLocalizedProduct(acc, language);
                   const inCart = cart.some((c) => c.product.id === acc.id);
                   return (
                     <div
                       key={acc.id}
-                      className="p-2.5 bg-white dark:bg-[#18222d] rounded-xl border border-rose-100/60 dark:border-gray-800 flex items-center justify-between gap-2 shadow-2xs"
+                      className="p-3 bg-white dark:bg-[#141a24] rounded-2xl border border-stone-200/50 dark:border-white/5 flex items-center justify-between gap-2.5 shadow-2xs hover:shadow-sm transition-shadow"
                     >
-                      <div className="w-10 h-10 rounded-lg overflow-hidden shrink-0 bg-gray-100 dark:bg-gray-800">
+                      <div className="w-11 h-11 rounded-xl overflow-hidden shrink-0 bg-stone-100 dark:bg-slate-800">
                         <img src={localizedAcc.image_url} alt={localizedAcc.title} className="w-full h-full object-cover" />
                       </div>
 
                       <div className="flex-1 min-w-0">
-                        <p className="text-[11px] font-semibold text-gray-900 dark:text-white line-clamp-1">
+                        <p className="text-xs font-bold text-stone-900 dark:text-white line-clamp-1">
                           {localizedAcc.title}
                         </p>
-                        <p className="text-[10px] font-extrabold text-rose-600 dark:text-rose-400">
+                        <p className="text-xs font-extrabold text-rose-600 dark:text-rose-400 mt-0.5">
                           {localizedAcc.price === 0
-                            ? language === 'pl' ? 'Gratis' : language === 'ua' ? 'Безкоштовно' : 'Бесплатно'
+                            ? language === 'pl' ? 'Gratis 🎁' : language === 'ua' ? 'Безкоштовно 🎁' : 'Бесплатно 🎁'
                             : formatCurrency(localizedAcc.price)}
                         </p>
                       </div>
@@ -301,15 +311,15 @@ export const CartView: React.FC<CartViewProps> = ({ onClose, onOrderSuccess }) =
                       <button
                         type="button"
                         onClick={() => handleAddUpsell(acc)}
-                        className={`px-2.5 py-1.5 rounded-lg text-[10px] font-bold shrink-0 transition-all flex items-center gap-1 cursor-pointer ${
+                        className={`px-3 py-1.5 rounded-xl text-xs font-bold shrink-0 transition-all flex items-center gap-1 cursor-pointer active:scale-95 ${
                           inCart
-                            ? 'bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 border border-rose-200 dark:border-rose-800'
-                            : 'bg-rose-600 hover:bg-rose-700 text-white shadow-2xs active:scale-95'
+                            ? 'bg-rose-50 dark:bg-rose-950/50 text-rose-600 dark:text-rose-400 border border-rose-300 dark:border-rose-800'
+                            : 'bg-rose-600 hover:bg-rose-700 text-white shadow-xs'
                         }`}
                       >
                         {inCart ? (
                           <>
-                            <Check className="w-3 h-3" />
+                            <Check className="w-3.5 h-3.5" />
                             <span>{t.addedToOrder}</span>
                           </>
                         ) : (
@@ -323,15 +333,46 @@ export const CartView: React.FC<CartViewProps> = ({ onClose, onOrderSuccess }) =
             </div>
 
             {/* Delivery Timing & Date Picker Card */}
-            <div className="bg-white dark:bg-[#18222d] rounded-2xl border border-gray-100 dark:border-gray-800 p-3.5 sm:p-4 space-y-3 shadow-2xs">
-              <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-400 flex items-center gap-1.5">
-                <Calendar className="w-3.5 h-3.5 text-rose-500" />
-                <span>{t.deliveryTimingTitle}</span>
-              </h3>
+            <div className="bg-white dark:bg-[#141a24] rounded-3xl border border-stone-200/60 dark:border-white/5 p-4 sm:p-5 space-y-4 shadow-xs">
+              <div className="flex items-center justify-between">
+                <h3 className="text-xs font-bold uppercase tracking-wider text-stone-500 dark:text-stone-400 flex items-center gap-1.5">
+                  <Calendar className="w-3.5 h-3.5 text-rose-500" />
+                  <span>{t.deliveryTimingTitle}</span>
+                </h3>
+                <span className="text-[10px] font-extrabold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 px-2 py-0.5 rounded-full">
+                  Gwarancja punktualności
+                </span>
+              </div>
 
-              <div className="grid grid-cols-2 gap-2.5">
-                <div className="flex flex-col">
-                  <label className="text-xs font-medium text-gray-700 dark:text-gray-300 mb-1.5 h-4 flex items-center">
+              {/* Quick Date Tabs */}
+              <div className="grid grid-cols-2 gap-2">
+                <button
+                  type="button"
+                  onClick={() => setDeliveryDate(todayStr)}
+                  className={`py-2 px-3 rounded-xl text-xs font-bold border transition-all cursor-pointer ${
+                    deliveryDate === todayStr
+                      ? 'bg-rose-600 text-white border-rose-600 shadow-xs'
+                      : 'bg-stone-50 dark:bg-slate-800 text-stone-700 dark:text-stone-300 border-stone-200/60 dark:border-white/5'
+                  }`}
+                >
+                  Dziś ({todayStr.slice(5)})
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setDeliveryDate(tomorrowStr)}
+                  className={`py-2 px-3 rounded-xl text-xs font-bold border transition-all cursor-pointer ${
+                    deliveryDate === tomorrowStr
+                      ? 'bg-rose-600 text-white border-rose-600 shadow-xs'
+                      : 'bg-stone-50 dark:bg-slate-800 text-stone-700 dark:text-stone-300 border-stone-200/60 dark:border-white/5'
+                  }`}
+                >
+                  Jutro ({tomorrowStr.slice(5)})
+                </button>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3 pt-1">
+                <div>
+                  <label className="text-[11px] font-semibold text-stone-500 dark:text-stone-400 mb-1.5 block">
                     {t.deliveryDateLabel}
                   </label>
                   <input
@@ -340,19 +381,19 @@ export const CartView: React.FC<CartViewProps> = ({ onClose, onOrderSuccess }) =
                     min={todayStr}
                     value={deliveryDate}
                     onChange={(e) => setDeliveryDate(e.target.value)}
-                    className="w-full h-11 px-3 bg-gray-50 dark:bg-[#233142]/60 rounded-xl text-xs sm:text-sm text-gray-900 dark:text-white border border-transparent focus:border-rose-500 focus:outline-none transition-colors"
+                    className="w-full h-11 px-3.5 bg-stone-50 dark:bg-slate-800/80 rounded-2xl text-xs font-bold text-stone-900 dark:text-white border border-stone-200/60 dark:border-white/5 focus:border-rose-500 focus:outline-none transition-colors"
                   />
                 </div>
 
-                <div className="flex flex-col">
-                  <label className="text-xs font-medium text-gray-700 dark:text-gray-300 mb-1.5 h-4 flex items-center truncate" title={t.deliveryTimeLabel}>
+                <div>
+                  <label className="text-[11px] font-semibold text-stone-500 dark:text-stone-400 mb-1.5 block">
                     {t.deliveryTimeLabel}
                   </label>
                   <div className="relative">
                     <select
                       value={deliveryTime}
                       onChange={(e) => setDeliveryTime(e.target.value)}
-                      className="w-full h-11 px-3 bg-gray-50 dark:bg-[#233142]/60 rounded-xl text-xs sm:text-sm text-gray-900 dark:text-white border border-transparent focus:border-rose-500 focus:outline-none transition-colors appearance-none pr-8 cursor-pointer"
+                      className="w-full h-11 px-3.5 bg-stone-50 dark:bg-slate-800/80 rounded-2xl text-xs font-bold text-stone-900 dark:text-white border border-stone-200/60 dark:border-white/5 focus:border-rose-500 focus:outline-none transition-colors appearance-none pr-8 cursor-pointer"
                     >
                       {TIME_SLOTS.map((slot) => (
                         <option key={slot} value={slot}>
@@ -360,44 +401,44 @@ export const CartView: React.FC<CartViewProps> = ({ onClose, onOrderSuccess }) =
                         </option>
                       ))}
                     </select>
-                    <Clock className="w-3.5 h-3.5 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400" />
+                    <Clock className="w-3.5 h-3.5 absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-stone-400" />
                   </div>
                 </div>
               </div>
 
               {/* Special options (Surprise & Call Recipient) */}
-              <div className="space-y-2 pt-2 border-t border-gray-100 dark:border-gray-800">
-                <label className="flex items-start gap-2.5 cursor-pointer select-none">
+              <div className="space-y-2 pt-2 border-t border-stone-100 dark:border-white/5">
+                <label className="p-3 rounded-2xl bg-stone-50/70 dark:bg-slate-800/50 border border-stone-200/60 dark:border-white/5 flex items-start gap-3 cursor-pointer select-none hover:bg-stone-100/60 dark:hover:bg-slate-800 transition-colors">
                   <input
                     type="checkbox"
                     checked={isSurprise}
                     onChange={(e) => setIsSurprise(e.target.checked)}
-                    className="mt-0.5 w-4 h-4 text-rose-600 rounded focus:ring-rose-500 cursor-pointer shrink-0"
+                    className="mt-0.5 w-4 h-4 text-rose-600 rounded focus:ring-rose-500 cursor-pointer shrink-0 accent-rose-600"
                   />
                   <div>
-                    <span className="text-xs font-bold text-gray-900 dark:text-white flex items-center gap-1.5">
+                    <span className="text-xs font-bold text-stone-900 dark:text-white flex items-center gap-1.5">
                       <EyeOff className="w-3.5 h-3.5 text-purple-500 shrink-0" />
                       <span>{t.surpriseDeliveryTitle}</span>
                     </span>
-                    <p className="text-[11px] text-gray-500 dark:text-gray-400 mt-0.5">
+                    <p className="text-[11px] text-stone-500 dark:text-stone-400 mt-0.5 leading-snug">
                       {t.surpriseDeliveryDesc}
                     </p>
                   </div>
                 </label>
 
-                <label className="flex items-start gap-2.5 cursor-pointer select-none">
+                <label className="p-3 rounded-2xl bg-stone-50/70 dark:bg-slate-800/50 border border-stone-200/60 dark:border-white/5 flex items-start gap-3 cursor-pointer select-none hover:bg-stone-100/60 dark:hover:bg-slate-800 transition-colors">
                   <input
                     type="checkbox"
                     checked={needCallRecipient}
                     onChange={(e) => setNeedCallRecipient(e.target.checked)}
-                    className="mt-0.5 w-4 h-4 text-rose-600 rounded focus:ring-rose-500 cursor-pointer shrink-0"
+                    className="mt-0.5 w-4 h-4 text-rose-600 rounded focus:ring-rose-500 cursor-pointer shrink-0 accent-rose-600"
                   />
                   <div>
-                    <span className="text-xs font-bold text-gray-900 dark:text-white flex items-center gap-1.5">
+                    <span className="text-xs font-bold text-stone-900 dark:text-white flex items-center gap-1.5">
                       <PhoneCall className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
                       <span>{t.needCallRecipientTitle}</span>
                     </span>
-                    <p className="text-[11px] text-gray-500 dark:text-gray-400 mt-0.5">
+                    <p className="text-[11px] text-stone-500 dark:text-stone-400 mt-0.5 leading-snug">
                       {t.needCallRecipientDesc}
                     </p>
                   </div>
@@ -406,15 +447,15 @@ export const CartView: React.FC<CartViewProps> = ({ onClose, onOrderSuccess }) =
             </div>
 
             {/* Customer Details Form */}
-            <form onSubmit={handleCheckout} className="space-y-3.5">
-              <div className="bg-white dark:bg-[#18222d] rounded-2xl border border-gray-100 dark:border-gray-800 p-3.5 sm:p-4 space-y-3 shadow-2xs">
-                <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-400">
+            <form onSubmit={handleCheckout} className="space-y-4">
+              <div className="bg-white dark:bg-[#141a24] rounded-3xl border border-stone-200/60 dark:border-white/5 p-4 sm:p-5 space-y-3.5 shadow-xs">
+                <h3 className="text-xs font-bold uppercase tracking-wider text-stone-500 dark:text-stone-400">
                   {t.contactInfo}
                 </h3>
 
                 <div>
-                  <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    {t.customerName}
+                  <label className="block text-xs font-semibold text-stone-700 dark:text-stone-300 mb-1">
+                    {t.customerName} *
                   </label>
                   <input
                     type="text"
@@ -422,12 +463,12 @@ export const CartView: React.FC<CartViewProps> = ({ onClose, onOrderSuccess }) =
                     placeholder={t.customerNamePlaceholder}
                     value={customerName}
                     onChange={(e) => setCustomerName(e.target.value)}
-                    className="w-full px-3.5 py-2.5 bg-gray-50 dark:bg-[#233142]/60 rounded-xl text-xs sm:text-sm text-gray-900 dark:text-white border border-transparent focus:border-rose-500 focus:outline-none transition-colors placeholder:text-gray-400"
+                    className="w-full px-4 py-2.5 bg-stone-50 dark:bg-slate-800/80 rounded-2xl text-xs sm:text-sm text-stone-900 dark:text-white border border-stone-200/60 dark:border-white/5 focus:border-rose-500 focus:outline-none transition-colors placeholder:text-stone-400"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  <label className="block text-xs font-semibold text-stone-700 dark:text-stone-300 mb-1">
                     {t.phoneNumber}
                   </label>
                   <input
@@ -435,13 +476,13 @@ export const CartView: React.FC<CartViewProps> = ({ onClose, onOrderSuccess }) =
                     placeholder={t.phoneNumberPlaceholder}
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
-                    className="w-full px-3.5 py-2.5 bg-gray-50 dark:bg-[#233142]/60 rounded-xl text-xs sm:text-sm text-gray-900 dark:text-white border border-transparent focus:border-rose-500 focus:outline-none transition-colors placeholder:text-gray-400"
+                    className="w-full px-4 py-2.5 bg-stone-50 dark:bg-slate-800/80 rounded-2xl text-xs sm:text-sm text-stone-900 dark:text-white border border-stone-200/60 dark:border-white/5 focus:border-rose-500 focus:outline-none transition-colors placeholder:text-stone-400"
                   />
                 </div>
 
                 {!needCallRecipient && (
                   <div>
-                    <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    <label className="block text-xs font-semibold text-stone-700 dark:text-stone-300 mb-1">
                       {t.addressComment}
                     </label>
                     <textarea
@@ -449,13 +490,13 @@ export const CartView: React.FC<CartViewProps> = ({ onClose, onOrderSuccess }) =
                       placeholder={t.addressCommentPlaceholder}
                       value={address}
                       onChange={(e) => setAddress(e.target.value)}
-                      className="w-full px-3.5 py-2 bg-gray-50 dark:bg-[#233142]/60 rounded-xl text-xs sm:text-sm text-gray-900 dark:text-white border border-transparent focus:border-rose-500 focus:outline-none transition-colors placeholder:text-gray-400 resize-none"
+                      className="w-full px-4 py-2.5 bg-stone-50 dark:bg-slate-800/80 rounded-2xl text-xs sm:text-sm text-stone-900 dark:text-white border border-stone-200/60 dark:border-white/5 focus:border-rose-500 focus:outline-none transition-colors placeholder:text-stone-400 resize-none"
                     />
                   </div>
                 )}
 
                 <div>
-                  <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  <label className="block text-xs font-semibold text-stone-700 dark:text-stone-300 mb-1">
                     💌 {t.cardMessage}
                   </label>
                   <textarea
@@ -463,51 +504,61 @@ export const CartView: React.FC<CartViewProps> = ({ onClose, onOrderSuccess }) =
                     placeholder={t.cardMessagePlaceholder}
                     value={cardMessage}
                     onChange={(e) => setCardMessage(e.target.value)}
-                    className="w-full px-3.5 py-2 bg-rose-50/50 dark:bg-[#233142]/40 rounded-xl text-xs sm:text-sm text-gray-900 dark:text-white border border-rose-200/50 dark:border-rose-900/30 focus:border-rose-500 focus:outline-none transition-colors placeholder:text-gray-400 resize-none italic"
+                    className="w-full px-4 py-2.5 bg-rose-50/50 dark:bg-rose-950/20 rounded-2xl text-xs sm:text-sm text-stone-900 dark:text-white border border-rose-200/60 dark:border-rose-900/30 focus:border-rose-500 focus:outline-none transition-colors placeholder:text-stone-400 resize-none italic"
                   />
                 </div>
               </div>
 
               {/* Order Summary & Pricing breakdown */}
-              <div className="bg-white dark:bg-[#18222d] rounded-2xl border border-gray-100 dark:border-gray-800 p-3.5 sm:p-4 space-y-2 shadow-2xs">
-                <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400">
+              <div className="bg-white dark:bg-[#141a24] rounded-3xl border border-stone-200/60 dark:border-white/5 p-4 sm:p-5 space-y-2.5 shadow-xs">
+                <div className="flex justify-between text-xs text-stone-500 dark:text-stone-400">
                   <span>{t.itemsInOrder}</span>
-                  <span>{totalCount} szt.</span>
+                  <span className="font-bold text-stone-700 dark:text-stone-300">{totalCount} szt.</span>
                 </div>
-                <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400">
+                <div className="flex justify-between text-xs text-stone-500 dark:text-stone-400">
                   <span>{t.delivery}</span>
-                  <span className="text-emerald-500 font-semibold">{t.freeDelivery}</span>
+                  <span className="text-emerald-600 dark:text-emerald-400 font-bold">{t.freeDelivery}</span>
                 </div>
-                <div className="border-t border-gray-100 dark:border-gray-800 pt-2 flex justify-between items-baseline">
-                  <span className="text-sm font-bold text-gray-900 dark:text-white">{t.totalToPay}</span>
-                  <span className="text-lg font-extrabold text-rose-600 dark:text-rose-400">
+                <div className="border-t border-dashed border-stone-200 dark:border-white/10 pt-2.5 flex justify-between items-baseline">
+                  <span className="text-sm font-black text-stone-900 dark:text-white">{t.totalToPay}</span>
+                  <span className="text-xl font-black text-rose-600 dark:text-rose-400">
                     {formatCurrency(totalPrice)}
                   </span>
                 </div>
               </div>
 
               {error && (
-                <div className="p-3 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800 text-red-600 dark:text-red-400 text-xs rounded-xl flex items-center gap-2">
+                <div className="p-3.5 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800 text-red-600 dark:text-red-400 text-xs rounded-2xl flex items-center gap-2">
                   <AlertCircle className="w-4 h-4 shrink-0" />
                   <span>{error}</span>
                 </div>
               )}
 
-              {/* Checkout / Pay Button */}
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="w-full py-4 px-4 bg-gradient-to-r from-rose-600 to-pink-600 hover:from-rose-700 hover:to-pink-700 text-white rounded-2xl font-bold text-base shadow-lg shadow-rose-500/25 flex items-center justify-center gap-2.5 active:scale-[0.99] transition-all disabled:opacity-70 cursor-pointer"
-              >
-                {isSubmitting ? (
-                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                ) : (
-                  <>
-                    <CreditCard className="w-5 h-5" />
-                    <span>{t.proceedToCheckout} • {formatCurrency(totalPrice)}</span>
-                  </>
-                )}
-              </button>
+              {/* Floating Bottom Checkout Button */}
+              <div className="fixed bottom-0 left-0 right-0 p-4 bg-white/90 dark:bg-[#0b0f17]/90 backdrop-blur-xl border-t border-stone-200/60 dark:border-white/5 z-30">
+                <div className="max-w-xl mx-auto">
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="w-full py-4 px-5 bg-gradient-to-r from-rose-600 via-pink-600 to-rose-600 hover:from-rose-500 hover:to-pink-500 text-white rounded-2xl font-black text-sm sm:text-base shadow-xl shadow-rose-500/25 flex items-center justify-between active:scale-[0.99] transition-all disabled:opacity-70 cursor-pointer"
+                  >
+                    <div className="flex items-center gap-2">
+                      <CreditCard className="w-5 h-5" />
+                      <span>{t.proceedToCheckout}</span>
+                    </div>
+                    <div className="flex items-center gap-1.5 font-black text-base">
+                      {isSubmitting ? (
+                        <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                      ) : (
+                        <>
+                          <span>{formatCurrency(totalPrice)}</span>
+                          <ChevronRight className="w-4 h-4" />
+                        </>
+                      )}
+                    </div>
+                  </button>
+                </div>
+              </div>
             </form>
           </>
         )}

@@ -1,32 +1,32 @@
 @import "tailwindcss";
 
 :root {
-  --tg-theme-bg-color: #f7f9fa;
+  --tg-theme-bg-color: #faf7f5;
   --tg-theme-secondary-bg-color: #ffffff;
-  --tg-theme-text-color: #111827;
-  --tg-theme-hint-color: #6b7280;
-  --tg-theme-link-color: #2481cc;
-  --tg-theme-button-color: #2481cc;
+  --tg-theme-text-color: #1a1718;
+  --tg-theme-hint-color: #78716c;
+  --tg-theme-link-color: #e11d48;
+  --tg-theme-button-color: #e11d48;
   --tg-theme-button-text-color: #ffffff;
   --tg-theme-section-bg-color: #ffffff;
-  --tg-theme-section-separator-color: #e5e7eb;
+  --tg-theme-section-separator-color: #f3ece7;
+  --font-serif: 'Playfair Display', Georgia, serif;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --tg-theme-bg-color: #0f141c;
-    --tg-theme-secondary-bg-color: #18222d;
-    --tg-theme-text-color: #f3f4f6;
-    --tg-theme-hint-color: #9ca3af;
-    --tg-theme-link-color: #5bb3ff;
-    --tg-theme-button-color: #2ea6ff;
+    --tg-theme-bg-color: #0b0f17;
+    --tg-theme-secondary-bg-color: #141a24;
+    --tg-theme-text-color: #f8fafc;
+    --tg-theme-hint-color: #94a3b8;
+    --tg-theme-link-color: #fb7185;
+    --tg-theme-button-color: #e11d48;
     --tg-theme-button-text-color: #ffffff;
-    --tg-theme-section-bg-color: #18222d;
-    --tg-theme-section-separator-color: #233142;
+    --tg-theme-section-bg-color: #141a24;
+    --tg-theme-section-separator-color: #1e293b;
   }
 }
 
-/* Telegram theme variable overrides when run inside Telegram WebApp */
 body {
   background-color: var(--tg-theme-bg-color);
   color: var(--tg-theme-text-color);
@@ -40,18 +40,73 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 
+/* Luxury ambient and glass styling */
+.glass-surface {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.dark .glass-surface {
+  background: rgba(20, 26, 36, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.glass-pill {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.dark .glass-pill {
+  background: rgba(30, 41, 59, 0.7);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* Subtle Shimmer Animation */
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.animate-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.animate-shimmer::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+  animation: shimmer 2.5s infinite;
+}
+
 /* Smooth custom scrollbars */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
 }
 ::-webkit-scrollbar-track {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(150, 150, 150, 0.25);
-  border-radius: 4px;
+  background: rgba(225, 29, 72, 0.15);
+  border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(150, 150, 150, 0.4);
+  background: rgba(225, 29, 72, 0.3);
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }

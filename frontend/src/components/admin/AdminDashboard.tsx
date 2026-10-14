@@ -8,7 +8,6 @@ import { useLanguage } from '../../context/LanguageContext';
 import {
   Package,
   Layers,
-  ShoppingBag,
   Plus,
   Edit2,
   Trash2,
@@ -145,69 +144,70 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   });
 
   return (
-    <div className="max-w-4xl mx-auto w-full px-3 sm:px-4 py-3 space-y-4 animate-in fade-in duration-200">
+    <div className="max-w-4xl mx-auto w-full px-3.5 sm:px-6 py-4 space-y-5 animate-in fade-in duration-200 pb-20">
       
-      {/* Top Metrics Cards */}
-      <div className="grid grid-cols-3 gap-2 sm:gap-3">
-        <div
-          onClick={() => setActiveTab('products')}
-          className={`p-2.5 sm:p-3.5 rounded-2xl border transition-all cursor-pointer flex flex-col justify-between ${
-            activeTab === 'products'
-              ? 'bg-rose-50/80 dark:bg-rose-950/40 border-rose-200 dark:border-rose-800 shadow-2xs'
-              : 'bg-white dark:bg-[#18222d] border-gray-100 dark:border-gray-800'
-          }`}
-        >
-          <div className="flex items-center gap-1.5 text-rose-600 dark:text-rose-400">
-            <Package className="w-3.5 h-3.5 shrink-0" />
-            <span className="text-[11px] sm:text-xs font-semibold truncate">{t.adminProducts}</span>
+      {/* Top Header & Metrics Cards */}
+      <div className="p-5 rounded-3xl bg-gradient-to-br from-rose-950 via-stone-900 to-stone-950 text-white shadow-xl relative overflow-hidden">
+        <div className="relative z-10 space-y-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-xl bg-rose-500/30 border border-rose-400/40 flex items-center justify-center text-rose-300">
+                <Package className="w-4 h-4" />
+              </div>
+              <h2 className="text-base sm:text-lg font-black tracking-tight">Panel Florysty (Atelier)</h2>
+            </div>
+            <span className="px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-rose-500/20 text-rose-300 border border-rose-500/30">
+              Live Management
+            </span>
           </div>
-          <p className="text-base sm:text-xl font-extrabold text-gray-900 dark:text-white mt-1">
-            {products.length}
-          </p>
-        </div>
 
-        <div
-          onClick={() => setIsCategoryModalOpen(true)}
-          className="p-2.5 sm:p-3.5 rounded-2xl bg-white dark:bg-[#18222d] border border-gray-100 dark:border-gray-800 hover:border-gray-300 dark:hover:border-gray-700 transition-all cursor-pointer flex flex-col justify-between"
-        >
-          <div className="flex items-center gap-1.5 text-indigo-600 dark:text-indigo-400">
-            <Layers className="w-3.5 h-3.5 shrink-0" />
-            <span className="text-[11px] sm:text-xs font-semibold truncate">{t.adminCategories}</span>
-          </div>
-          <p className="text-base sm:text-xl font-extrabold text-gray-900 dark:text-white mt-1">
-            {categories.length}
-          </p>
-        </div>
+          <div className="grid grid-cols-3 gap-2.5 pt-1">
+            <div
+              onClick={() => setActiveTab('products')}
+              className={`p-3 rounded-2xl border transition-all cursor-pointer ${
+                activeTab === 'products'
+                  ? 'bg-rose-500/20 border-rose-400/50 shadow-inner'
+                  : 'bg-white/5 border-white/10 hover:bg-white/10'
+              }`}
+            >
+              <div className="text-[10px] font-bold uppercase tracking-wider text-stone-400">Bukietów</div>
+              <div className="text-lg sm:text-2xl font-black mt-0.5">{products.length}</div>
+            </div>
 
-        <div
-          onClick={() => setActiveTab('orders')}
-          className={`p-2.5 sm:p-3.5 rounded-2xl border transition-all cursor-pointer flex flex-col justify-between ${
-            activeTab === 'orders'
-              ? 'bg-emerald-50/80 dark:bg-emerald-950/40 border-emerald-200 dark:border-emerald-800 shadow-2xs'
-              : 'bg-white dark:bg-[#18222d] border-gray-100 dark:border-gray-800'
-          }`}
-        >
-          <div className="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400">
-            <ShoppingBag className="w-3.5 h-3.5 shrink-0" />
-            <span className="text-[11px] sm:text-xs font-semibold truncate">{t.adminOrders}</span>
+            <div
+              onClick={() => setIsCategoryModalOpen(true)}
+              className="p-3 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all cursor-pointer"
+            >
+              <div className="text-[10px] font-bold uppercase tracking-wider text-stone-400">Kategorii</div>
+              <div className="text-lg sm:text-2xl font-black mt-0.5">{categories.length}</div>
+            </div>
+
+            <div
+              onClick={() => setActiveTab('orders')}
+              className={`p-3 rounded-2xl border transition-all cursor-pointer ${
+                activeTab === 'orders'
+                  ? 'bg-emerald-500/20 border-emerald-400/50 shadow-inner'
+                  : 'bg-white/5 border-white/10 hover:bg-white/10'
+              }`}
+            >
+              <div className="text-[10px] font-bold uppercase tracking-wider text-emerald-400">Zamówienia</div>
+              <div className="text-lg sm:text-2xl font-black mt-0.5 text-emerald-300">Zarządzaj</div>
+            </div>
           </div>
-          <p className="text-base sm:text-xl font-extrabold text-gray-900 dark:text-white mt-1 truncate">
-            {t.adminOrdersTitle.split(' ')[0]}
-          </p>
         </div>
       </div>
 
       {/* Segmented Control Tabs */}
-      <div className="flex items-center bg-gray-200/70 dark:bg-[#1f2c3b] p-1 rounded-2xl">
+      <div className="flex items-center bg-stone-200/60 dark:bg-slate-800/80 p-1.5 rounded-2xl border border-stone-200/40 dark:border-white/5">
         <button
           onClick={() => {
             hapticImpact('light');
             setActiveTab('products');
           }}
-          className={`flex-1 py-2 text-xs font-bold rounded-xl transition-all ${
+          className={`flex-1 py-2.5 text-xs font-black uppercase tracking-wider rounded-xl transition-all cursor-pointer ${
             activeTab === 'products'
-              ? 'bg-white dark:bg-[#18222d] text-gray-900 dark:text-white shadow-2xs'
-              : 'text-gray-600 dark:text-gray-400'
+              ? 'bg-white dark:bg-[#141a24] text-stone-900 dark:text-white shadow-sm ring-1 ring-black/5 dark:ring-white/10'
+              : 'text-stone-600 dark:text-stone-400 hover:text-stone-900'
           }`}
         >
           {t.adminProducts} ({products.length})
@@ -217,10 +217,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
             hapticImpact('light');
             setActiveTab('orders');
           }}
-          className={`flex-1 py-2 text-xs font-bold rounded-xl transition-all ${
+          className={`flex-1 py-2.5 text-xs font-black uppercase tracking-wider rounded-xl transition-all cursor-pointer ${
             activeTab === 'orders'
-              ? 'bg-white dark:bg-[#18222d] text-gray-900 dark:text-white shadow-2xs'
-              : 'text-gray-600 dark:text-gray-400'
+              ? 'bg-white dark:bg-[#141a24] text-stone-900 dark:text-white shadow-sm ring-1 ring-black/5 dark:ring-white/10'
+              : 'text-stone-600 dark:text-stone-400 hover:text-stone-900'
           }`}
         >
           {t.adminOrdersTitle}
@@ -231,18 +231,18 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       {activeTab === 'orders' ? (
         <OrdersList />
       ) : (
-        <div className="space-y-3">
+        <div className="space-y-4">
           
-          {/* Action buttons on mobile */}
-          <div className="grid grid-cols-2 gap-2">
+          {/* Action buttons bar */}
+          <div className="grid grid-cols-2 gap-2.5">
             <button
               onClick={() => {
                 hapticImpact('light');
                 setIsCategoryModalOpen(true);
               }}
-              className="py-2.5 px-3 bg-white dark:bg-[#18222d] text-gray-800 dark:text-gray-200 border border-gray-200 dark:border-gray-700/60 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 shadow-2xs active:scale-[0.98] transition-all"
+              className="py-3 px-4 bg-white dark:bg-[#141a24] text-stone-800 dark:text-stone-200 border border-stone-200/60 dark:border-white/5 rounded-2xl text-xs font-bold flex items-center justify-center gap-2 shadow-xs active:scale-[0.98] transition-all cursor-pointer hover:border-indigo-400"
             >
-              <Layers className="w-3.5 h-3.5 text-indigo-500" />
+              <Layers className="w-4 h-4 text-indigo-500" />
               <span>{t.adminManageCategories}</span>
             </button>
 
@@ -251,7 +251,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 hapticImpact('medium');
                 setProductModalState({ isOpen: true, product: null });
               }}
-              className="py-2.5 px-3 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 shadow-sm shadow-rose-500/20 active:scale-[0.98] transition-all"
+              className="py-3 px-4 bg-gradient-to-r from-rose-600 to-pink-600 hover:from-rose-500 hover:to-pink-500 text-white rounded-2xl text-xs font-black flex items-center justify-center gap-2 shadow-md shadow-rose-500/25 active:scale-[0.98] transition-all cursor-pointer"
             >
               <Plus className="w-4 h-4" />
               <span>{t.adminAddProduct}</span>
@@ -259,15 +259,15 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
           </div>
 
           {/* Filter & Search Bar */}
-          <div className="flex flex-col sm:flex-row gap-2">
+          <div className="flex flex-col sm:flex-row gap-2.5">
             <div className="relative flex-1">
-              <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+              <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400" />
               <input
                 type="text"
                 placeholder={t.searchPlaceholder}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-9 pr-3 py-2 bg-white dark:bg-[#18222d] border border-gray-200 dark:border-gray-800 rounded-xl text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-rose-500"
+                className="w-full pl-10 pr-3.5 py-2.5 bg-white dark:bg-[#141a24] border border-stone-200/60 dark:border-white/5 rounded-2xl text-xs sm:text-sm text-stone-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-rose-500 shadow-2xs placeholder:text-stone-400"
               />
             </div>
 
@@ -277,7 +277,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 onChange={(e) =>
                   setSelectedCategoryFilter(e.target.value ? Number(e.target.value) : null)
                 }
-                className="w-full sm:w-auto px-3 py-2 bg-white dark:bg-[#18222d] border border-gray-200 dark:border-gray-800 rounded-xl text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-rose-500 appearance-none pr-8"
+                className="w-full sm:w-auto px-4 py-2.5 bg-white dark:bg-[#141a24] border border-stone-200/60 dark:border-white/5 rounded-2xl text-xs font-bold text-stone-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-rose-500 appearance-none pr-9 cursor-pointer shadow-2xs"
               >
                 <option value="">{t.allCategories} ({categories.length})</option>
                 {categories.map((c) => (
@@ -286,26 +286,26 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                   </option>
                 ))}
               </select>
-              <SlidersHorizontal className="w-3.5 h-3.5 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400" />
+              <SlidersHorizontal className="w-3.5 h-3.5 absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-stone-400" />
             </div>
           </div>
 
           {/* Products Mobile Card List */}
           {filteredProducts.length === 0 ? (
-            <div className="py-12 text-center text-gray-400 text-xs bg-white dark:bg-[#18222d] rounded-2xl border border-gray-100 dark:border-gray-800">
+            <div className="py-14 text-center text-stone-400 text-xs bg-white dark:bg-[#141a24] rounded-3xl border border-stone-200/60 dark:border-white/5">
               {t.emptyProductsTitle}
             </div>
           ) : (
-            <div className="space-y-2.5">
+            <div className="space-y-3">
               {filteredProducts.map((prod) => (
                 <div
                   key={prod.id}
-                  className="p-3 bg-white dark:bg-[#18222d] rounded-2xl border border-gray-100 dark:border-gray-800 shadow-2xs space-y-2.5"
+                  className="p-4 bg-white dark:bg-[#141a24] rounded-3xl border border-stone-200/60 dark:border-white/5 shadow-xs space-y-3 hover:border-rose-200 dark:hover:border-rose-900/40 transition-all"
                 >
                   {/* Top info row */}
-                  <div className="flex items-start gap-3">
+                  <div className="flex items-start gap-3.5">
                     {/* Thumbnail */}
-                    <div className="w-14 h-14 rounded-xl bg-gray-100 dark:bg-[#233142] overflow-hidden shrink-0">
+                    <div className="w-16 h-16 rounded-2xl bg-stone-100 dark:bg-slate-800 overflow-hidden shrink-0 border border-stone-200/60 dark:border-white/5">
                       {prod.image_url ? (
                         <img
                           src={prod.image_url}
@@ -315,8 +315,8 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                           }`}
                         />
                       ) : (
-                        <div className="w-full h-full flex items-center justify-center text-gray-400 text-[10px]">
-                          Kwiaty
+                        <div className="w-full h-full flex items-center justify-center text-stone-400 text-xs">
+                          🌸
                         </div>
                       )}
                     </div>
@@ -325,53 +325,54 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-1.5 flex-wrap">
                         {prod.category_name && (
-                          <span className="px-2 py-0.5 rounded-md text-[10px] font-medium bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400">
+                          <span className="px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-rose-500/10 text-rose-600 dark:text-rose-400">
                             {prod.category_name}
                           </span>
                         )}
                       </div>
-                      <h4 className="text-xs sm:text-sm font-semibold text-gray-900 dark:text-white mt-1 line-clamp-1">
+                      <h4 className="text-xs sm:text-sm font-bold text-stone-900 dark:text-white mt-1 line-clamp-1">
                         {prod.title}
                       </h4>
-                      <p className="text-xs sm:text-sm font-extrabold text-rose-600 dark:text-rose-400 mt-0.5">
+                      <p className="text-xs sm:text-sm font-black text-rose-600 dark:text-rose-400 mt-0.5">
                         {formatCurrency(prod.price)}
                       </p>
                     </div>
                   </div>
 
                   {/* Bottom Action Bar */}
-                  <div className="border-t border-gray-100 dark:border-gray-800/80 pt-2 flex items-center justify-between gap-2">
+                  <div className="border-t border-stone-100 dark:border-white/5 pt-2.5 flex items-center justify-between gap-2">
                     {/* Stock status toggle button */}
                     <button
                       onClick={() => handleToggleStock(prod)}
-                      className={`px-3 py-1.5 rounded-xl text-[11px] font-semibold transition-all flex items-center gap-1.5 active:scale-95 ${
+                      className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 active:scale-95 cursor-pointer ${
                         prod.in_stock === 1
-                          ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20'
-                          : 'bg-red-50 dark:bg-red-950/40 text-red-600 dark:text-red-400 border border-red-500/20'
+                          ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/25'
+                          : 'bg-red-500/10 text-red-600 dark:text-red-400 border border-red-500/25'
                       }`}
                     >
                       <span
-                        className={`w-1.5 h-1.5 rounded-full ${
-                          prod.in_stock === 1 ? 'bg-emerald-500' : 'bg-red-500'
+                        className={`w-2 h-2 rounded-full ${
+                          prod.in_stock === 1 ? 'bg-emerald-500 animate-pulse' : 'bg-red-500'
                         }`}
                       />
                       <span>{prod.in_stock === 1 ? t.inStock : t.outOfStock}</span>
                     </button>
 
                     {/* Channel, Edit & Delete Action Buttons */}
-                    <div className="flex items-center gap-1">
+                    <div className="flex items-center gap-1.5">
                       <button
                         onClick={() => openPublishModal(prod)}
-                        className="px-2.5 py-1.5 bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 rounded-xl text-xs font-semibold flex items-center gap-1 hover:bg-blue-100 dark:hover:bg-blue-900/40 transition-colors active:scale-95"
-                        title="Opublikuj w grupie/kanale"
+                        className="px-3 py-1.5 bg-sky-500/10 text-sky-600 dark:text-sky-400 rounded-xl text-xs font-bold flex items-center gap-1.5 hover:bg-sky-500/20 transition-colors active:scale-95 cursor-pointer border border-sky-500/20"
+                        title="Opublikuj w Telegramie"
                       >
                         <Send className="w-3.5 h-3.5" />
-                        <span>В группу</span>
+                        <span className="hidden sm:inline">Do kanału</span>
+                        <span className="sm:hidden">TG</span>
                       </button>
 
                       <button
                         onClick={() => setProductModalState({ isOpen: true, product: prod })}
-                        className="px-2.5 py-1.5 bg-gray-100 dark:bg-[#233142] text-gray-700 dark:text-gray-300 rounded-xl text-xs font-semibold flex items-center gap-1 hover:bg-gray-200 dark:hover:bg-[#2e3f53] transition-colors active:scale-95"
+                        className="px-3 py-1.5 bg-stone-100 dark:bg-slate-800 text-stone-700 dark:text-stone-300 rounded-xl text-xs font-bold flex items-center gap-1.5 hover:bg-stone-200 dark:hover:bg-slate-700 transition-colors active:scale-95 cursor-pointer border border-stone-200/50 dark:border-white/5"
                       >
                         <Edit2 className="w-3.5 h-3.5 text-rose-500" />
                         <span>Edytuj</span>
@@ -379,7 +380,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
                       <button
                         onClick={() => handleDeleteProduct(prod)}
-                        className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30 rounded-xl transition-colors active:scale-95"
+                        className="p-1.5 text-stone-400 hover:text-red-600 hover:bg-red-500/10 rounded-xl transition-colors active:scale-95 cursor-pointer"
                         title="Usuń"
                       >
                         <Trash2 className="w-4 h-4" />
@@ -395,41 +396,49 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
       {/* Publish to Channel / Group Interactive Modal */}
       {publishModal.isOpen && publishModal.product && (
-        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-200">
-          <div className="w-full sm:max-w-md bg-white dark:bg-[#18222d] rounded-t-3xl sm:rounded-3xl shadow-2xl p-5 space-y-4 animate-in slide-in-from-bottom duration-300">
-            <div className="flex items-center justify-between pb-2 border-b border-gray-100 dark:border-gray-800">
-              <h3 className="text-sm sm:text-base font-bold text-gray-900 dark:text-white flex items-center gap-1.5">
-                <Send className="w-4 h-4 text-blue-500" />
-                <span>Публикация в группу / канал</span>
+        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/70 backdrop-blur-md animate-in fade-in duration-200">
+          <div className="w-full sm:max-w-md bg-white dark:bg-[#141a24] rounded-t-[32px] sm:rounded-3xl shadow-2xl p-5 sm:p-6 space-y-4 animate-in slide-in-from-bottom duration-300 border border-stone-200/50 dark:border-white/10">
+            <div className="flex items-center justify-between pb-2 border-b border-stone-100 dark:border-white/5">
+              <h3 className="text-sm sm:text-base font-black text-stone-900 dark:text-white flex items-center gap-2">
+                <Send className="w-4 h-4 text-sky-500" />
+                <span>Publikacja w Telegramie</span>
               </h3>
               <button
                 onClick={() => setPublishModal((prev) => ({ ...prev, isOpen: false }))}
-                className="w-8 h-8 rounded-full flex items-center justify-center text-gray-400 hover:text-gray-600"
+                className="w-8 h-8 rounded-full flex items-center justify-center text-stone-400 hover:text-stone-600 dark:hover:text-stone-200"
               >
                 <X className="w-4 h-4" />
               </button>
             </div>
 
-            {/* Product Preview Card */}
-            <div className="p-3 bg-gray-50 dark:bg-[#233142]/60 rounded-2xl flex items-center gap-3">
-              <img
-                src={publishModal.product.image_url}
-                alt={publishModal.product.title}
-                className="w-12 h-12 rounded-xl object-cover"
-              />
-              <div className="flex-1 min-w-0">
-                <h4 className="text-xs font-bold text-gray-900 dark:text-white truncate">
-                  {publishModal.product.title}
-                </h4>
-                <p className="text-xs font-extrabold text-rose-600 dark:text-rose-400">
-                  {formatCurrency(publishModal.product.price)}
-                </p>
+            {/* Simulated Telegram Post Mockup */}
+            <div className="bg-[#0f141c] text-white rounded-2xl p-3.5 space-y-2.5 border border-slate-800 shadow-md">
+              <div className="text-[10px] uppercase font-bold text-sky-400 flex items-center gap-1">
+                <span>Podgląd posta w Telegramie:</span>
+              </div>
+              <div className="w-full h-36 rounded-xl overflow-hidden bg-slate-800">
+                <img
+                  src={publishModal.product.image_url}
+                  alt={publishModal.product.title}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div>
+                <h5 className="font-bold text-xs sm:text-sm text-white">{publishModal.product.title}</h5>
+                <p className="text-[11px] text-slate-300 mt-0.5 line-clamp-2">{publishModal.product.description}</p>
+                <div className="text-xs font-black text-rose-400 mt-1">Cena: {formatCurrency(publishModal.product.price)}</div>
+              </div>
+              {/* Telegram Native Inline Button */}
+              <div className="pt-1">
+                <div className="w-full py-2 bg-sky-500/20 text-sky-300 text-xs font-bold text-center rounded-xl border border-sky-500/40">
+                  🛍 Zamów ten bukiet • {publishModal.product.price} zł
+                </div>
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Куда отправить (ID группы или @username канала)
+              <label className="block text-xs font-bold text-stone-700 dark:text-stone-300 mb-1.5">
+                ID grupy / kanału (lub @username)
               </label>
               <input
                 type="text"
@@ -437,17 +446,17 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 onChange={(e) =>
                   setPublishModal((prev) => ({ ...prev, channelId: e.target.value }))
                 }
-                placeholder="-5431810394 или @kanal"
-                className="w-full px-3.5 py-2.5 bg-gray-50 dark:bg-[#233142] text-xs sm:text-sm text-gray-900 dark:text-white rounded-xl border border-gray-200 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono"
+                placeholder="-5431810394 lub @twoj_kanal"
+                className="w-full px-4 py-2.5 bg-stone-50 dark:bg-slate-800 text-xs sm:text-sm text-stone-900 dark:text-white rounded-2xl border border-stone-200/60 dark:border-white/5 focus:outline-none focus:ring-2 focus:ring-sky-500 font-mono shadow-inner"
               />
             </div>
 
             {publishModal.message && (
               <div
-                className={`p-3 rounded-xl text-xs flex items-center gap-2 ${
+                className={`p-3.5 rounded-2xl text-xs font-semibold flex items-center gap-2 ${
                   publishModal.isSuccess
-                    ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20'
-                    : 'bg-red-50 dark:bg-red-950/40 text-red-600 dark:text-red-400 border border-red-500/20'
+                    ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/25'
+                    : 'bg-red-500/10 text-red-600 dark:text-red-400 border border-red-500/25'
                 }`}
               >
                 {publishModal.isSuccess && <CheckCircle2 className="w-4 h-4 shrink-0" />}
@@ -458,14 +467,14 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
             <button
               onClick={executePublish}
               disabled={publishModal.isPublishing}
-              className="w-full py-3.5 px-4 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold text-sm shadow-md shadow-blue-500/25 flex items-center justify-center gap-2 transition-all active:scale-[0.98] cursor-pointer disabled:opacity-70"
+              className="w-full py-4 px-5 bg-gradient-to-r from-sky-600 to-blue-600 hover:from-sky-500 hover:to-blue-500 text-white rounded-2xl font-black text-sm shadow-lg shadow-sky-500/25 flex items-center justify-center gap-2 transition-all active:scale-[0.98] cursor-pointer disabled:opacity-70"
             >
               {publishModal.isPublishing ? (
-                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
               ) : (
                 <>
                   <Send className="w-4 h-4" />
-                  <span>Опубликовать прямо сейчас</span>
+                  <span>Opublikuj w kanale</span>
                 </>
               )}
             </button>
