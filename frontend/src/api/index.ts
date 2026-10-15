@@ -1,7 +1,26 @@
 import type { Category, Product, Order } from '../types';
 
-const API_BASE = '/api';
+export const SERVER_CONFIG_KEY = 'flowers_lviv_server_url';
 export const DEFAULT_GROUP_ID = '-5431810394';
+
+export function getApiBaseUrl(): string {
+  // 1. Manually saved in admin settings
+  const custom = localStorage.getItem(SERVER_CONFIG_KEY);
+  if (custom && custom.trim()) {
+    const clean = custom.trim().replace(/\/+$/, '');
+    return clean.endsWith('/api') ? clean : `${clean}/api`;
+  }
+
+  // 2. Build-time Vite env variable
+  const envUrl = import.meta.env.VITE_API_URL;
+  if (envUrl && envUrl.trim()) {
+    const clean = envUrl.trim().replace(/\/+$/, '');
+    return clean.endsWith('/api') ? clean : `${clean}/api`;
+  }
+
+  // 3. Fallback to relative /api
+  return '/api';
+}
 
 // Flower boutique initial categories
 // Flowers Lviv initial categories
@@ -316,12 +335,13 @@ const STORAGE_KEYS = {
   PRODUCTS: 'tg_flowers_lviv_products_v2',
   ORDERS: 'tg_flowers_lviv_orders_v2',
   CHANNEL_SETTINGS: 'tg_flowers_lviv_channel_v2',
+  INITIALIZED: 'tg_flowers_lviv_initialized_v2',
 };
 
 function getLocal<T>(key: string, fallback: T): T {
   try {
     const data = localStorage.getItem(key);
-    return data ? JSON.parse(data) : fallback;
+    return data !== null ? JSON.parse(data) : fallback;
   } catch {
     return fallback;
   }
@@ -335,14 +355,28 @@ function setLocal<T>(key: string, value: T): void {
   }
 }
 
+function ensureLocalCatalogSeed(): void {
+  if (!localStorage.getItem(STORAGE_KEYS.INITIALIZED)) {
+    localStorage.setItem(STORAGE_KEYS.INITIALIZED, 'true');
+    if (!localStorage.getItem(STORAGE_KEYS.PRODUCTS)) {
+      setLocal(STORAGE_KEYS.PRODUCTS, INITIAL_PRODUCTS);
+    }
+    if (!localStorage.getItem(STORAGE_KEYS.CATEGORIES)) {
+      setLocal(STORAGE_KEYS.CATEGORIES, INITIAL_CATEGORIES);
+    }
+  }
+}
+
 export const api = {
   // Categories
   async getCategories(): Promise<Category[]> {
+    ensureLocalCatalogSeed();
+    const base = getApiBaseUrl();
     try {
-      const res = await fetch(`${API_BASE}/categories`);
+      const res = await fetch(`${base}/categories`);
       if (res.ok) {
         const data = await res.json();
-        if (data.success && Array.isArray(data.data) && data.data.length > 0) {
+        if (data.success && Array.isArray(data.data)) {
           setLocal(STORAGE_KEYS.CATEGORIES, data.data);
           return data.data;
         }
@@ -352,15 +386,21 @@ export const api = {
   },
 
   async createCategory(payload: { name: string; icon?: string; sort_order?: number }): Promise<Category> {
+    ensureLocalCatalogSeed();
+    const base = getApiBaseUrl();
     try {
-      const res = await fetch(`${API_BASE}/categories`, {
+      const res = await fetch(`${base}/categories`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
       });
       if (res.ok) {
         const data = await res.json();
-        if (data.success) return data.data;
+        if (data.success && data.data) {
+          const categories = getLocal<Category[]>(STORAGE_KEYS.CATEGORIES, INITIAL_CATEGORIES);
+          setLocal(STORAGE_KEYS.CATEGORIES, [...categories.filter(c => c.id !== data.data.id), data.data]);
+          return data.data;
+        }
       }
     } catch {}
 
@@ -377,15 +417,22 @@ export const api = {
   },
 
   async updateCategory(id: number, payload: Partial<Category>): Promise<Category> {
+    ensureLocalCatalogSeed();
+    const base = getApiBaseUrl();
     try {
-      const res = await fetch(`${API_BASE}/categories/${id}`, {
+      const res = await fetch(`${base}/categories/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
       });
       if (res.ok) {
         const data = await res.json();
-        if (data.success) return data.data;
+        if (data.success && data.data) {
+          const categories = getLocal<Category[]>(STORAGE_KEYS.CATEGORIES, INITIAL_CATEGORIES);
+          const updated = categories.map((c) => (c.id === id ? data.data : c));
+          setLocal(STORAGE_KEYS.CATEGORIES, updated);
+          return data.data;
+        }
       }
     } catch {}
 
@@ -396,8 +443,9 @@ export const api = {
   },
 
   async deleteCategory(id: number): Promise<void> {
+    const base = getApiBaseUrl();
     try {
-      await fetch(`${API_BASE}/categories/${id}`, { method: 'DELETE' });
+      await fetch(`${base}/categories/${id}`, { method: 'DELETE' });
     } catch {}
 
     const categories = getLocal<Category[]>(STORAGE_KEYS.CATEGORIES, INITIAL_CATEGORIES);
@@ -413,7 +461,10 @@ export const api = {
     in_stock_only?: boolean;
     search?: string;
   }): Promise<Product[]> {
+    ensureLocalCatalogSeed();
     let products: Product[] = [];
+    let fetchedFromServer = false;
+    const base = getApiBaseUrl();
 
     try {
       const query = new URLSearchParams();
@@ -421,17 +472,18 @@ export const api = {
       if (params?.in_stock_only) query.append('in_stock_only', '1');
       if (params?.search) query.append('search', params.search);
 
-      const res = await fetch(`${API_BASE}/products?${query.toString()}`);
+      const res = await fetch(`${base}/products?${query.toString()}`);
       if (res.ok) {
         const data = await res.json();
-        if (data.success && Array.isArray(data.data) && data.data.length > 0) {
+        if (data.success && Array.isArray(data.data)) {
           products = data.data;
           setLocal(STORAGE_KEYS.PRODUCTS, products);
+          fetchedFromServer = true;
         }
       }
     } catch {}
 
-    if (products.length === 0) {
+    if (!fetchedFromServer) {
       products = getLocal<Product[]>(STORAGE_KEYS.PRODUCTS, INITIAL_PRODUCTS);
     }
 
@@ -461,15 +513,21 @@ export const api = {
     payload: Omit<Product, 'id' | 'created_at'>,
     options?: { publish_to_channel?: boolean; channel_username?: string }
   ): Promise<Product> {
+    ensureLocalCatalogSeed();
+    const base = getApiBaseUrl();
     try {
-      const res = await fetch(`${API_BASE}/products`, {
+      const res = await fetch(`${base}/products`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ...payload, ...options }),
       });
       if (res.ok) {
         const data = await res.json();
-        if (data.success) return data.data;
+        if (data.success && data.data) {
+          const products = getLocal<Product[]>(STORAGE_KEYS.PRODUCTS, INITIAL_PRODUCTS);
+          setLocal(STORAGE_KEYS.PRODUCTS, [data.data, ...products.filter(p => p.id !== data.data.id)]);
+          return data.data;
+        }
       }
     } catch {}
 
@@ -494,15 +552,22 @@ export const api = {
   },
 
   async updateProduct(id: number, payload: Partial<Product>): Promise<Product> {
+    ensureLocalCatalogSeed();
+    const base = getApiBaseUrl();
     try {
-      const res = await fetch(`${API_BASE}/products/${id}`, {
+      const res = await fetch(`${base}/products/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
       });
       if (res.ok) {
         const data = await res.json();
-        if (data.success) return data.data;
+        if (data.success && data.data) {
+          const products = getLocal<Product[]>(STORAGE_KEYS.PRODUCTS, INITIAL_PRODUCTS);
+          const updated = products.map((p) => (p.id === id ? data.data : p));
+          setLocal(STORAGE_KEYS.PRODUCTS, updated);
+          return data.data;
+        }
       }
     } catch {}
 
@@ -513,6 +578,23 @@ export const api = {
   },
 
   async toggleProductStock(id: number): Promise<Product> {
+    ensureLocalCatalogSeed();
+    const base = getApiBaseUrl();
+    try {
+      const res = await fetch(`${base}/products/${id}/stock`, {
+        method: 'PATCH',
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.success && data.data) {
+          const products = getLocal<Product[]>(STORAGE_KEYS.PRODUCTS, INITIAL_PRODUCTS);
+          const updated = products.map((p) => (p.id === id ? { ...p, in_stock: data.data.in_stock } : p));
+          setLocal(STORAGE_KEYS.PRODUCTS, updated);
+          return updated.find((p) => p.id === id)!;
+        }
+      }
+    } catch {}
+
     const products = getLocal<Product[]>(STORAGE_KEYS.PRODUCTS, INITIAL_PRODUCTS);
     const prod = products.find((p) => p.id === id);
     const newStock = prod ? (prod.in_stock === 1 ? 0 : 1) : 1;
@@ -520,8 +602,10 @@ export const api = {
   },
 
   async deleteProduct(id: number): Promise<void> {
+    ensureLocalCatalogSeed();
+    const base = getApiBaseUrl();
     try {
-      await fetch(`${API_BASE}/products/${id}`, { method: 'DELETE' });
+      await fetch(`${base}/products/${id}`, { method: 'DELETE' });
     } catch (e) {
       console.warn(`Local deletion fallback for #${id}`);
     }
@@ -539,9 +623,10 @@ export const api = {
     }
 
     setLocal(STORAGE_KEYS.CHANNEL_SETTINGS, rawTarget);
+    const base = getApiBaseUrl();
 
     try {
-      const res = await fetch(`${API_BASE}/products/publish-to-channel`, {
+      const res = await fetch(`${base}/products/publish-to-channel`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -582,16 +667,28 @@ export const api = {
       const formData = new FormData();
       formData.append('image', file);
 
-      const res = await fetch(`${API_BASE}/products/upload`, {
+      const base = getApiBaseUrl();
+      const res = await fetch(`${base}/upload`, {
         method: 'POST',
         body: formData,
       });
 
       if (res.ok) {
         const data = await res.json();
-        if (data.success) return data.data;
+        if (data.success) {
+          let finalUrl = data.url;
+          if (finalUrl && finalUrl.startsWith('/')) {
+            const backendOrigin = base.replace(/\/api\/?$/, '');
+            if (backendOrigin && !backendOrigin.startsWith('/')) {
+              finalUrl = `${backendOrigin}${finalUrl}`;
+            }
+          }
+          return { url: finalUrl, filename: data.filename };
+        }
       }
-    } catch {}
+    } catch (e) {
+      console.warn('Backend image upload fallback to base64:', e);
+    }
 
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -608,11 +705,15 @@ export const api = {
 
   // Orders
   async getOrders(): Promise<Order[]> {
+    const base = getApiBaseUrl();
     try {
-      const res = await fetch(`${API_BASE}/orders`);
+      const res = await fetch(`${base}/orders`);
       if (res.ok) {
         const data = await res.json();
-        if (data.success) return data.data;
+        if (data.success && Array.isArray(data.data)) {
+          setLocal(STORAGE_KEYS.ORDERS, data.data);
+          return data.data;
+        }
       }
     } catch {}
 
@@ -633,15 +734,20 @@ export const api = {
     items: { id: number; title: string; price: number; quantity: number; image_url?: string }[];
     total_price: number;
   }): Promise<Order> {
+    const base = getApiBaseUrl();
     try {
-      const res = await fetch(`${API_BASE}/orders`, {
+      const res = await fetch(`${base}/orders`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
       });
       if (res.ok) {
         const data = await res.json();
-        if (data.success) return data.data;
+        if (data.success && data.data) {
+          const orders = getLocal<Order[]>(STORAGE_KEYS.ORDERS, []);
+          setLocal(STORAGE_KEYS.ORDERS, [data.data, ...orders]);
+          return data.data;
+        }
       }
     } catch {}
 
@@ -669,15 +775,21 @@ export const api = {
   },
 
   async updateOrderStatus(id: number, status: Order['status']): Promise<Order> {
+    const base = getApiBaseUrl();
     try {
-      const res = await fetch(`${API_BASE}/orders/${id}/status`, {
+      const res = await fetch(`${base}/orders/${id}/status`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status }),
       });
       if (res.ok) {
         const data = await res.json();
-        if (data.success) return data.data;
+        if (data.success && data.data) {
+          const orders = getLocal<Order[]>(STORAGE_KEYS.ORDERS, []);
+          const updated = orders.map((o) => (o.id === id ? data.data : o));
+          setLocal(STORAGE_KEYS.ORDERS, updated);
+          return data.data;
+        }
       }
     } catch {}
 
@@ -688,10 +800,139 @@ export const api = {
   },
 
   async getHealth(): Promise<{ status: string; adminIds?: string[] }> {
+    const base = getApiBaseUrl();
     try {
-      const res = await fetch(`${API_BASE}/health`);
+      const res = await fetch(`${base}/health`);
       if (res.ok) return await res.json();
     } catch {}
     return { status: 'offline' };
+  },
+
+  async checkServerHealth(url?: string): Promise<{ ok: boolean; message: string; timestamp?: string }> {
+    const rawTarget = (url || getApiBaseUrl()).trim().replace(/\/+$/, '');
+    if (!rawTarget) {
+      return { ok: false, message: 'Адресу сервера не вказано' };
+    }
+    const healthUrl = rawTarget.endsWith('/api')
+      ? `${rawTarget}/health`
+      : rawTarget.includes('/api/')
+      ? `${rawTarget}`
+      : `${rawTarget}/api/health`;
+
+    try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 6000);
+      const res = await fetch(healthUrl, { signal: controller.signal });
+      clearTimeout(timeoutId);
+
+      if (res.ok) {
+        const data = await res.json();
+        return {
+          ok: true,
+          message: `Сервер на зв'язку (Онлайн)`,
+          timestamp: data.timestamp || new Date().toISOString(),
+        };
+      } else {
+        return {
+          ok: false,
+          message: `Сервер повернув код ${res.status}: ${res.statusText}`,
+        };
+      }
+    } catch (e: any) {
+      return {
+        ok: false,
+        message: e.name === 'AbortError' ? 'Таймаут (понад 6 сек)' : `Не вдалося з'єднатися (${e.message || 'offline'})`,
+      };
+    }
+  },
+
+  async syncFromServer(): Promise<void> {
+    const base = getApiBaseUrl();
+
+    // 1. Categories
+    try {
+      const catRes = await fetch(`${base}/categories`);
+      if (catRes.ok) {
+        const catData = await catRes.json();
+        if (catData.success && Array.isArray(catData.data)) {
+          setLocal(STORAGE_KEYS.CATEGORIES, catData.data);
+        }
+      }
+    } catch (e) {
+      console.warn('Sync categories error:', e);
+    }
+
+    // 2. Products
+    try {
+      const prodRes = await fetch(`${base}/products`);
+      if (prodRes.ok) {
+        const prodData = await prodRes.json();
+        if (prodData.success && Array.isArray(prodData.data)) {
+          setLocal(STORAGE_KEYS.PRODUCTS, prodData.data);
+          setLocal(STORAGE_KEYS.INITIALIZED, 'true');
+        }
+      }
+    } catch (e) {
+      console.warn('Sync products error:', e);
+    }
+
+    // 3. Orders
+    try {
+      const ordRes = await fetch(`${base}/orders`);
+      if (ordRes.ok) {
+        const ordData = await ordRes.json();
+        if (ordData.success && Array.isArray(ordData.data)) {
+          setLocal(STORAGE_KEYS.ORDERS, ordData.data);
+        }
+      }
+    } catch (e) {
+      console.warn('Sync orders error:', e);
+    }
+  },
+
+  async exportLocalToCentralServer(): Promise<number> {
+    const base = getApiBaseUrl();
+    const categories = getLocal<Category[]>(STORAGE_KEYS.CATEGORIES, INITIAL_CATEGORIES);
+    const products = getLocal<Product[]>(STORAGE_KEYS.PRODUCTS, INITIAL_PRODUCTS);
+
+    for (const cat of categories) {
+      try {
+        await fetch(`${base}/categories`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: cat.name,
+            icon: cat.icon,
+            sort_order: cat.sort_order,
+          }),
+        });
+      } catch (e) {
+        console.warn('Export category failed:', cat.name, e);
+      }
+    }
+
+    let count = 0;
+    for (const p of products) {
+      try {
+        await fetch(`${base}/products`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            category_id: p.category_id,
+            title: p.title,
+            description: p.description,
+            price: p.price,
+            image_url: p.image_url,
+            in_stock: p.in_stock,
+          }),
+        });
+        count++;
+      } catch (e) {
+        console.warn('Export product failed:', p.title, e);
+      }
+    }
+
+    await this.syncFromServer();
+    return count;
   },
 };

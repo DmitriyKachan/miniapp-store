@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: flowers-lviv-api
+    env: node
+    plan: free
+    rootDir: backend
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: PORT
+        value: 10000
+      - key: WEBAPP_URL
+        value: https://dmitriykachan.github.io/miniapp-store/
+      - key: BOT_TOKEN
+        sync: false
+      - key: ADMIN_CHAT_ID
+        sync: false
