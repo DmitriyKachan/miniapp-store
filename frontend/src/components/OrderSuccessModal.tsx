@@ -27,31 +27,31 @@ export const OrderSuccessModal: React.FC<OrderSuccessModalProps> = ({ order, onC
         </div>
 
         <div>
-          <span className="inline-block px-3 py-1 rounded-full bg-rose-500/10 text-rose-600 dark:text-rose-400 text-xs font-black uppercase tracking-wider border border-rose-500/20">
+          <span className="inline-block px-3 py-1 rounded-full bg-[#131d33]/10 dark:bg-white/10 text-[#131d33] dark:text-[#f1f5f9] text-xs font-black uppercase tracking-wider border border-[#131d33]/20">
             {t.orderNumber} #{order.id}
           </span>
-          <h3 className="text-xl sm:text-2xl font-black text-stone-900 dark:text-white mt-2 leading-tight">
+          <h3 className="font-brand-serif text-xl sm:text-2xl font-bold text-[#131d33] dark:text-white mt-2 leading-tight">
             {t.orderSuccessTitle}
           </h3>
-          <p className="text-xs text-stone-500 dark:text-stone-400 mt-1 leading-relaxed">
+          <p className="text-xs text-[#6e809f] dark:text-[#8fa0ba] mt-1 leading-relaxed">
             {t.orderSuccessDesc}
           </p>
         </div>
 
         {/* Order Details Receipt Card */}
-        <div className="bg-stone-50 dark:bg-slate-800/60 rounded-2xl p-4 text-left space-y-2.5 text-xs border border-stone-200/60 dark:border-white/5">
+        <div className="bg-[#faf8f5] dark:bg-[#131b2d] rounded-2xl p-4 text-left space-y-2.5 text-xs border border-[#e8e4da] dark:border-white/5">
           <div className="flex justify-between items-center text-stone-500 dark:text-stone-400">
             <span>{t.orderStatus}</span>
-            <span className="px-2.5 py-0.5 rounded-full font-bold text-[11px] bg-amber-500/15 text-amber-700 dark:text-amber-300">
+            <span className="px-2.5 py-0.5 rounded-full font-bold text-[11px] bg-[#c5a880]/20 text-[#131d33] dark:text-[#c5a880]">
               {t.orderPending}
             </span>
           </div>
           <div className="flex justify-between items-center text-stone-500 dark:text-stone-400">
             <span>{t.totalToPay}</span>
-            <span className="font-black text-base text-stone-900 dark:text-white">{formatCurrency(order.total_price)}</span>
+            <span className="font-black text-base text-[#131d33] dark:text-white">{formatCurrency(order.total_price)}</span>
           </div>
           {order.items && order.items.length > 0 && (
-            <div className="border-t border-dashed border-stone-200 dark:border-white/10 pt-2.5 text-[11px] text-stone-600 dark:text-stone-300 space-y-1">
+            <div className="border-t border-dashed border-[#e8e4da] dark:border-white/10 pt-2.5 text-[11px] text-stone-600 dark:text-stone-300 space-y-1">
               {order.items.map((it, idx) => (
                 <div key={idx} className="flex justify-between">
                   <span className="truncate pr-2 font-medium">{it.title} x{it.quantity}</span>
@@ -68,9 +68,9 @@ export const OrderSuccessModal: React.FC<OrderSuccessModalProps> = ({ order, onC
             hapticImpact('light');
             onClose();
           }}
-          className="w-full py-4 px-5 bg-gradient-to-r from-rose-600 via-pink-600 to-rose-600 hover:from-rose-500 hover:to-pink-500 text-white rounded-2xl font-black text-sm shadow-lg shadow-rose-500/25 flex items-center justify-center gap-2 active:scale-[0.98] transition-all cursor-pointer"
+          className="w-full py-4 px-5 bg-[#131d33] hover:bg-[#1a2846] text-white rounded-2xl font-black text-sm shadow-lg shadow-[#131d33]/25 flex items-center justify-center gap-2 active:scale-[0.98] transition-all cursor-pointer border border-[#2b3c5c]"
         >
-          <ShoppingBag className="w-4 h-4" />
+          <ShoppingBag className="w-4 h-4 text-[#c5a880]" />
           <span>{t.backToShopping}</span>
         </button>
       </div>

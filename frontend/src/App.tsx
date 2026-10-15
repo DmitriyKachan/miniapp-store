@@ -117,45 +117,51 @@ const ShopContent: React.FC = () => {
         <main className="max-w-4xl mx-auto w-full px-3.5 sm:px-6 py-4 flex-1 flex flex-col space-y-4">
           
           {/* Flowers Lviv Brand & Atelier Showcase Banner */}
-          <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-rose-900 via-rose-800 to-pink-900 text-white p-5 sm:p-6 shadow-xl shadow-rose-900/25 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border border-rose-400/25">
-            <div className="space-y-2 z-10 max-w-lg">
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/15 backdrop-blur-md text-[10px] font-black tracking-widest uppercase text-white shadow-xs">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                <span>Flowers Lviv Atelier</span>
+          <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#101726] via-[#152238] to-[#1c2c48] text-white p-5 sm:p-6 shadow-xl shadow-[#131d33]/25 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5 border border-[#243452]">
+            <div className="space-y-3 z-10 max-w-lg">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md text-[10px] font-black tracking-widest uppercase text-[#c5a880] border border-[#c5a880]/30 shadow-xs">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#c5a880] animate-pulse" />
+                <span className="font-brand-serif">Flowers Lviv Atelier</span>
               </div>
-              <h2 className="text-base sm:text-xl font-black tracking-tight leading-snug">
-                Свіжі авторські букети та доставка квітів по Львову
+              <h2 className="font-brand-serif text-lg sm:text-2xl font-black tracking-wide leading-snug text-white">
+                Авторські букети та доставка квітів по Львову
               </h2>
-              <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-rose-100 font-medium">
+              <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-[#a3b3cc] font-medium">
                 <span className="flex items-center gap-1.5">
-                  <MapPin className="w-3.5 h-3.5 text-amber-300 shrink-0" />
+                  <MapPin className="w-3.5 h-3.5 text-[#c5a880] shrink-0" />
                   <span>вул. Топольна, 4В</span>
                 </span>
                 <span className="flex items-center gap-1.5">
-                  <Clock className="w-3.5 h-3.5 text-amber-300 shrink-0" />
+                  <Clock className="w-3.5 h-3.5 text-[#c5a880] shrink-0" />
                   <span>10:00 – 20:00</span>
                 </span>
                 <span className="flex items-center gap-1.5">
-                  <Truck className="w-3.5 h-3.5 text-amber-300 shrink-0" />
+                  <Truck className="w-3.5 h-3.5 text-[#c5a880] shrink-0" />
                   <span>від 60 хв</span>
                 </span>
               </div>
             </div>
 
-            <button
-              onClick={() => {
-                hapticImpact('light');
-                openExternalLink('https://www.instagram.com/flowers___lviv/');
-              }}
-              className="z-10 px-4 py-2.5 rounded-2xl bg-gradient-to-r from-amber-400 to-pink-400 text-stone-950 hover:brightness-105 font-black text-xs sm:text-sm shadow-xl active:scale-95 transition-all flex items-center gap-2 shrink-0 cursor-pointer"
-            >
-              <span>@flowers___lviv</span>
-              <ExternalLink className="w-3.5 h-3.5 text-stone-950" />
-            </button>
+            <div className="flex items-center gap-3 z-10 w-full sm:w-auto justify-between sm:justify-end">
+              <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl overflow-hidden bg-white p-1 shadow-lg shrink-0 border border-white/20">
+                <img src="./logo.png" alt="Flowers Lviv Logo" className="w-full h-full object-cover" />
+              </div>
+              
+              <button
+                onClick={() => {
+                  hapticImpact('light');
+                  openExternalLink('https://www.instagram.com/flowers___lviv/');
+                }}
+                className="px-4 py-2.5 rounded-2xl bg-white/10 hover:bg-white/20 text-[#f1f5f9] border border-white/20 font-bold text-xs shadow-md active:scale-95 transition-all flex items-center gap-2 shrink-0 cursor-pointer backdrop-blur-md"
+              >
+                <span>@flowers___lviv</span>
+                <ExternalLink className="w-3.5 h-3.5 text-[#c5a880]" />
+              </button>
+            </div>
 
-            {/* Decorative background glows */}
-            <div className="absolute -right-8 -top-8 w-44 h-44 bg-rose-500/20 rounded-full blur-3xl pointer-events-none" />
-            <div className="absolute right-32 -bottom-10 w-36 h-36 bg-amber-400/20 rounded-full blur-2xl pointer-events-none" />
+            {/* Subtle background botanical ambient glows */}
+            <div className="absolute -right-12 -top-12 w-56 h-56 bg-[#6e809f]/15 rounded-full blur-3xl pointer-events-none" />
+            <div className="absolute left-1/3 -bottom-16 w-48 h-48 bg-[#c5a880]/10 rounded-full blur-2xl pointer-events-none" />
           </div>
 
           {/* Categories Horizontal Scroll */}
@@ -244,20 +250,20 @@ const ShopContent: React.FC = () => {
               hapticImpact('medium');
               setIsCartOpen(true);
             }}
-            className="w-full bg-gradient-to-r from-rose-600 via-pink-600 to-rose-600 hover:from-rose-500 hover:to-pink-500 text-white p-3.5 sm:p-4 rounded-2xl sm:rounded-3xl shadow-2xl shadow-rose-600/35 flex items-center justify-between active:scale-[0.99] transition-all cursor-pointer border border-white/20"
+            className="w-full bg-[#131d33] hover:bg-[#1a2846] text-white p-3.5 sm:p-4 rounded-2xl sm:rounded-3xl shadow-2xl shadow-[#131d33]/40 flex items-center justify-between active:scale-[0.99] transition-all cursor-pointer border border-[#2b3c5c]"
           >
             <div className="flex items-center gap-2.5 sm:gap-3">
-              <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl sm:rounded-2xl bg-white/25 flex items-center justify-center font-black text-xs backdrop-blur-xs">
+              <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl sm:rounded-2xl bg-[#c5a880] text-[#131d33] flex items-center justify-center font-black text-xs shadow-xs">
                 {totalCount}
               </div>
-              <span className="text-xs sm:text-sm font-bold tracking-tight">Квітковий кошик</span>
+              <span className="font-brand-serif text-xs sm:text-sm font-bold tracking-wider uppercase">Квітковий кошик</span>
             </div>
 
             <div className="flex items-center gap-2">
-              <span className="text-sm sm:text-base font-black tracking-tight">
+              <span className="text-sm sm:text-base font-black tracking-tight text-[#f1f5f9]">
                 {formatCurrency(totalPrice)}
               </span>
-              <ArrowRight className="w-4 h-4" />
+              <ArrowRight className="w-4 h-4 text-[#c5a880]" />
             </div>
           </button>
         </div>

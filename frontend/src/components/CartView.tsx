@@ -185,20 +185,20 @@ export const CartView: React.FC<CartViewProps> = ({ onClose, onOrderSuccess }) =
       <div className="flex-1 overflow-y-auto p-4 sm:p-6 max-w-xl mx-auto w-full space-y-5 pb-36 no-scrollbar">
         {cart.length === 0 ? (
           <div className="py-24 flex flex-col items-center justify-center text-center space-y-4">
-            <div className="w-20 h-20 rounded-3xl bg-rose-500/10 dark:bg-rose-950/30 border border-rose-500/20 flex items-center justify-center text-rose-500 shadow-inner">
+            <div className="w-20 h-20 rounded-3xl bg-[#131d33]/5 dark:bg-white/5 border border-[#131d33]/15 flex items-center justify-center text-[#131d33] dark:text-[#f8fafc] shadow-inner">
               <ShoppingBag className="w-9 h-9" />
             </div>
             <div className="space-y-1">
-              <h3 className="text-lg sm:text-xl font-black text-stone-900 dark:text-white">
+              <h3 className="font-brand-serif text-lg sm:text-xl font-bold text-[#131d33] dark:text-white">
                 {t.cartEmptyTitle}
               </h3>
-              <p className="text-xs text-stone-500 max-w-xs leading-relaxed">
+              <p className="text-xs text-[#6e809f] max-w-xs leading-relaxed">
                 {t.cartEmptyDesc}
               </p>
             </div>
             <button
               onClick={onClose}
-              className="mt-3 px-7 py-3 bg-gradient-to-r from-rose-600 to-pink-600 text-white rounded-2xl text-xs font-bold shadow-lg shadow-rose-500/25 hover:from-rose-500 hover:to-pink-500 transition-all cursor-pointer active:scale-95"
+              className="mt-3 px-7 py-3 bg-[#131d33] hover:bg-[#1b2946] text-white rounded-2xl text-xs font-bold shadow-lg shadow-[#131d33]/25 transition-all cursor-pointer active:scale-95"
             >
               {t.goToCatalog}
             </button>
@@ -207,7 +207,7 @@ export const CartView: React.FC<CartViewProps> = ({ onClose, onOrderSuccess }) =
           <>
             {/* Cart Items List */}
             <div className="space-y-2.5">
-              <div className="text-[11px] uppercase font-bold tracking-wider text-stone-400 dark:text-stone-500 px-1">
+              <div className="text-[11px] uppercase font-bold tracking-wider text-[#6e809f] px-1">
                 Обрані букети
               </div>
               {cart.map((item) => {
@@ -215,10 +215,10 @@ export const CartView: React.FC<CartViewProps> = ({ onClose, onOrderSuccess }) =
                 return (
                   <div
                     key={item.product.id}
-                    className="p-3.5 bg-white dark:bg-[#141a24] rounded-2xl border border-stone-200/60 dark:border-white/5 shadow-xs flex items-center gap-3.5 transition-all hover:border-rose-200 dark:hover:border-rose-900/40"
+                    className="p-3.5 bg-white dark:bg-[#131b2d] rounded-2xl border border-[#e8e4da] dark:border-[#1f2b43] shadow-xs flex items-center gap-3.5 transition-all hover:border-[#131d33]/30"
                   >
                     {/* Item Image */}
-                    <div className="w-16 h-16 rounded-xl bg-stone-100 dark:bg-slate-800 overflow-hidden shrink-0 border border-stone-100 dark:border-white/5">
+                    <div className="w-16 h-16 rounded-xl bg-[#f5f2eb] dark:bg-slate-800 overflow-hidden shrink-0 border border-[#e8e4da] dark:border-white/5">
                       {localized.image_url ? (
                         <img
                           src={localized.image_url}
@@ -226,18 +226,18 @@ export const CartView: React.FC<CartViewProps> = ({ onClose, onOrderSuccess }) =
                           className="w-full h-full object-cover"
                         />
                       ) : (
-                        <div className="w-full h-full flex items-center justify-center text-xs text-stone-400">
-                          🌸 Flowers Lviv
+                        <div className="w-full h-full flex flex-col items-center justify-center p-2 text-center text-[10px] text-stone-400">
+                          <img src="./logo.png" alt="Flowers Lviv" className="w-6 h-6 object-contain opacity-60" />
                         </div>
                       )}
                     </div>
 
                     {/* Title and Price */}
                     <div className="flex-1 min-w-0">
-                      <h4 className="text-xs sm:text-sm font-bold text-stone-900 dark:text-white line-clamp-1">
+                      <h4 className="text-xs sm:text-sm font-bold text-[#131d33] dark:text-white line-clamp-1">
                         {localized.title}
                       </h4>
-                      <p className="text-xs font-extrabold text-rose-600 dark:text-rose-400 mt-1">
+                      <p className="text-xs font-extrabold text-[#131d33] dark:text-[#f8fafc] mt-1">
                         {formatCurrency(localized.price)}
                       </p>
                     </div>
@@ -255,7 +255,7 @@ export const CartView: React.FC<CartViewProps> = ({ onClose, onOrderSuccess }) =
                       </span>
                       <button
                         onClick={() => updateQuantity(item.product.id, item.quantity + 1)}
-                        className="w-7 h-7 rounded-lg bg-rose-600 text-white flex items-center justify-center shadow-xs active:scale-90 transition-transform cursor-pointer"
+                        className="w-7 h-7 rounded-lg bg-[#131d33] text-white flex items-center justify-center shadow-xs active:scale-90 transition-transform cursor-pointer"
                       >
                         <Plus className="w-3 h-3" />
                       </button>
@@ -275,12 +275,12 @@ export const CartView: React.FC<CartViewProps> = ({ onClose, onOrderSuccess }) =
             </div>
 
             {/* UPSELL RECOMMENDATIONS: "Доповнити букет 🎁" */}
-            <div className="bg-gradient-to-br from-rose-500/5 via-pink-500/5 to-amber-500/5 rounded-3xl border border-rose-200/60 dark:border-rose-900/30 p-4 space-y-3">
-              <div className="flex items-center gap-2 text-rose-600 dark:text-rose-400">
-                <Gift className="w-4 h-4" />
+            <div className="bg-[#faf8f5] dark:bg-[#131b2d] rounded-3xl border border-[#e8e4da] dark:border-[#1f2b43] p-4 space-y-3">
+              <div className="flex items-center gap-2 text-[#131d33] dark:text-white">
+                <Gift className="w-4 h-4 text-[#c5a880]" />
                 <div>
                   <h4 className="text-xs font-black uppercase tracking-wider">{t.upsellTitle}</h4>
-                  <p className="text-[11px] text-stone-500 dark:text-stone-400">{t.upsellSubtitle}</p>
+                  <p className="text-[11px] text-[#6e809f] dark:text-[#8fa0ba]">{t.upsellSubtitle}</p>
                 </div>
               </div>
 
@@ -291,7 +291,7 @@ export const CartView: React.FC<CartViewProps> = ({ onClose, onOrderSuccess }) =
                   return (
                     <div
                       key={acc.id}
-                      className="p-3 bg-white dark:bg-[#141a24] rounded-2xl border border-stone-200/50 dark:border-white/5 flex items-center justify-between gap-2.5 shadow-2xs hover:shadow-sm transition-shadow"
+                      className="p-3 bg-white dark:bg-[#0f1523] rounded-2xl border border-[#e8e4da] dark:border-white/5 flex items-center justify-between gap-2.5 shadow-2xs hover:shadow-sm transition-shadow"
                     >
                       <div className="w-11 h-11 rounded-xl overflow-hidden shrink-0 bg-stone-100 dark:bg-slate-800">
                         <img src={localizedAcc.image_url} alt={localizedAcc.title} className="w-full h-full object-cover" />
@@ -301,7 +301,7 @@ export const CartView: React.FC<CartViewProps> = ({ onClose, onOrderSuccess }) =
                         <p className="text-xs font-bold text-stone-900 dark:text-white line-clamp-1">
                           {localizedAcc.title}
                         </p>
-                        <p className="text-xs font-extrabold text-rose-600 dark:text-rose-400 mt-0.5">
+                        <p className="text-xs font-extrabold text-[#131d33] dark:text-[#f8fafc] mt-0.5">
                           {localizedAcc.price === 0
                             ? 'Безкоштовно 🎁'
                             : formatCurrency(localizedAcc.price)}
@@ -313,13 +313,13 @@ export const CartView: React.FC<CartViewProps> = ({ onClose, onOrderSuccess }) =
                         onClick={() => handleAddUpsell(acc)}
                         className={`px-3 py-1.5 rounded-xl text-xs font-bold shrink-0 transition-all flex items-center gap-1 cursor-pointer active:scale-95 ${
                           inCart
-                            ? 'bg-rose-50 dark:bg-rose-950/50 text-rose-600 dark:text-rose-400 border border-rose-300 dark:border-rose-800'
-                            : 'bg-rose-600 hover:bg-rose-700 text-white shadow-xs'
+                            ? 'bg-[#131d33]/10 dark:bg-white/10 text-[#131d33] dark:text-white border border-[#131d33]/20'
+                            : 'bg-[#131d33] hover:bg-[#1a2846] text-white shadow-xs'
                         }`}
                       >
                         {inCart ? (
                           <>
-                            <Check className="w-3.5 h-3.5" />
+                            <Check className="w-3.5 h-3.5 text-[#c5a880]" />
                             <span>{t.addedToOrder}</span>
                           </>
                         ) : (
@@ -351,8 +351,8 @@ export const CartView: React.FC<CartViewProps> = ({ onClose, onOrderSuccess }) =
                   onClick={() => setDeliveryDate(todayStr)}
                   className={`py-2 px-3 rounded-xl text-xs font-bold border transition-all cursor-pointer ${
                     deliveryDate === todayStr
-                      ? 'bg-rose-600 text-white border-rose-600 shadow-xs'
-                      : 'bg-stone-50 dark:bg-slate-800 text-stone-700 dark:text-stone-300 border-stone-200/60 dark:border-white/5'
+                      ? 'bg-[#131d33] text-white border-[#131d33] shadow-xs'
+                      : 'bg-white dark:bg-slate-800 text-stone-700 dark:text-stone-300 border-[#e8e4da] dark:border-white/5'
                   }`}
                 >
                   {t.today} ({todayStr.slice(5)})
@@ -362,8 +362,8 @@ export const CartView: React.FC<CartViewProps> = ({ onClose, onOrderSuccess }) =
                   onClick={() => setDeliveryDate(tomorrowStr)}
                   className={`py-2 px-3 rounded-xl text-xs font-bold border transition-all cursor-pointer ${
                     deliveryDate === tomorrowStr
-                      ? 'bg-rose-600 text-white border-rose-600 shadow-xs'
-                      : 'bg-stone-50 dark:bg-slate-800 text-stone-700 dark:text-stone-300 border-stone-200/60 dark:border-white/5'
+                      ? 'bg-[#131d33] text-white border-[#131d33] shadow-xs'
+                      : 'bg-white dark:bg-slate-800 text-stone-700 dark:text-stone-300 border-[#e8e4da] dark:border-white/5'
                   }`}
                 >
                   {t.tomorrow} ({tomorrowStr.slice(5)})
@@ -525,9 +525,9 @@ export const CartView: React.FC<CartViewProps> = ({ onClose, onOrderSuccess }) =
                   <span>{t.delivery}</span>
                   <span className="text-emerald-600 dark:text-emerald-400 font-bold">{t.freeDelivery}</span>
                 </div>
-                <div className="border-t border-dashed border-stone-200 dark:border-white/10 pt-2.5 flex justify-between items-baseline">
+                <div className="border-t border-dashed border-[#e8e4da] dark:border-white/10 pt-2.5 flex justify-between items-baseline">
                   <span className="text-sm font-black text-stone-900 dark:text-white">{t.totalToPay}</span>
-                  <span className="text-xl font-black text-rose-600 dark:text-rose-400">
+                  <span className="text-xl font-black text-[#131d33] dark:text-[#f8fafc]">
                     {formatCurrency(totalPrice)}
                   </span>
                 </div>
@@ -541,24 +541,24 @@ export const CartView: React.FC<CartViewProps> = ({ onClose, onOrderSuccess }) =
               )}
 
               {/* Floating Bottom Checkout Button */}
-              <div className="fixed bottom-0 left-0 right-0 p-4 bg-white/90 dark:bg-[#0b0f17]/90 backdrop-blur-xl border-t border-stone-200/60 dark:border-white/5 z-30">
+              <div className="fixed bottom-0 left-0 right-0 p-4 bg-white/90 dark:bg-[#0b0f17]/90 backdrop-blur-xl border-t border-[#e8e4da] dark:border-white/5 z-30">
                 <div className="max-w-xl mx-auto">
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full py-4 px-5 bg-gradient-to-r from-rose-600 via-pink-600 to-rose-600 hover:from-rose-500 hover:to-pink-500 text-white rounded-2xl font-black text-sm sm:text-base shadow-xl shadow-rose-500/25 flex items-center justify-between active:scale-[0.99] transition-all disabled:opacity-70 cursor-pointer"
+                    className="w-full py-4 px-5 bg-[#131d33] hover:bg-[#1a2846] text-white rounded-2xl font-black text-sm sm:text-base shadow-xl shadow-[#131d33]/25 flex items-center justify-between active:scale-[0.99] transition-all disabled:opacity-70 cursor-pointer border border-[#2b3c5c]"
                   >
                     <div className="flex items-center gap-2">
-                      <CreditCard className="w-5 h-5" />
-                      <span>{t.proceedToCheckout}</span>
+                      <CreditCard className="w-5 h-5 text-[#c5a880]" />
+                      <span className="font-brand-serif tracking-wider uppercase">{t.proceedToCheckout}</span>
                     </div>
-                    <div className="flex items-center gap-1.5 font-black text-base">
+                    <div className="flex items-center gap-1.5 font-black text-base text-[#f1f5f9]">
                       {isSubmitting ? (
                         <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
                       ) : (
                         <>
                           <span>{formatCurrency(totalPrice)}</span>
-                          <ChevronRight className="w-4 h-4" />
+                          <ChevronRight className="w-4 h-4 text-[#c5a880]" />
                         </>
                       )}
                     </div>

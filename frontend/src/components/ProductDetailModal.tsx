@@ -45,7 +45,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product,
         </div>
 
         {/* Hero image container */}
-        <div className="relative w-full pt-[85%] bg-stone-100 dark:bg-slate-800 overflow-hidden">
+        <div className="relative w-full pt-[85%] bg-[#f5f2eb] dark:bg-slate-800 overflow-hidden">
           {localized.image_url ? (
             <img
               src={localized.image_url}
@@ -55,15 +55,16 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product,
               }`}
             />
           ) : (
-            <div className="absolute inset-0 flex items-center justify-center text-stone-400">
-              🌸 Flowers Lviv Atelier
+            <div className="absolute inset-0 flex flex-col items-center justify-center p-6 bg-[#faf8f5]">
+              <img src="./logo.png" alt="Flowers Lviv Logo" className="w-20 h-20 object-contain" />
+              <span className="font-brand-serif text-xs tracking-widest text-[#6e809f] uppercase mt-2">Flowers Lviv Atelier</span>
             </div>
           )}
 
           {/* Action pills top */}
           <div className="absolute top-3.5 left-3.5 right-3.5 flex items-center justify-between">
             {localized.category_name ? (
-              <span className="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-black/50 backdrop-blur-md text-white shadow-xs">
+              <span className="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-black/60 backdrop-blur-md text-white shadow-xs">
                 {localized.category_name}
               </span>
             ) : <span />}
@@ -77,7 +78,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product,
                 }}
                 className="w-9 h-9 rounded-full bg-black/40 backdrop-blur-md text-white flex items-center justify-center hover:bg-black/60 transition-colors cursor-pointer active:scale-90"
               >
-                <Heart className={`w-4 h-4 ${isLiked ? 'fill-rose-500 text-rose-500' : 'text-white'}`} />
+                <Heart className={`w-4 h-4 ${isLiked ? 'fill-[#c5a880] text-[#c5a880]' : 'text-white'}`} />
               </button>
 
               <button
@@ -97,26 +98,26 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product,
         <div className="p-5 sm:p-6 flex-1 overflow-y-auto space-y-4 no-scrollbar">
           <div className="space-y-1">
             <div className="flex items-start justify-between gap-3">
-              <h2 className="text-xl sm:text-2xl font-black text-stone-900 dark:text-white leading-tight">
+              <h2 className="font-brand-serif text-xl sm:text-2xl font-bold text-[#131d33] dark:text-white leading-tight">
                 {localized.title}
               </h2>
             </div>
-            <div className="text-xl sm:text-2xl font-extrabold text-rose-600 dark:text-rose-400 tracking-tight">
+            <div className="text-xl sm:text-2xl font-black text-[#131d33] dark:text-[#f8fafc] tracking-tight">
               {formatCurrency(localized.price)}
             </div>
           </div>
 
           {/* Boutique guarantees */}
           <div className="grid grid-cols-2 gap-2 py-1">
-            <div className="p-2.5 rounded-2xl bg-rose-50/70 dark:bg-rose-950/20 border border-rose-100 dark:border-rose-900/30 flex items-center gap-2">
-              <Sparkles className="w-4 h-4 text-rose-500 shrink-0" />
-              <span className="text-[11px] font-bold text-stone-800 dark:text-rose-200">
+            <div className="p-2.5 rounded-2xl bg-[#131d33]/5 dark:bg-white/5 border border-[#131d33]/10 dark:border-white/10 flex items-center gap-2">
+              <Sparkles className="w-4 h-4 text-[#c5a880] shrink-0" />
+              <span className="text-[11px] font-bold text-[#131d33] dark:text-[#f1f5f9]">
                 {t.fastDeliveryBadge}
               </span>
             </div>
-            <div className="p-2.5 rounded-2xl bg-amber-50/70 dark:bg-amber-950/20 border border-amber-100 dark:border-amber-900/30 flex items-center gap-2">
-              <Droplets className="w-4 h-4 text-amber-500 shrink-0" />
-              <span className="text-[11px] font-bold text-stone-800 dark:text-amber-200">
+            <div className="p-2.5 rounded-2xl bg-[#6e809f]/10 dark:bg-[#6e809f]/20 border border-[#6e809f]/20 flex items-center gap-2">
+              <Droplets className="w-4 h-4 text-[#6e809f] shrink-0" />
+              <span className="text-[11px] font-bold text-[#131d33] dark:text-[#f1f5f9]">
                 {t.chrysalFreeBadge}
               </span>
             </div>
@@ -124,7 +125,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product,
 
           {localized.description && (
             <div className="space-y-1.5 pt-1">
-              <h4 className="text-[11px] font-bold uppercase tracking-wider text-stone-400 dark:text-stone-500">
+              <h4 className="text-[11px] font-bold uppercase tracking-wider text-[#6e809f]">
                 Склад та опис букету
               </h4>
               <p className="text-xs sm:text-sm text-stone-600 dark:text-stone-300 leading-relaxed whitespace-pre-line">
@@ -134,17 +135,17 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product,
           )}
 
           {/* Stock status indicator */}
-          <div className="flex items-center gap-2 pt-1 border-t border-stone-100 dark:border-white/5">
+          <div className="flex items-center gap-2 pt-1 border-t border-[#e8e4da] dark:border-white/5">
             <span
               className={`w-2 h-2 rounded-full ${
-                localized.in_stock ? 'bg-emerald-500 animate-pulse' : 'bg-red-500'
+                localized.in_stock ? 'bg-emerald-500 animate-pulse' : 'bg-stone-400'
               }`}
             />
             <span className="text-xs font-semibold text-stone-600 dark:text-stone-300">
               {localized.in_stock ? t.inStock : t.outOfStock}
             </span>
             {currentInCart > 0 && (
-              <span className="ml-auto text-xs font-bold text-rose-600 dark:text-rose-400 bg-rose-50 dark:bg-rose-950/50 px-2.5 py-1 rounded-xl">
+              <span className="ml-auto text-xs font-bold text-[#131d33] dark:text-[#f1f5f9] bg-[#131d33]/10 dark:bg-white/10 px-2.5 py-1 rounded-xl">
                 {t.inCart}: {currentInCart}
               </span>
             )}
@@ -152,12 +153,12 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product,
         </div>
 
         {/* Footer with quantity stepper and Add button */}
-        <div className="p-4 border-t border-stone-200/60 dark:border-white/10 bg-stone-50/80 dark:bg-[#0f141c]/90 backdrop-blur-md flex items-center gap-3">
+        <div className="p-4 border-t border-[#e8e4da] dark:border-white/10 bg-[#faf8f5] dark:bg-[#0f141c]/90 backdrop-blur-md flex items-center gap-3">
           {!isOutOfStock && (
-            <div className="flex items-center gap-1.5 bg-white dark:bg-slate-800 border border-stone-200/80 dark:border-white/10 rounded-2xl p-1 shrink-0 shadow-xs">
+            <div className="flex items-center gap-1.5 bg-white dark:bg-slate-800 border border-[#e8e4da] dark:border-white/10 rounded-2xl p-1 shrink-0 shadow-xs">
               <button
                 onClick={() => setSelectedQty(Math.max(1, selectedQty - 1))}
-                className="w-9 h-9 rounded-xl flex items-center justify-center text-stone-700 dark:text-stone-200 hover:bg-stone-100 dark:hover:bg-slate-700 active:scale-90 transition-transform cursor-pointer"
+                className="w-9 h-9 rounded-xl flex items-center justify-center text-stone-700 dark:text-stone-200 hover:bg-[#f5f2eb] dark:hover:bg-slate-700 active:scale-90 transition-transform cursor-pointer"
               >
                 <Minus className="w-4 h-4" />
               </button>
@@ -166,7 +167,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product,
               </span>
               <button
                 onClick={() => setSelectedQty(selectedQty + 1)}
-                className="w-9 h-9 rounded-xl flex items-center justify-center text-stone-700 dark:text-stone-200 hover:bg-stone-100 dark:hover:bg-slate-700 active:scale-90 transition-transform cursor-pointer"
+                className="w-9 h-9 rounded-xl flex items-center justify-center text-stone-700 dark:text-stone-200 hover:bg-[#f5f2eb] dark:hover:bg-slate-700 active:scale-90 transition-transform cursor-pointer"
               >
                 <Plus className="w-4 h-4" />
               </button>
@@ -179,10 +180,10 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product,
             className={`flex-1 py-4 px-5 rounded-2xl font-bold text-sm flex items-center justify-center gap-2.5 shadow-lg transition-all active:scale-[0.98] cursor-pointer ${
               isOutOfStock
                 ? 'bg-stone-200 dark:bg-slate-800 text-stone-400 cursor-not-allowed shadow-none'
-                : 'bg-gradient-to-r from-rose-600 via-pink-600 to-rose-600 hover:from-rose-500 hover:to-pink-500 text-white shadow-rose-500/25'
+                : 'bg-[#131d33] hover:bg-[#1a2846] text-white shadow-[#131d33]/25 border border-[#2b3c5c]'
             }`}
           >
-            <ShoppingBag className="w-4 h-4" />
+            <ShoppingBag className="w-4 h-4 text-[#c5a880]" />
             <span>
               {isOutOfStock
                 ? t.outOfStock

@@ -157,8 +157,8 @@ export const OrdersList: React.FC = () => {
               }}
               className={`px-3.5 py-2 rounded-2xl text-xs font-bold transition-all cursor-pointer active:scale-95 ${
                 statusFilter === tab.key
-                  ? 'bg-rose-600 text-white shadow-md shadow-rose-500/25'
-                  : 'bg-white dark:bg-[#141a24] text-stone-600 dark:text-stone-300 border border-stone-200/60 dark:border-white/5 hover:border-stone-300'
+                  ? 'bg-[#131d33] text-white shadow-md shadow-[#131d33]/25'
+                  : 'bg-white dark:bg-[#141a24] text-stone-600 dark:text-stone-300 border border-[#e8e4da] dark:border-white/5 hover:border-stone-300'
               }`}
             >
               {tab.label}
@@ -171,9 +171,9 @@ export const OrdersList: React.FC = () => {
             hapticImpact('light');
             fetchOrders();
           }}
-          className="text-xs font-bold text-rose-600 dark:text-rose-400 hover:underline shrink-0 flex items-center gap-1.5 cursor-pointer px-2 py-1"
+          className="text-xs font-bold text-[#131d33] dark:text-[#f8fafc] hover:underline shrink-0 flex items-center gap-1.5 cursor-pointer px-2 py-1"
         >
-          <RefreshCw className="w-3.5 h-3.5" />
+          <RefreshCw className="w-3.5 h-3.5 text-[#c5a880]" />
           <span>Оновити</span>
         </button>
       </div>
@@ -213,7 +213,7 @@ export const OrdersList: React.FC = () => {
                   </div>
 
                   <div className="flex items-center gap-3 shrink-0">
-                    <span className="font-black text-sm sm:text-base text-rose-600 dark:text-rose-400">
+                    <span className="font-black text-sm sm:text-base text-[#131d33] dark:text-[#f8fafc]">
                       {formatCurrency(order.total_price)}
                     </span>
                     {isExpanded ? (

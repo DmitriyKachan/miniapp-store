@@ -422,14 +422,14 @@ export const ProductFormModal: React.FC<ProductFormModalProps> = ({
             <button
               type="submit"
               disabled={isSubmitting || isUploading}
-              className="w-full py-4 bg-gradient-to-r from-rose-600 via-pink-600 to-rose-600 hover:from-rose-500 hover:to-pink-500 text-white text-xs sm:text-sm font-black rounded-2xl shadow-lg shadow-rose-500/25 active:scale-[0.99] transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+              className="w-full py-4 bg-[#131d33] hover:bg-[#1a2846] text-white text-xs sm:text-sm font-black rounded-2xl shadow-lg shadow-[#131d33]/25 active:scale-[0.99] transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 border border-[#2b3c5c]"
             >
               {isSubmitting ? (
                 <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
               ) : (
                 <>
-                  <Check className="w-4 h-4" />
-                  <span>{product ? 'Зберегти зміни' : 'Опублікувати букет на вітрину'}</span>
+                  <Check className="w-4 h-4 text-[#c5a880]" />
+                  <span className="font-brand-serif tracking-wider uppercase">{product ? 'Зберегти зміни' : 'Опублікувати букет на вітрину'}</span>
                 </>
               )}
             </button>

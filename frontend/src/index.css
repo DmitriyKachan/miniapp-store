@@ -1,77 +1,102 @@
 @import "tailwindcss";
 
-:root {
-  --tg-theme-bg-color: #faf7f5;
-  --tg-theme-secondary-bg-color: #ffffff;
-  --tg-theme-text-color: #1a1718;
-  --tg-theme-hint-color: #78716c;
-  --tg-theme-link-color: #e11d48;
-  --tg-theme-button-color: #e11d48;
-  --tg-theme-button-text-color: #ffffff;
-  --tg-theme-section-bg-color: #ffffff;
-  --tg-theme-section-separator-color: #f3ece7;
-  --font-serif: 'Playfair Display', Georgia, serif;
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --tg-theme-bg-color: #0b0f17;
-    --tg-theme-secondary-bg-color: #141a24;
-    --tg-theme-text-color: #f8fafc;
-    --tg-theme-hint-color: #94a3b8;
-    --tg-theme-link-color: #fb7185;
-    --tg-theme-button-color: #e11d48;
+    --tg-theme-bg-color: #faf8f5;
+    --tg-theme-secondary-bg-color: #ffffff;
+    --tg-theme-text-color: #131d33;
+    --tg-theme-hint-color: #6e809f;
+    --tg-theme-link-color: #131d33;
+    --tg-theme-button-color: #131d33;
     --tg-theme-button-text-color: #ffffff;
-    --tg-theme-section-bg-color: #141a24;
-    --tg-theme-section-separator-color: #1e293b;
+    --tg-theme-section-bg-color: #ffffff;
+    --tg-theme-section-separator-color: #e8e4da;
+    
+    --brand-ink: #131d33;
+    --brand-ink-light: #1e2d4a;
+    --brand-slate: #6e809f;
+    --brand-cream: #faf8f5;
+    --brand-gold: #c5a880;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --tg-theme-bg-color: #0b111d;
+      --tg-theme-secondary-bg-color: #131b2d;
+      --tg-theme-text-color: #f8fafc;
+      --tg-theme-hint-color: #8fa0ba;
+      --tg-theme-link-color: #8fa0ba;
+      --tg-theme-button-color: #1e2d4a;
+      --tg-theme-button-text-color: #ffffff;
+      --tg-theme-section-bg-color: #131b2d;
+      --tg-theme-section-separator-color: #1f2b43;
+    }
+  }
+
+  html {
+    overflow-x: hidden;
+    max-width: 100vw;
+    width: 100%;
+  }
+
+  body {
+    background-color: var(--tg-theme-bg-color);
+    color: var(--tg-theme-text-color);
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    max-width: 100vw;
+    width: 100%;
+    min-height: 100vh;
+    min-height: 100dvh;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    padding-bottom: env(safe-area-inset-bottom, 0px);
   }
 }
 
-html {
-  overflow-x: hidden;
-  max-width: 100vw;
-  width: 100%;
+/* Font classes */
+.font-brand-serif {
+  font-family: 'Cinzel', 'Cormorant Garamond', Georgia, serif;
 }
 
-body {
-  background-color: var(--tg-theme-bg-color);
-  color: var(--tg-theme-text-color);
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  margin: 0;
-  padding: 0;
-  overflow-x: hidden;
-  max-width: 100vw;
-  width: 100%;
-  min-height: 100vh;
-  min-height: 100dvh;
-  user-select: none;
-  -webkit-tap-highlight-color: transparent;
-  padding-bottom: env(safe-area-inset-bottom, 0px);
+.font-editorial {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+}
+
+/* Botanical brand paper texture & watermark effects */
+.bg-porcelain {
+  background-color: #faf8f5;
+}
+
+.dark .bg-porcelain {
+  background-color: #0b111d;
 }
 
 /* Luxury ambient and glass styling */
 .glass-surface {
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
 }
 
 .dark .glass-surface {
-  background: rgba(20, 26, 36, 0.85);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: rgba(19, 27, 45, 0.88);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
 }
 
 .glass-pill {
-  background: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.75);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
 }
 
 .dark .glass-pill {
-  background: rgba(30, 41, 59, 0.7);
+  background: rgba(25, 36, 58, 0.75);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
 }
@@ -98,7 +123,7 @@ body {
   animation: shimmer 2.5s infinite;
 }
 
-/* Smooth custom scrollbars */
+/* Smooth custom scrollbars in slate ink */
 ::-webkit-scrollbar {
   width: 5px;
   height: 5px;
@@ -107,11 +132,11 @@ body {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(225, 29, 72, 0.15);
+  background: rgba(110, 128, 159, 0.25);
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(225, 29, 72, 0.3);
+  background: rgba(19, 29, 51, 0.4);
 }
 
 .no-scrollbar::-webkit-scrollbar {

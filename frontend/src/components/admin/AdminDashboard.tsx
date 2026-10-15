@@ -182,9 +182,9 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
               hapticImpact('light');
               setIsCategoryModalOpen(true);
             }}
-            className="flex-1 sm:flex-initial py-2.5 px-3.5 bg-stone-100 hover:bg-stone-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-stone-800 dark:text-stone-200 rounded-2xl text-xs font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer active:scale-95 border border-stone-200/60 dark:border-white/5 shadow-2xs"
+            className="flex-1 sm:flex-initial py-2.5 px-3.5 bg-white hover:bg-[#f5f2eb] dark:bg-slate-800 dark:hover:bg-slate-700 text-stone-800 dark:text-stone-200 rounded-2xl text-xs font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer active:scale-95 border border-[#e8e4da] dark:border-white/5 shadow-2xs"
           >
-            <Layers className="w-4 h-4 text-rose-500 shrink-0" />
+            <Layers className="w-4 h-4 text-[#6e809f] shrink-0" />
             <span>Категорії ({categories.length})</span>
           </button>
 
@@ -193,10 +193,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
               hapticImpact('medium');
               setProductModalState({ isOpen: true, product: null });
             }}
-            className="flex-1 sm:flex-initial py-2.5 px-4 bg-gradient-to-r from-rose-600 via-pink-600 to-rose-600 hover:from-rose-500 hover:to-pink-500 text-white rounded-2xl text-xs font-black flex items-center justify-center gap-1.5 shadow-md shadow-rose-500/25 transition-all cursor-pointer active:scale-95 shrink-0"
+            className="flex-1 sm:flex-initial py-2.5 px-4 bg-[#131d33] hover:bg-[#1a2846] text-white rounded-2xl text-xs font-black flex items-center justify-center gap-1.5 shadow-md shadow-[#131d33]/25 transition-all cursor-pointer active:scale-95 shrink-0 border border-[#2b3c5c]"
           >
-            <Plus className="w-4 h-4 shrink-0" />
-            <span>Додати букет</span>
+            <Plus className="w-4 h-4 text-[#c5a880] shrink-0" />
+            <span className="font-brand-serif tracking-wider uppercase">Додати букет</span>
           </button>
         </div>
       </div>
@@ -283,8 +283,8 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
               }}
               className={`px-3 py-1.5 rounded-xl text-xs font-bold shrink-0 transition-all cursor-pointer active:scale-95 ${
                 selectedCategoryFilter === null
-                  ? 'bg-rose-600 text-white shadow-xs'
-                  : 'bg-white dark:bg-[#141a24] text-stone-700 dark:text-stone-300 border border-stone-200/60 dark:border-white/5 hover:border-rose-200'
+                  ? 'bg-[#131d33] text-white shadow-xs'
+                  : 'bg-white dark:bg-[#141a24] text-stone-700 dark:text-stone-300 border border-[#e8e4da] dark:border-white/5 hover:border-[#131d33]/20'
               }`}
             >
               Усі букети ({products.length})
@@ -302,12 +302,12 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                   }}
                   className={`px-3 py-1.5 rounded-xl text-xs font-bold shrink-0 transition-all cursor-pointer active:scale-95 flex items-center gap-1.5 ${
                     isSelected
-                      ? 'bg-rose-600 text-white shadow-xs'
-                      : 'bg-white dark:bg-[#141a24] text-stone-700 dark:text-stone-300 border border-stone-200/60 dark:border-white/5 hover:border-rose-200'
+                      ? 'bg-[#131d33] text-white shadow-xs'
+                      : 'bg-white dark:bg-[#141a24] text-stone-700 dark:text-stone-300 border border-[#e8e4da] dark:border-white/5 hover:border-[#131d33]/20'
                   }`}
                 >
                   <span>{c.name}</span>
-                  <span className={`text-[10px] font-black ${isSelected ? 'text-white/80' : 'text-stone-400'}`}>
+                  <span className={`text-[10px] font-black ${isSelected ? 'text-[#c5a880]' : 'text-stone-400'}`}>
                     ({count})
                   </span>
                 </button>
@@ -344,8 +344,8 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                           }`}
                         />
                       ) : (
-                        <div className="w-full h-full flex items-center justify-center text-stone-400 text-xs">
-                          🌸
+                        <div className="w-full h-full flex flex-col items-center justify-center p-2 bg-[#faf8f5]">
+                          <img src="./logo.png" alt="Flowers Lviv" className="w-7 h-7 object-contain opacity-60" />
                         </div>
                       )}
                     </div>
@@ -354,12 +354,12 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between gap-2 flex-wrap">
                         {prod.category_name && (
-                          <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-rose-500/10 text-rose-600 dark:text-rose-400">
+                          <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-[#131d33]/10 dark:bg-white/10 text-[#131d33] dark:text-[#f8fafc]">
                             {prod.category_name}
                           </span>
                         )}
 
-                        <span className="text-sm sm:text-base font-black text-rose-600 dark:text-rose-400 ml-auto">
+                        <span className="text-sm sm:text-base font-black text-[#131d33] dark:text-[#f8fafc] ml-auto">
                           {formatCurrency(prod.price)}
                         </span>
                       </div>
@@ -406,7 +406,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                       onClick={() => setProductModalState({ isOpen: true, product: prod })}
                       className="px-3 py-2 bg-stone-100 hover:bg-stone-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-stone-700 dark:text-stone-200 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-stone-200/50 dark:border-white/5"
                     >
-                      <Edit2 className="w-3.5 h-3.5 text-rose-500" />
+                      <Edit2 className="w-3.5 h-3.5 text-[#131d33] dark:text-[#a5b9d8]" />
                       <span>Редагувати</span>
                     </button>
 
@@ -462,7 +462,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 <h4 className="text-xs font-bold text-stone-900 dark:text-white truncate">
                   {productToDelete.title}
                 </h4>
-                <p className="text-xs font-black text-rose-600 dark:text-rose-400 mt-0.5">
+                <p className="text-xs font-black text-[#131d33] dark:text-[#f8fafc] mt-0.5">
                   {formatCurrency(productToDelete.price)}
                 </p>
               </div>
@@ -544,7 +544,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 <h4 className="text-xs font-bold text-stone-900 dark:text-white truncate">
                   {publishModal.product.title}
                 </h4>
-                <p className="text-xs font-black text-rose-600 dark:text-rose-400 mt-0.5">
+                <p className="text-xs font-black text-[#131d33] dark:text-[#f8fafc] mt-0.5">
                   {formatCurrency(publishModal.product.price)}
                 </p>
               </div>

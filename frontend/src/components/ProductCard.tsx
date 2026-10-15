@@ -38,10 +38,10 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onOpenDetails
   return (
     <div
       onClick={() => onOpenDetails(localized)}
-      className="group relative bg-white dark:bg-[#141a24] rounded-3xl border border-stone-200/60 dark:border-white/5 shadow-xs hover:shadow-xl hover:shadow-rose-500/10 transition-all duration-300 flex flex-col justify-between overflow-hidden cursor-pointer active:scale-[0.98]"
+      className="group relative bg-white dark:bg-[#131b2d] rounded-3xl border border-[#e8e4da] dark:border-[#1f2b43] shadow-xs hover:shadow-xl hover:shadow-[#131d33]/10 transition-all duration-300 flex flex-col justify-between overflow-hidden cursor-pointer active:scale-[0.98]"
     >
       {/* Top Image Container */}
-      <div className="relative w-full pt-[96%] bg-stone-100 dark:bg-slate-800/60 overflow-hidden">
+      <div className="relative w-full pt-[96%] bg-[#f5f2eb] dark:bg-slate-800/60 overflow-hidden">
         {localized.image_url ? (
           <img
             src={localized.image_url}
@@ -52,8 +52,9 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onOpenDetails
             }`}
           />
         ) : (
-          <div className="absolute inset-0 flex items-center justify-center text-stone-300 dark:text-stone-600 text-xs">
-            🌸 Flowers Lviv
+          <div className="absolute inset-0 flex flex-col items-center justify-center p-4 bg-[#faf8f5]">
+            <img src="./logo.png" alt="Flowers Lviv" className="w-12 h-12 object-contain opacity-70" />
+            <span className="font-brand-serif text-[10px] tracking-widest text-[#6e809f] uppercase mt-1">Flowers Lviv</span>
           </div>
         )}
 
@@ -63,17 +64,17 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onOpenDetails
         {/* Top Badges */}
         <div className="absolute top-2.5 left-2.5 right-2.5 flex items-center justify-between pointer-events-none gap-1">
           {localized.category_name ? (
-            <span className="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-black/40 backdrop-blur-md text-white/95 truncate max-w-[120px] shadow-xs">
+            <span className="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-black/50 backdrop-blur-md text-white/95 truncate max-w-[120px] shadow-xs">
               {localized.category_name}
             </span>
           ) : <span />}
 
           {isOutOfStock ? (
-            <span className="px-2.5 py-1 rounded-full text-[10px] font-extrabold bg-stone-900/80 text-rose-300 backdrop-blur-md shadow-xs border border-rose-500/30">
+            <span className="px-2.5 py-1 rounded-full text-[10px] font-extrabold bg-[#131d33]/90 text-[#e2eaf5] backdrop-blur-md shadow-xs border border-white/20">
               {t.outOfStock}
             </span>
           ) : product.price >= 2500 ? (
-            <span className="px-2 py-0.5 rounded-full text-[9px] font-extrabold bg-amber-400 text-stone-950 backdrop-blur-md shadow-xs flex items-center gap-1">
+            <span className="px-2.5 py-0.5 rounded-full text-[9px] font-black bg-[#c5a880] text-[#131d33] backdrop-blur-md shadow-xs flex items-center gap-1">
               <Sparkles className="w-2.5 h-2.5" />
               <span>LUX</span>
             </span>
@@ -84,11 +85,11 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onOpenDetails
       {/* Content */}
       <div className="p-3.5 sm:p-4 flex flex-col flex-1 justify-between gap-3">
         <div>
-          <h3 className="font-bold text-xs sm:text-sm text-stone-900 dark:text-white line-clamp-1 group-hover:text-rose-600 dark:group-hover:text-rose-400 transition-colors leading-snug">
+          <h3 className="font-bold text-xs sm:text-sm text-[#131d33] dark:text-[#f8fafc] line-clamp-1 group-hover:text-[#475b7c] dark:group-hover:text-[#a5b9d8] transition-colors leading-snug">
             {localized.title}
           </h3>
           {localized.description && (
-            <p className="mt-1 text-[11px] text-stone-500 dark:text-stone-400 line-clamp-2 leading-relaxed">
+            <p className="mt-1 text-[11px] text-[#6e809f] dark:text-[#8fa0ba] line-clamp-2 leading-relaxed">
               {localized.description}
             </p>
           )}
@@ -97,10 +98,10 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onOpenDetails
         {/* Price & Add to Cart button */}
         <div className="flex items-center justify-between pt-1 mt-auto">
           <div>
-            <div className="text-[10px] uppercase font-bold tracking-wider text-stone-400 dark:text-stone-500">
+            <div className="text-[10px] uppercase font-bold tracking-wider text-[#8e9cb2] dark:text-stone-400">
               Ціна
             </div>
-            <div className="text-sm sm:text-base font-extrabold text-stone-900 dark:text-white tracking-tight">
+            <div className="text-sm sm:text-base font-extrabold text-[#131d33] dark:text-white tracking-tight">
               {formatCurrency(localized.price)}
             </div>
           </div>
@@ -111,20 +112,20 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onOpenDetails
           ) : quantity > 0 ? (
             <div
               onClick={(e) => e.stopPropagation()}
-              className="flex items-center gap-1 bg-rose-500/10 dark:bg-rose-950/40 border border-rose-500/25 rounded-2xl p-1"
+              className="flex items-center gap-1 bg-[#131d33]/5 dark:bg-white/10 border border-[#131d33]/15 dark:border-white/15 rounded-2xl p-1"
             >
               <button
                 onClick={handleDecrement}
-                className="w-7 h-7 rounded-xl bg-white dark:bg-slate-800 text-rose-600 dark:text-rose-300 flex items-center justify-center shadow-xs active:scale-90 transition-transform cursor-pointer"
+                className="w-7 h-7 rounded-xl bg-white dark:bg-slate-800 text-[#131d33] dark:text-white flex items-center justify-center shadow-xs active:scale-90 transition-transform cursor-pointer"
               >
                 <Minus className="w-3.5 h-3.5" />
               </button>
-              <span className="text-xs font-black text-rose-600 dark:text-rose-400 w-5 text-center">
+              <span className="text-xs font-black text-[#131d33] dark:text-white w-5 text-center">
                 {quantity}
               </span>
               <button
                 onClick={handleIncrement}
-                className="w-7 h-7 rounded-xl bg-rose-600 text-white flex items-center justify-center shadow-xs active:scale-90 transition-transform cursor-pointer"
+                className="w-7 h-7 rounded-xl bg-[#131d33] text-white flex items-center justify-center shadow-xs active:scale-90 transition-transform cursor-pointer"
               >
                 <Plus className="w-3.5 h-3.5" />
               </button>
@@ -132,7 +133,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onOpenDetails
           ) : (
             <button
               onClick={handleIncrement}
-              className="w-9 h-9 rounded-2xl bg-gradient-to-tr from-rose-600 to-pink-600 hover:from-rose-500 hover:to-pink-500 text-white flex items-center justify-center shadow-md shadow-rose-500/25 active:scale-90 transition-transform cursor-pointer"
+              className="w-9 h-9 rounded-2xl bg-[#131d33] hover:bg-[#1f2d49] text-white flex items-center justify-center shadow-md shadow-[#131d33]/20 active:scale-90 transition-transform cursor-pointer"
               aria-label="Add to cart"
             >
               <Plus className="w-4 h-4" />

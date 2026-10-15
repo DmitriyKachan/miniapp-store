@@ -30,11 +30,11 @@ export const CategoryFilter: React.FC<CategoryFilterProps> = ({
           }}
           className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs font-bold tracking-tight transition-all duration-200 cursor-pointer active:scale-95 ${
             selectedCategoryId === null
-              ? 'bg-gradient-to-r from-rose-600 to-pink-600 text-white shadow-md shadow-rose-500/25 ring-2 ring-rose-500/30'
-              : 'bg-white dark:bg-[#141a24] text-stone-700 dark:text-stone-300 hover:bg-stone-50 dark:hover:bg-slate-800 border border-stone-200/60 dark:border-white/5 shadow-2xs'
+              ? 'bg-[#131d33] text-white shadow-md shadow-[#131d33]/25 ring-2 ring-[#131d33]/30'
+              : 'bg-white dark:bg-[#131b2d] text-stone-700 dark:text-stone-300 hover:bg-[#f5f2eb] dark:hover:bg-slate-800 border border-[#e8e4da] dark:border-[#1f2b43] shadow-2xs'
           }`}
         >
-          <LayoutGrid className={`w-3.5 h-3.5 ${selectedCategoryId === null ? 'text-white' : 'text-rose-500'}`} />
+          <LayoutGrid className={`w-3.5 h-3.5 ${selectedCategoryId === null ? 'text-[#c5a880]' : 'text-[#6e809f]'}`} />
           <span>{t.allCategories}</span>
         </button>
 
@@ -51,13 +51,13 @@ export const CategoryFilter: React.FC<CategoryFilterProps> = ({
               }}
               className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs font-bold tracking-tight transition-all duration-200 cursor-pointer active:scale-95 ${
                 isSelected
-                  ? 'bg-gradient-to-r from-rose-600 to-pink-600 text-white shadow-md shadow-rose-500/25 ring-2 ring-rose-500/30'
-                  : 'bg-white dark:bg-[#141a24] text-stone-700 dark:text-stone-300 hover:bg-stone-50 dark:hover:bg-slate-800 border border-stone-200/60 dark:border-white/5 shadow-2xs'
+                  ? 'bg-[#131d33] text-white shadow-md shadow-[#131d33]/25 ring-2 ring-[#131d33]/30'
+                  : 'bg-white dark:bg-[#131b2d] text-stone-700 dark:text-stone-300 hover:bg-[#f5f2eb] dark:hover:bg-slate-800 border border-[#e8e4da] dark:border-[#1f2b43] shadow-2xs'
               }`}
             >
               <CategoryIcon
                 name={category.icon}
-                className={`w-3.5 h-3.5 ${isSelected ? 'text-white' : 'text-rose-500'}`}
+                className={`w-3.5 h-3.5 ${isSelected ? 'text-[#c5a880]' : 'text-[#6e809f]'}`}
               />
               <span>{localizedName}</span>
             </button>

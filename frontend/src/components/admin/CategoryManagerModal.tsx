@@ -203,8 +203,8 @@ export const CategoryManagerModal: React.FC<CategoryManagerModalProps> = ({
                       }}
                       className={`p-2 rounded-xl flex flex-col items-center justify-center gap-1 transition-all cursor-pointer ${
                         isSelected
-                          ? 'bg-rose-500 text-white shadow-xs scale-105 ring-2 ring-rose-500/40'
-                          : 'bg-white dark:bg-[#141a24] text-stone-600 dark:text-stone-300 border border-stone-200/60 dark:border-white/5 hover:border-rose-200'
+                          ? 'bg-[#131d33] text-[#c5a880] shadow-xs scale-105 ring-2 ring-[#131d33]/40'
+                          : 'bg-white dark:bg-[#141a24] text-stone-600 dark:text-stone-300 border border-[#e8e4da] dark:border-white/5 hover:border-[#131d33]/30'
                       }`}
                       title={opt.label}
                     >
@@ -227,7 +227,7 @@ export const CategoryManagerModal: React.FC<CategoryManagerModalProps> = ({
                 type="number"
                 value={sortOrder}
                 onChange={(e) => setSortOrder(Number(e.target.value))}
-                className="w-20 px-3 py-1.5 text-center bg-white dark:bg-[#141a24] text-xs font-bold text-stone-900 dark:text-white rounded-xl border border-stone-200/60 dark:border-white/10 focus:border-rose-500 focus:outline-none"
+                className="w-20 px-3 py-1.5 text-center bg-white dark:bg-[#141a24] text-xs font-bold text-stone-900 dark:text-white rounded-xl border border-stone-200/60 dark:border-white/10 focus:border-[#131d33] focus:outline-none"
               />
             </div>
 
@@ -235,10 +235,10 @@ export const CategoryManagerModal: React.FC<CategoryManagerModalProps> = ({
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full py-3 bg-gradient-to-r from-rose-600 to-pink-600 hover:from-rose-500 hover:to-pink-500 text-white text-xs font-black rounded-xl flex items-center justify-center gap-1.5 shadow-md shadow-rose-500/20 active:scale-[0.98] transition-all cursor-pointer"
+              className="w-full py-3 bg-[#131d33] hover:bg-[#1a2846] text-white text-xs font-black rounded-xl flex items-center justify-center gap-1.5 shadow-md shadow-[#131d33]/20 active:scale-[0.98] transition-all cursor-pointer border border-[#2b3c5c]"
             >
-              {editingId ? <Check className="w-3.5 h-3.5" /> : <Plus className="w-3.5 h-3.5" />}
-              <span>{editingId ? 'Зберегти категорію' : 'Створити категорію'}</span>
+              {editingId ? <Check className="w-3.5 h-3.5 text-[#c5a880]" /> : <Plus className="w-3.5 h-3.5 text-[#c5a880]" />}
+              <span className="font-brand-serif tracking-wider uppercase">{editingId ? 'Зберегти категорію' : 'Створити категорію'}</span>
             </button>
           </form>
 

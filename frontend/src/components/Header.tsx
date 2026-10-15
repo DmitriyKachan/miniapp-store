@@ -1,5 +1,5 @@
 import React from 'react';
-import { ShoppingBag, ShieldCheck, User, Search, X, Sparkles, Truck, ChevronDown, MapPin } from 'lucide-react';
+import { ShoppingBag, ShieldCheck, User, Search, X, Truck, ChevronDown, MapPin } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../context/LanguageContext';
@@ -32,24 +32,24 @@ export const Header: React.FC<HeaderProps> = ({ onOpenCart, searchQuery, onSearc
           label: t.roleAdmin,
           shortLabel: 'Флорист',
           icon: ShieldCheck,
-          color: 'text-rose-700 dark:text-rose-300 bg-rose-500/10 border-rose-500/25',
-          dot: 'bg-rose-500',
+          color: 'text-[#131d33] dark:text-[#f1f5f9] bg-[#131d33]/10 dark:bg-white/10 border-[#131d33]/20 dark:border-white/20',
+          dot: 'bg-[#131d33] dark:bg-white',
         };
       case 'courier':
         return {
           label: t.roleCourier,
           shortLabel: "Кур'єр",
           icon: Truck,
-          color: 'text-indigo-700 dark:text-indigo-300 bg-indigo-500/10 border-indigo-500/25',
-          dot: 'bg-indigo-500',
+          color: 'text-[#475b7c] dark:text-[#a5b9d8] bg-[#475b7c]/10 dark:bg-[#475b7c]/20 border-[#475b7c]/25',
+          dot: 'bg-[#475b7c]',
         };
       default:
         return {
           label: t.roleBuyer,
           shortLabel: 'Клієнт',
           icon: User,
-          color: 'text-stone-700 dark:text-stone-200 bg-stone-500/10 border-stone-300/30 dark:border-stone-700/50',
-          dot: 'bg-rose-500',
+          color: 'text-stone-700 dark:text-stone-200 bg-stone-100 dark:bg-slate-800/80 border-stone-200 dark:border-white/10',
+          dot: 'bg-[#131d33]',
         };
     }
   };
@@ -57,22 +57,20 @@ export const Header: React.FC<HeaderProps> = ({ onOpenCart, searchQuery, onSearc
   const currentRoleInfo = getRoleLabel(mode);
 
   return (
-    <header className="sticky top-0 z-30 bg-white/80 dark:bg-[#0b0f17]/85 backdrop-blur-xl border-b border-rose-100/60 dark:border-white/5 transition-all">
+    <header className="sticky top-0 z-30 bg-[#faf8f5]/90 dark:bg-[#0b111d]/90 backdrop-blur-xl border-b border-[#e8e4da] dark:border-[#1f2b43] transition-all">
       <div className="max-w-4xl mx-auto px-3 sm:px-6 py-2.5 flex items-center justify-between gap-1.5 sm:gap-2.5">
         
-        {/* Left: Brand info */}
-        <div className="flex items-center gap-2 min-w-0">
-          <div className="relative group shrink-0">
-            <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-2xl bg-gradient-to-tr from-rose-600 via-pink-500 to-amber-300 flex items-center justify-center text-white shadow-md shadow-rose-500/20">
-              <Sparkles className="w-4 h-4 sm:w-4.5 sm:h-4.5 text-white animate-pulse" />
-            </div>
+        {/* Left: Brand info with actual Logo */}
+        <div className="flex items-center gap-2.5 min-w-0">
+          <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl overflow-hidden shadow-sm border border-[#e8e4da] dark:border-[#202d44] bg-white shrink-0">
+            <img src="./logo.png" alt="Flowers Lviv Logo" className="w-full h-full object-cover" />
           </div>
           <div className="min-w-0">
-            <h1 className="text-xs sm:text-sm font-extrabold tracking-tight leading-none text-stone-900 dark:text-white uppercase truncate">
+            <h1 className="font-brand-serif text-xs sm:text-sm font-black tracking-[0.2em] leading-none text-[#131d33] dark:text-[#f8fafc] uppercase truncate">
               {t.appName}
             </h1>
-            <p className="text-[10px] text-rose-600/80 dark:text-rose-400 font-medium truncate mt-0.5">
-              {user?.first_name ? `Вітаємо, ${user.first_name}!` : 'Студія квітів'}
+            <p className="text-[10px] text-[#6e809f] dark:text-[#8fa0ba] font-medium tracking-wider uppercase truncate mt-0.5">
+              {user?.first_name ? `Вітаємо, ${user.first_name}!` : 'Квітковий дім • Львів'}
             </p>
           </div>
         </div>
@@ -80,16 +78,16 @@ export const Header: React.FC<HeaderProps> = ({ onOpenCart, searchQuery, onSearc
         {/* Right: Actions */}
         <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
           
-          {/* Lviv Address Pill - visible on md+ to prevent header crowding on mobile */}
+          {/* Lviv Address Pill */}
           <button
             onClick={() => {
               hapticImpact('light');
               openExternalLink('https://www.instagram.com/flowers___lviv/');
             }}
-            className="hidden md:flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-[11px] font-bold bg-gradient-to-r from-amber-500/10 via-rose-500/10 to-purple-500/10 hover:from-amber-500/20 hover:to-purple-500/20 text-rose-600 dark:text-rose-400 border border-rose-300/40 dark:border-rose-500/20 transition-all cursor-pointer active:scale-95"
+            className="hidden md:flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-[11px] font-semibold bg-white dark:bg-[#131b2d] hover:bg-[#f3f0ea] text-[#131d33] dark:text-[#e2e8f0] border border-[#e8e4da] dark:border-[#1f2b43] transition-all cursor-pointer active:scale-95 shadow-2xs"
             title="Instagram @flowers___lviv"
           >
-            <MapPin className="w-3.5 h-3.5 text-rose-500" />
+            <MapPin className="w-3.5 h-3.5 text-[#6e809f]" />
             <span>вул. Топольна, 4В</span>
           </button>
 
@@ -109,8 +107,8 @@ export const Header: React.FC<HeaderProps> = ({ onOpenCart, searchQuery, onSearc
             </button>
 
             {showRoleMenu && (
-              <div className="absolute right-0 mt-1.5 w-48 bg-white/95 dark:bg-[#141a24]/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-stone-200/60 dark:border-white/10 p-1.5 z-50 animate-in fade-in zoom-in-95 duration-150">
-                <div className="px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-stone-400 dark:text-stone-500">
+              <div className="absolute right-0 mt-1.5 w-48 bg-white/95 dark:bg-[#131b2d]/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-[#e8e4da] dark:border-white/10 p-1.5 z-50 animate-in fade-in zoom-in-95 duration-150">
+                <div className="px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-[#6e809f]">
                   Режим перегляду:
                 </div>
                 {[
@@ -121,20 +119,20 @@ export const Header: React.FC<HeaderProps> = ({ onOpenCart, searchQuery, onSearc
                   <button
                     key={item.key}
                     onClick={() => selectRole(item.key)}
-                    className={`w-full text-left p-2.5 rounded-xl text-xs font-semibold flex items-center justify-between hover:bg-rose-50 dark:hover:bg-slate-800 transition-colors cursor-pointer ${
+                    className={`w-full text-left p-2.5 rounded-xl text-xs font-semibold flex items-center justify-between hover:bg-[#f5f2eb] dark:hover:bg-slate-800 transition-colors cursor-pointer ${
                       mode === item.key
-                        ? 'text-rose-600 dark:text-rose-400 font-bold bg-rose-50/60 dark:bg-rose-950/30'
+                        ? 'text-[#131d33] dark:text-white font-bold bg-[#faf8f5] dark:bg-slate-800/80'
                         : 'text-stone-700 dark:text-stone-300'
                     }`}
                   >
                     <div className="flex items-center gap-2">
-                      <item.icon className="w-4 h-4 shrink-0 text-rose-500" />
+                      <item.icon className="w-4 h-4 shrink-0 text-[#6e809f]" />
                       <div>
                         <div className="font-bold leading-tight">{item.label}</div>
                         <div className="text-[10px] text-stone-400 font-normal leading-tight mt-0.5">{item.desc}</div>
                       </div>
                     </div>
-                    {mode === item.key && <span className="w-2 h-2 rounded-full bg-rose-500 shrink-0" />}
+                    {mode === item.key && <span className="w-2 h-2 rounded-full bg-[#131d33] dark:bg-white shrink-0" />}
                   </button>
                 ))}
               </div>
@@ -152,8 +150,8 @@ export const Header: React.FC<HeaderProps> = ({ onOpenCart, searchQuery, onSearc
               aria-label="Пошук"
               className={`w-8 h-8 sm:w-9 sm:h-9 rounded-xl flex items-center justify-center transition-all cursor-pointer active:scale-95 shrink-0 ${
                 showSearch
-                  ? 'bg-rose-600 text-white shadow-sm'
-                  : 'bg-stone-100/80 dark:bg-slate-800/80 text-stone-600 dark:text-stone-300 hover:bg-stone-200 dark:hover:bg-slate-700'
+                  ? 'bg-[#131d33] text-white shadow-sm'
+                  : 'bg-white dark:bg-slate-800 text-stone-600 dark:text-stone-300 hover:bg-stone-100 border border-[#e8e4da] dark:border-transparent'
               }`}
             >
               {showSearch ? <X className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> : <Search className="w-3.5 h-3.5 sm:w-4 sm:h-4" />}
@@ -167,11 +165,11 @@ export const Header: React.FC<HeaderProps> = ({ onOpenCart, searchQuery, onSearc
                 hapticImpact('medium');
                 onOpenCart();
               }}
-              className="relative w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-gradient-to-tr from-rose-600 to-pink-600 text-white flex items-center justify-center shadow-md shadow-rose-500/25 active:scale-95 transition-transform cursor-pointer shrink-0"
+              className="relative w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-[#131d33] hover:bg-[#1c2c49] text-white flex items-center justify-center shadow-md shadow-[#131d33]/25 active:scale-95 transition-transform cursor-pointer shrink-0"
             >
               <ShoppingBag className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
               {totalCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-amber-400 text-stone-950 text-[10px] font-black w-4 h-4 rounded-full flex items-center justify-center border-2 border-white dark:border-[#0b0f17] shadow-sm">
+                <span className="absolute -top-1 -right-1 bg-[#c5a880] text-[#131d33] text-[10px] font-black w-4 h-4 rounded-full flex items-center justify-center border-2 border-white dark:border-[#0b111d] shadow-sm">
                   {totalCount > 99 ? '99+' : totalCount}
                 </span>
               )}

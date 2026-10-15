@@ -202,7 +202,7 @@ export const CourierDashboard: React.FC = () => {
                     </span>
                   </div>
 
-                  <span className="text-sm font-black text-rose-600 dark:text-rose-400">
+                  <span className="text-sm font-black text-[#131d33] dark:text-[#f8fafc]">
                     {formatCurrency(order.total_price)}
                   </span>
                 </div>
