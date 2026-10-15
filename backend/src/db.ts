@@ -106,4 +106,19 @@ export function initDatabase() {
   try { db.exec("ALTER TABLE products ADD COLUMN description_ru TEXT DEFAULT '';"); } catch {}
   try { db.exec("ALTER TABLE products ADD COLUMN description_pl TEXT DEFAULT '';"); } catch {}
   try { db.exec("ALTER TABLE products ADD COLUMN description_ua TEXT DEFAULT '';"); } catch {}
+
+  // Auto-seed standard categories if table is empty
+  try {
+    const row = db.prepare('SELECT COUNT(*) as count FROM categories').get() as { count: number };
+    if (!row || row.count === 0) {
+      const ins = db.prepare('INSERT INTO categories (name, icon, sort_order) VALUES (?, ?, ?)');
+      ins.run('Авторські букети', 'Sparkles', 1);
+      ins.run('Троянди & Монобукети', 'Heart', 2);
+      ins.run('Flower Box & Кошики', 'Gift', 3);
+      ins.run('Кімнатні рослини & Орхідеї', 'Leaf', 4);
+      ins.run('Подарунки & Аксесуари', 'Smile', 5);
+    }
+  } catch (e) {
+    console.warn('Categories auto-seed skipped:', e);
+  }
 }
