@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../context/LanguageContext';
 import { useNotification } from '../context/NotificationContext';
-import { api, UPSELL_ACCESSORIES } from '../api';
+import { api } from '../api';
 import type { Order, Product } from '../types';
 import { getLocalizedProduct } from '../i18n/translations';
 import {
@@ -61,6 +61,21 @@ export const CartView: React.FC<CartViewProps> = ({ onClose, onOrderSuccess }) =
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
+  const [upsellProducts, setUpsellProducts] = useState<Product[]>([]);
+
+  useEffect(() => {
+    api.getProducts({ in_stock_only: true })
+      .then((all) => {
+        const accessories = all.filter(
+          (p) =>
+            p.category_id === 5 ||
+            p.category_name?.toLowerCase().includes('подарун') ||
+            p.category_name?.toLowerCase().includes('аксесуар')
+        );
+        setUpsellProducts(accessories);
+      })
+      .catch(() => {});
+  }, []);
 
   const handleAddUpsell = (product: Product) => {
     hapticImpact('light');
@@ -274,63 +289,65 @@ export const CartView: React.FC<CartViewProps> = ({ onClose, onOrderSuccess }) =
               })}
             </div>
 
-            {/* UPSELL RECOMMENDATIONS: "Доповнити букет 🎁" */}
-            <div className="bg-[#faf8f5] dark:bg-[#131b2d] rounded-3xl border border-[#e8e4da] dark:border-[#1f2b43] p-4 space-y-3">
-              <div className="flex items-center gap-2 text-[#131d33] dark:text-white">
-                <Gift className="w-4 h-4 text-[#c5a880]" />
-                <div>
-                  <h4 className="text-xs font-black uppercase tracking-wider">{t.upsellTitle}</h4>
-                  <p className="text-[11px] text-[#6e809f] dark:text-[#8fa0ba]">{t.upsellSubtitle}</p>
+            {/* UPSELL RECOMMENDATIONS: "Доповнити букет 🎁" - only from real database */}
+            {upsellProducts.length > 0 && (
+              <div className="bg-[#faf8f5] dark:bg-[#131b2d] rounded-3xl border border-[#e8e4da] dark:border-[#1f2b43] p-4 space-y-3">
+                <div className="flex items-center gap-2 text-[#131d33] dark:text-white">
+                  <Gift className="w-4 h-4 text-[#c5a880]" />
+                  <div>
+                    <h4 className="text-xs font-black uppercase tracking-wider">{t.upsellTitle}</h4>
+                    <p className="text-[11px] text-[#6e809f] dark:text-[#8fa0ba]">{t.upsellSubtitle}</p>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
+                  {upsellProducts.map((acc) => {
+                    const localizedAcc = getLocalizedProduct(acc, language);
+                    const inCart = cart.some((c) => c.product.id === acc.id);
+                    return (
+                      <div
+                        key={acc.id}
+                        className="p-3 bg-white dark:bg-[#0f1523] rounded-2xl border border-[#e8e4da] dark:border-white/5 flex items-center justify-between gap-2.5 shadow-2xs hover:shadow-sm transition-shadow"
+                      >
+                        <div className="w-11 h-11 rounded-xl overflow-hidden shrink-0 bg-stone-100 dark:bg-slate-800">
+                          <img src={localizedAcc.image_url} alt={localizedAcc.title} className="w-full h-full object-cover" />
+                        </div>
+
+                        <div className="flex-1 min-w-0">
+                          <p className="text-xs font-bold text-stone-900 dark:text-white line-clamp-1">
+                            {localizedAcc.title}
+                          </p>
+                          <p className="text-xs font-extrabold text-[#131d33] dark:text-[#f8fafc] mt-0.5">
+                            {localizedAcc.price === 0
+                              ? 'Безкоштовно 🎁'
+                              : formatCurrency(localizedAcc.price)}
+                          </p>
+                        </div>
+
+                        <button
+                          type="button"
+                          onClick={() => handleAddUpsell(acc)}
+                          className={`px-3 py-1.5 rounded-xl text-xs font-bold shrink-0 transition-all flex items-center gap-1 cursor-pointer active:scale-95 ${
+                            inCart
+                              ? 'bg-[#131d33]/10 dark:bg-white/10 text-[#131d33] dark:text-white border border-[#131d33]/20'
+                              : 'bg-[#131d33] hover:bg-[#1a2846] text-white shadow-xs'
+                          }`}
+                        >
+                          {inCart ? (
+                            <>
+                              <Check className="w-3.5 h-3.5 text-[#c5a880]" />
+                              <span>{t.addedToOrder}</span>
+                            </>
+                          ) : (
+                            <span>{t.addToOrder}</span>
+                          )}
+                        </button>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
-                {UPSELL_ACCESSORIES.map((acc) => {
-                  const localizedAcc = getLocalizedProduct(acc, language);
-                  const inCart = cart.some((c) => c.product.id === acc.id);
-                  return (
-                    <div
-                      key={acc.id}
-                      className="p-3 bg-white dark:bg-[#0f1523] rounded-2xl border border-[#e8e4da] dark:border-white/5 flex items-center justify-between gap-2.5 shadow-2xs hover:shadow-sm transition-shadow"
-                    >
-                      <div className="w-11 h-11 rounded-xl overflow-hidden shrink-0 bg-stone-100 dark:bg-slate-800">
-                        <img src={localizedAcc.image_url} alt={localizedAcc.title} className="w-full h-full object-cover" />
-                      </div>
-
-                      <div className="flex-1 min-w-0">
-                        <p className="text-xs font-bold text-stone-900 dark:text-white line-clamp-1">
-                          {localizedAcc.title}
-                        </p>
-                        <p className="text-xs font-extrabold text-[#131d33] dark:text-[#f8fafc] mt-0.5">
-                          {localizedAcc.price === 0
-                            ? 'Безкоштовно 🎁'
-                            : formatCurrency(localizedAcc.price)}
-                        </p>
-                      </div>
-
-                      <button
-                        type="button"
-                        onClick={() => handleAddUpsell(acc)}
-                        className={`px-3 py-1.5 rounded-xl text-xs font-bold shrink-0 transition-all flex items-center gap-1 cursor-pointer active:scale-95 ${
-                          inCart
-                            ? 'bg-[#131d33]/10 dark:bg-white/10 text-[#131d33] dark:text-white border border-[#131d33]/20'
-                            : 'bg-[#131d33] hover:bg-[#1a2846] text-white shadow-xs'
-                        }`}
-                      >
-                        {inCart ? (
-                          <>
-                            <Check className="w-3.5 h-3.5 text-[#c5a880]" />
-                            <span>{t.addedToOrder}</span>
-                          </>
-                        ) : (
-                          <span>{t.addToOrder}</span>
-                        )}
-                      </button>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
+            )}
 
             {/* Delivery Timing & Date Picker Card */}
             <div className="bg-white dark:bg-[#141a24] rounded-3xl border border-stone-200/60 dark:border-white/5 p-4 sm:p-5 space-y-4 shadow-xs">

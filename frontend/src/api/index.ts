@@ -269,59 +269,8 @@ const INITIAL_PRODUCTS: Product[] = [
   },
 ];
 
-// Upsell accessories recommended in cart (UAH prices)
-export const UPSELL_ACCESSORIES: Product[] = [
-  {
-    id: 101,
-    category_id: 5,
-    category_name: 'Подарунки & Аксесуари',
-    title: 'Авторська листівка з вашим текстом (від руки)',
-    description: 'Красива фірмова листівка Flowers Lviv, підписана флористом каліграфічним почерком.',
-    price: 0,
-    image_url: 'https://images.unsplash.com/photo-1586075010923-2dd4570fb338?w=300&auto=format&fit=crop&q=80',
-    in_stock: 1,
-  },
-  {
-    id: 10,
-    category_id: 5,
-    category_name: 'Подарунки & Аксесуари',
-    title: 'Скляна циліндрична ваза 25 см',
-    description: 'Ідеально підходить за висотою та об’ємом для букета.',
-    price: 350,
-    image_url: 'https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?w=300&auto=format&fit=crop&q=80',
-    in_stock: 1,
-  },
-  {
-    id: 11,
-    category_id: 5,
-    category_name: 'Подарунки & Аксесуари',
-    title: 'Цукерки Ferrero Rocher / Raffaello',
-    description: 'Солодкий та смачний додаток до квітів.',
-    price: 240,
-    image_url: 'https://images.unsplash.com/photo-1549007994-cb92caebd54b?w=300&auto=format&fit=crop&q=80',
-    in_stock: 1,
-  },
-  {
-    id: 102,
-    category_id: 5,
-    category_name: 'Подарунки & Аксесуари',
-    title: 'Підживлення для квітів Chrysal (3 саше)',
-    description: 'Продовжує життя квітів у вазі до 2 тижнів.',
-    price: 0,
-    image_url: 'https://images.unsplash.com/photo-1592150621744-aca64f48394a?w=300&auto=format&fit=crop&q=80',
-    in_stock: 1,
-  },
-  {
-    id: 103,
-    category_id: 5,
-    category_name: 'Подарунки & Аксесуари',
-    title: 'Повітряна кулька з гелієм «Серце»',
-    description: 'Глянцеве фольговане серце на шовковій стрічці до букета.',
-    price: 180,
-    image_url: 'https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=300&auto=format&fit=crop&q=80',
-    in_stock: 1,
-  },
-];
+// Upsell accessories (dynamic from database)
+export const UPSELL_ACCESSORIES: Product[] = [];
 
 const STORAGE_KEYS = {
   CATEGORIES: 'flowers_lviv_central_categories_v3',
