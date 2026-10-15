@@ -2,8 +2,16 @@ import React, { useState } from 'react';
 import type { Category } from '../../types';
 import { api } from '../../api';
 import { CategoryIcon, ICON_OPTIONS } from '../CategoryIcon';
-import { useLanguage } from '../../context/LanguageContext';
-import { X, Plus, Edit2, Trash2, Check, AlertCircle } from 'lucide-react';
+import {
+  X,
+  Plus,
+  Edit2,
+  Trash2,
+  Check,
+  AlertCircle,
+  Layers,
+  AlertTriangle,
+} from 'lucide-react';
 import { hapticImpact, hapticNotification } from '../../utils/telegram';
 
 interface CategoryManagerModalProps {
@@ -17,7 +25,6 @@ export const CategoryManagerModal: React.FC<CategoryManagerModalProps> = ({
   onClose,
   onRefresh,
 }) => {
-  const { t } = useLanguage();
   const [editingId, setEditingId] = useState<number | null>(null);
 
   const [name, setName] = useState('');
@@ -25,6 +32,10 @@ export const CategoryManagerModal: React.FC<CategoryManagerModalProps> = ({
   const [sortOrder, setSortOrder] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
+
+  // In-app delete confirmation state
+  const [categoryToDelete, setCategoryToDelete] = useState<Category | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const startEdit = (cat: Category) => {
     hapticImpact('light');
@@ -46,7 +57,7 @@ export const CategoryManagerModal: React.FC<CategoryManagerModalProps> = ({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim()) {
-      setError(t.errorCategoryNameRequired);
+      setError('Введіть назву категорії');
       return;
     }
 
@@ -81,37 +92,52 @@ export const CategoryManagerModal: React.FC<CategoryManagerModalProps> = ({
     }
   };
 
-  const handleDelete = async (cat: Category) => {
-    if (!window.confirm(`${t.adminDeleteCategoryConfirm}`)) return;
+  const confirmDeleteCategory = async () => {
+    if (!categoryToDelete) return;
 
     try {
+      setIsDeleting(true);
       hapticImpact('heavy');
-      await api.deleteCategory(cat.id);
+      await api.deleteCategory(categoryToDelete.id);
       hapticNotification('success');
-      if (editingId === cat.id) resetForm();
+      if (editingId === categoryToDelete.id) resetForm();
+      setCategoryToDelete(null);
       onRefresh();
     } catch (err: any) {
-      alert(err.message || 'Помилка видалення');
+      alert(err.message || 'Помилка видалення категорії');
+    } finally {
+      setIsDeleting(false);
     }
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-200">
-      <div className="w-full sm:max-w-md bg-white dark:bg-[#18222d] rounded-t-3xl sm:rounded-3xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col animate-in slide-in-from-bottom duration-300">
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/70 backdrop-blur-sm animate-in fade-in duration-200">
+      <div className="w-full sm:max-w-md bg-white dark:bg-[#141a24] rounded-t-[32px] sm:rounded-3xl shadow-2xl overflow-hidden max-h-[92vh] flex flex-col animate-in slide-in-from-bottom duration-300 border border-stone-200/60 dark:border-white/10">
         
-        {/* Header */}
+        {/* Mobile handle & Header */}
         <div className="pt-2 sm:pt-0">
-          <div className="w-10 h-1 rounded-full bg-gray-300 dark:bg-gray-700 mx-auto sm:hidden my-1.5" />
-          <div className="px-4 py-3 border-b border-gray-100 dark:border-gray-800 flex items-center justify-between">
-            <h3 className="text-sm sm:text-base font-bold text-gray-900 dark:text-white">
-              {t.adminCategoriesTitle}
-            </h3>
+          <div className="w-10 h-1 rounded-full bg-stone-300 dark:bg-slate-700 mx-auto sm:hidden my-2" />
+          <div className="px-5 py-3.5 border-b border-stone-100 dark:border-white/5 flex items-center justify-between">
+            <div className="flex items-center gap-2.5">
+              <div className="w-9 h-9 rounded-2xl bg-rose-500/10 text-rose-600 dark:text-rose-400 flex items-center justify-center font-bold">
+                <Layers className="w-4.5 h-4.5" />
+              </div>
+              <div>
+                <h3 className="text-base font-black text-stone-900 dark:text-white leading-tight">
+                  Категорії вітрини
+                </h3>
+                <p className="text-[11px] text-stone-400">
+                  Flowers Lviv Atelier
+                </p>
+              </div>
+            </div>
+
             <button
               onClick={() => {
                 hapticImpact('light');
                 onClose();
               }}
-              className="w-8 h-8 rounded-full flex items-center justify-center text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 cursor-pointer"
+              className="w-8 h-8 rounded-xl flex items-center justify-center text-stone-400 hover:text-stone-600 dark:hover:text-stone-200 hover:bg-stone-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
             >
               <X className="w-4 h-4" />
             </button>
@@ -119,25 +145,25 @@ export const CategoryManagerModal: React.FC<CategoryManagerModalProps> = ({
         </div>
 
         {/* Modal Body */}
-        <div className="p-4 sm:p-5 overflow-y-auto space-y-4 flex-1">
+        <div className="p-4 sm:p-5 overflow-y-auto space-y-4 flex-1 no-scrollbar pb-[calc(2.5rem+env(safe-area-inset-bottom,20px))]">
           {error && (
-            <div className="p-3 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800/80 rounded-xl flex items-center gap-2 text-xs text-red-600 dark:text-red-400">
+            <div className="p-3 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800/80 rounded-2xl flex items-center gap-2 text-xs text-red-600 dark:text-red-400">
               <AlertCircle className="w-4 h-4 shrink-0" />
               <span>{error}</span>
             </div>
           )}
 
-          {/* Form Create / Edit */}
-          <form onSubmit={handleSubmit} className="p-3.5 bg-gray-50 dark:bg-[#233142]/50 rounded-2xl border border-gray-200/60 dark:border-gray-700 space-y-3">
+          {/* Form Card: Create / Edit Category */}
+          <form onSubmit={handleSubmit} className="p-4 bg-stone-50/80 dark:bg-slate-800/40 rounded-2xl border border-stone-200/60 dark:border-white/5 space-y-3.5">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-gray-800 dark:text-white">
-                {editingId ? t.adminEditCategory : t.adminNewCategory}
+              <span className="text-xs font-black uppercase tracking-wider text-stone-800 dark:text-white">
+                {editingId ? 'Редагувати категорію' : 'Нова категорія'}
               </span>
               {editingId && (
                 <button
                   type="button"
                   onClick={resetForm}
-                  className="text-[11px] text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 cursor-pointer"
+                  className="text-xs font-bold text-rose-600 hover:underline cursor-pointer"
                 >
                   Скасувати
                 </button>
@@ -146,98 +172,113 @@ export const CategoryManagerModal: React.FC<CategoryManagerModalProps> = ({
 
             {/* Name Input */}
             <div>
-              <label className="block text-[11px] font-bold text-gray-600 dark:text-gray-400 mb-1">
-                {t.adminCategoryName}
+              <label className="block text-[11px] font-bold text-stone-600 dark:text-stone-400 mb-1">
+                Назва розділу *
               </label>
               <input
                 type="text"
                 required
-                placeholder={t.adminCategoryNamePlaceholder}
+                placeholder="Наприклад: Авторські букети / Троянди"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="w-full px-3 py-2 bg-white dark:bg-[#18222d] text-xs text-gray-900 dark:text-white rounded-xl border border-gray-200 dark:border-gray-700 focus:border-rose-500 focus:outline-none transition-colors"
+                className="w-full px-3.5 py-2.5 bg-white dark:bg-[#141a24] text-xs sm:text-sm text-stone-900 dark:text-white rounded-xl border border-stone-200/60 dark:border-white/10 focus:border-rose-500 focus:outline-none transition-colors placeholder:text-stone-400"
               />
             </div>
 
-            {/* Icon picker & Sort order */}
-            <div className="grid grid-cols-2 gap-2">
-              <div>
-                <label className="block text-[11px] font-bold text-gray-600 dark:text-gray-400 mb-1">
-                  {t.adminIcon}
-                </label>
-                <div className="flex items-center gap-1.5">
-                  <div className="p-2 bg-white dark:bg-[#18222d] border border-gray-200 dark:border-gray-700 rounded-xl text-rose-500 shrink-0">
-                    <CategoryIcon name={icon} className="w-4 h-4" />
-                  </div>
-                  <select
-                    value={icon}
-                    onChange={(e) => setIcon(e.target.value)}
-                    className="flex-1 px-2 py-2 bg-white dark:bg-[#18222d] text-xs text-gray-900 dark:text-white rounded-xl border border-gray-200 dark:border-gray-700 focus:border-rose-500 focus:outline-none cursor-pointer"
-                  >
-                    {ICON_OPTIONS.map((opt) => (
-                      <option key={opt.name} value={opt.name}>
-                        {opt.label}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-[11px] font-bold text-gray-600 dark:text-gray-400 mb-1">
-                  Порядок сортування
-                </label>
-                <input
-                  type="number"
-                  value={sortOrder}
-                  onChange={(e) => setSortOrder(Number(e.target.value))}
-                  className="w-full px-3 py-2 bg-white dark:bg-[#18222d] text-xs text-gray-900 dark:text-white rounded-xl border border-gray-200 dark:border-gray-700 focus:border-rose-500 focus:outline-none transition-colors"
-                />
+            {/* Visual Icon Picker Grid */}
+            <div>
+              <label className="block text-[11px] font-bold text-stone-600 dark:text-stone-400 mb-1.5">
+                Оберіть іконку:
+              </label>
+              <div className="grid grid-cols-4 sm:grid-cols-7 gap-1.5">
+                {ICON_OPTIONS.map((opt) => {
+                  const isSelected = icon === opt.name;
+                  return (
+                    <button
+                      key={opt.name}
+                      type="button"
+                      onClick={() => {
+                        hapticImpact('light');
+                        setIcon(opt.name);
+                      }}
+                      className={`p-2 rounded-xl flex flex-col items-center justify-center gap-1 transition-all cursor-pointer ${
+                        isSelected
+                          ? 'bg-rose-500 text-white shadow-xs scale-105 ring-2 ring-rose-500/40'
+                          : 'bg-white dark:bg-[#141a24] text-stone-600 dark:text-stone-300 border border-stone-200/60 dark:border-white/5 hover:border-rose-200'
+                      }`}
+                      title={opt.label}
+                    >
+                      <opt.Icon className="w-4 h-4 shrink-0" />
+                      <span className="text-[9px] truncate max-w-full font-bold">
+                        {opt.name}
+                      </span>
+                    </button>
+                  );
+                })}
               </div>
             </div>
 
+            {/* Sort Order */}
+            <div className="flex items-center justify-between pt-1">
+              <span className="text-[11px] font-bold text-stone-600 dark:text-stone-400">
+                Порядок показу (сортування):
+              </span>
+              <input
+                type="number"
+                value={sortOrder}
+                onChange={(e) => setSortOrder(Number(e.target.value))}
+                className="w-20 px-3 py-1.5 text-center bg-white dark:bg-[#141a24] text-xs font-bold text-stone-900 dark:text-white rounded-xl border border-stone-200/60 dark:border-white/10 focus:border-rose-500 focus:outline-none"
+              />
+            </div>
+
+            {/* Submit Action */}
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full py-2.5 bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold rounded-xl flex items-center justify-center gap-1.5 shadow-sm active:scale-[0.98] transition-all cursor-pointer"
+              className="w-full py-3 bg-gradient-to-r from-rose-600 to-pink-600 hover:from-rose-500 hover:to-pink-500 text-white text-xs font-black rounded-xl flex items-center justify-center gap-1.5 shadow-md shadow-rose-500/20 active:scale-[0.98] transition-all cursor-pointer"
             >
               {editingId ? <Check className="w-3.5 h-3.5" /> : <Plus className="w-3.5 h-3.5" />}
-              <span>{editingId ? t.adminSave : t.adminCreate}</span>
+              <span>{editingId ? 'Зберегти категорію' : 'Створити категорію'}</span>
             </button>
           </form>
 
           {/* List of current categories */}
-          <div className="space-y-2">
-            <h4 className="text-xs font-bold text-gray-500 uppercase tracking-wider">
-              {t.adminCurrentCategories} ({categories.length})
+          <div className="space-y-2 pt-1">
+            <h4 className="text-xs font-black text-stone-400 dark:text-stone-500 uppercase tracking-wider">
+              Поточні категорії ({categories.length})
             </h4>
 
-            <div className="space-y-1.5 max-h-56 overflow-y-auto pr-1">
+            <div className="space-y-2 max-h-60 overflow-y-auto pr-1 no-scrollbar">
               {categories.map((cat) => (
                 <div
                   key={cat.id}
-                  className="p-2.5 bg-white dark:bg-[#233142]/40 rounded-xl border border-gray-200/60 dark:border-gray-700/60 flex items-center justify-between gap-2"
+                  className="p-3 bg-white dark:bg-[#141a24] rounded-2xl border border-stone-200/60 dark:border-white/5 flex items-center justify-between gap-2 shadow-2xs hover:border-rose-200 transition-colors"
                 >
-                  <div className="flex items-center gap-2 min-w-0">
-                    <div className="p-1.5 bg-rose-50 dark:bg-rose-950/40 text-rose-500 rounded-lg shrink-0">
-                      <CategoryIcon name={cat.icon} className="w-3.5 h-3.5" />
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    <div className="w-8 h-8 rounded-xl bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 flex items-center justify-center shrink-0">
+                      <CategoryIcon name={cat.icon} className="w-4 h-4" />
                     </div>
-                    <span className="text-xs font-bold text-gray-900 dark:text-white truncate">
-                      {cat.name_ua || cat.name}
-                    </span>
+                    <div className="min-w-0">
+                      <span className="text-xs font-bold text-stone-900 dark:text-white truncate block">
+                        {cat.name_ua || cat.name}
+                      </span>
+                      <span className="text-[10px] text-stone-400 font-medium">
+                        Порядок: {cat.sort_order || 0}
+                      </span>
+                    </div>
                   </div>
 
                   <div className="flex items-center gap-1 shrink-0">
                     <button
                       onClick={() => startEdit(cat)}
-                      className="p-1 text-gray-400 hover:text-rose-600 transition-colors cursor-pointer"
+                      className="p-2 text-stone-500 hover:text-rose-600 hover:bg-stone-100 dark:hover:bg-slate-800 rounded-xl transition-colors cursor-pointer"
                       title="Редагувати"
                     >
                       <Edit2 className="w-3.5 h-3.5" />
                     </button>
                     <button
-                      onClick={() => handleDelete(cat)}
-                      className="p-1 text-gray-400 hover:text-red-600 transition-colors cursor-pointer"
+                      onClick={() => setCategoryToDelete(cat)}
+                      className="p-2 text-stone-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/40 rounded-xl transition-colors cursor-pointer"
                       title="Видалити"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
@@ -248,6 +289,46 @@ export const CategoryManagerModal: React.FC<CategoryManagerModalProps> = ({
             </div>
           </div>
         </div>
+
+        {/* Delete Category In-App Confirmation Modal */}
+        {categoryToDelete && (
+          <div className="fixed inset-0 z-60 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-in fade-in duration-150">
+            <div className="w-full max-w-xs bg-white dark:bg-[#141a24] rounded-3xl p-5 shadow-2xl border border-stone-200/60 dark:border-white/10 space-y-4 animate-in zoom-in-95 duration-200 text-center">
+              <div className="w-11 h-11 rounded-2xl bg-red-500/15 border border-red-500/30 flex items-center justify-center text-red-500 mx-auto">
+                <AlertTriangle className="w-6 h-6" />
+              </div>
+
+              <div>
+                <h3 className="text-sm font-black text-stone-900 dark:text-white">
+                  Видалити категорію?
+                </h3>
+                <p className="text-xs text-stone-500 dark:text-stone-400 mt-1">
+                  «{categoryToDelete.name_ua || categoryToDelete.name}»
+                </p>
+              </div>
+
+              <div className="grid grid-cols-2 gap-2 pt-1">
+                <button
+                  type="button"
+                  disabled={isDeleting}
+                  onClick={() => setCategoryToDelete(null)}
+                  className="py-2.5 px-3 bg-stone-100 hover:bg-stone-200 dark:bg-slate-800 text-stone-800 dark:text-stone-200 rounded-xl text-xs font-bold transition-all cursor-pointer"
+                >
+                  Скасувати
+                </button>
+
+                <button
+                  type="button"
+                  disabled={isDeleting}
+                  onClick={confirmDeleteCategory}
+                  className="py-2.5 px-3 bg-red-600 hover:bg-red-700 text-white rounded-xl text-xs font-bold transition-all cursor-pointer"
+                >
+                  {isDeleting ? '...' : 'Видалити'}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
