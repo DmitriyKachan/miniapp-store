@@ -17,20 +17,20 @@ import {
 } from 'lucide-react';
 
 export const ICON_OPTIONS = [
-  { name: 'Coffee', label: 'Кофе / Напитки', Icon: Coffee },
-  { name: 'Cake', label: 'Десерты / Еда', Icon: Cake },
-  { name: 'Shirt', label: 'Одежда / Мерч', Icon: Shirt },
-  { name: 'Headphones', label: 'Гаджеты / Звук', Icon: Headphones },
-  { name: 'Smartphone', label: 'Смартфоны', Icon: Smartphone },
-  { name: 'Sparkles', label: 'Новинки / Акции', Icon: Sparkles },
-  { name: 'Flame', label: 'Хиты продаж', Icon: Flame },
-  { name: 'Gift', label: 'Подарки', Icon: Gift },
-  { name: 'Watch', label: 'Аксессуары', Icon: Watch },
-  { name: 'BookOpen', label: 'Книги / Обучение', Icon: BookOpen },
+  { name: 'Coffee', label: 'Кава / Напої', Icon: Coffee },
+  { name: 'Cake', label: 'Десерти / Солодощі', Icon: Cake },
+  { name: 'Shirt', label: 'Одяг / Мерч', Icon: Shirt },
+  { name: 'Headphones', label: 'Гаджети / Звук', Icon: Headphones },
+  { name: 'Smartphone', label: 'Смартфони', Icon: Smartphone },
+  { name: 'Sparkles', label: 'Новинки / Акції', Icon: Sparkles },
+  { name: 'Flame', label: 'Хіти продажів', Icon: Flame },
+  { name: 'Gift', label: 'Подарунки', Icon: Gift },
+  { name: 'Watch', label: 'Аксесуари', Icon: Watch },
+  { name: 'BookOpen', label: 'Книги / Навчання', Icon: BookOpen },
   { name: 'Utensils', label: 'Ресторан / Кухня', Icon: Utensils },
-  { name: 'Heart', label: 'Красота / Здоровье', Icon: Heart },
+  { name: 'Heart', label: 'Краса / Догляд', Icon: Heart },
   { name: 'ShoppingBag', label: 'Магазин', Icon: ShoppingBag },
-  { name: 'Package', label: 'Товары общего типа', Icon: Package },
+  { name: 'Package', label: 'Товари загального типу', Icon: Package },
 ];
 
 export const CategoryIcon: React.FC<{ name: string; className?: string }> = ({ name, className = 'w-4 h-4' }) => {

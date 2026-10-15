@@ -28,7 +28,7 @@ const upload = multer({
     if (file.mimetype.startsWith('image/')) {
       cb(null, true);
     } else {
-      cb(new Error('Разрешены только изображения (JPEG, PNG, WEBP, GIF)'));
+      cb(new Error('Дозволені лише зображення (JPEG, PNG, WEBP, GIF)'));
     }
   },
 });
@@ -36,7 +36,7 @@ const upload = multer({
 router.post('/', upload.single('image'), (req: Request, res: Response) => {
   try {
     if (!req.file) {
-      return res.status(400).json({ success: false, error: 'Файл не загружен' });
+      return res.status(400).json({ success: false, error: 'Файл не завантажено' });
     }
 
     const fileUrl = `/uploads/${req.file.filename}`;

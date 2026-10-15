@@ -49,44 +49,44 @@ export const OrdersList: React.FC = () => {
         prev.map((o) => (o.id === orderId ? { ...o, status: newStatus } : o))
       );
 
-      // Trigger test notifications for all roles
+      // Trigger test notifications for all roles in Ukrainian
       if (newStatus === 'assembling') {
         showNotification(
-          `Заказ #${orderId} принят флористом`,
-          'Флорист начал сборку свежей композиции',
+          `Замовлення #${orderId} прийнято флористом`,
+          'Флорист почав складати свіжу композицію в студії на Топольній',
           'florist'
         );
         showNotification(
-          `Ваш заказ #${orderId} собирается!`,
-          'Флорист подбирает самые свежие цветы для вашего букета',
+          `Ваш букет #${orderId} вже складається!`,
+          'Флорист дбайливо підбирає найсвіжіші квіти для вашого букета',
           'client'
         );
       } else if (newStatus === 'ready_for_pickup') {
         showNotification(
-          `Заказ #${orderId} собран!`,
-          'Букет готов к выдаче. Курьер получил уведомление о заборе.',
+          `Замовлення #${orderId} зібрано!`,
+          'Букет готовий до видачі. Кур’єр отримав сповіщення про забір.',
           'florist'
         );
         showNotification(
-          `Новый заказ #${orderId} к забору!`,
-          'Букет готов и ждет курьера в мастерской.',
+          `Нове замовлення #${orderId} до забору!`,
+          'Букет готовий та чекає на кур’єра в студії на вул. Топольній, 4В.',
           'courier'
         );
       } else if (newStatus === 'in_delivery') {
         showNotification(
-          `Курьер в пути к получателю`,
-          `Заказ #${orderId} передан курьеру и доставляется по адресу.`,
+          `Кур’єр у дорозі до одержувача`,
+          `Замовлення #${orderId} передано кур’єру та доставляється по Львову.`,
           'client'
         );
       } else if (newStatus === 'completed') {
         showNotification(
-          `Заказ #${orderId} успешно доставлен!`,
-          'Букет вручен получателю в руки.',
+          `Замовлення #${orderId} успішно доставлено!`,
+          'Букет вручено одержувачу.',
           'client'
         );
       }
     } catch (err: any) {
-      alert(err.message || 'Error');
+      alert(err.message || 'Помилка');
     }
   };
 
@@ -143,11 +143,11 @@ export const OrdersList: React.FC = () => {
         <div className="flex items-center gap-1.5 min-w-max">
           {[
             { key: 'all', label: t.allCategories },
-            { key: 'pending', label: 'Nowe' },
-            { key: 'assembling', label: 'Układanie' },
-            { key: 'ready_for_pickup', label: 'Do odbioru' },
-            { key: 'in_delivery', label: 'W dostawie' },
-            { key: 'completed', label: 'Doręczone' },
+            { key: 'pending', label: 'Нові' },
+            { key: 'assembling', label: 'Складання' },
+            { key: 'ready_for_pickup', label: 'До видачі' },
+            { key: 'in_delivery', label: 'У дорозі' },
+            { key: 'completed', label: 'Доставлені' },
           ].map((tab) => (
             <button
               key={tab.key}
@@ -174,7 +174,7 @@ export const OrdersList: React.FC = () => {
           className="text-xs font-bold text-rose-600 dark:text-rose-400 hover:underline shrink-0 flex items-center gap-1.5 cursor-pointer px-2 py-1"
         >
           <RefreshCw className="w-3.5 h-3.5" />
-          <span>Odśwież</span>
+          <span>Оновити</span>
         </button>
       </div>
 
@@ -208,7 +208,7 @@ export const OrdersList: React.FC = () => {
                       {getStatusBadge(order.status)}
                     </div>
                     <p className="text-xs text-stone-500 dark:text-stone-400 truncate font-medium">
-                      {order.customer_name || 'Klient'} • {new Date(order.created_at).toLocaleString('pl-PL')}
+                      {order.customer_name || 'Клієнт'} • {new Date(order.created_at).toLocaleString('uk-UA')}
                     </p>
                   </div>
 
@@ -235,7 +235,7 @@ export const OrdersList: React.FC = () => {
                       className="flex-1 py-3 px-4 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white rounded-2xl text-xs font-black flex items-center justify-center gap-2 shadow-md shadow-purple-500/20 active:scale-98 transition-all cursor-pointer"
                     >
                       <Sparkles className="w-4 h-4" />
-                      <span>Przyjmij zamówienie i zacznij układanie</span>
+                      <span>Прийняти замовлення та почати збирання</span>
                     </button>
                   )}
 
@@ -248,14 +248,14 @@ export const OrdersList: React.FC = () => {
                       className="flex-1 py-3 px-4 bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-500 hover:to-orange-500 text-white rounded-2xl text-xs font-black flex items-center justify-center gap-2 shadow-md shadow-amber-500/20 active:scale-98 transition-all cursor-pointer"
                     >
                       <PackageCheck className="w-4 h-4" />
-                      <span>Bukiet gotowy! Powiadom kuriera o odbiorze</span>
+                      <span>Букет готовий! Сповістити кур’єра</span>
                     </button>
                   )}
 
                   {order.status === 'ready_for_pickup' && (
                     <div className="flex-1 py-2.5 px-4 bg-amber-500/10 text-amber-700 dark:text-amber-300 rounded-2xl text-xs font-bold flex items-center gap-2 border border-amber-500/20">
                       <Truck className="w-4 h-4" />
-                      <span>Bukiet oczekuje na odbiór przez kuriera w atelier</span>
+                      <span>Букет очікує на кур’єра в студії на Топольній, 4В</span>
                     </div>
                   )}
                 </div>
@@ -278,7 +278,7 @@ export const OrdersList: React.FC = () => {
                       {(order.delivery_date || order.delivery_time) && (
                         <div className="flex items-center gap-2 sm:col-span-2">
                           <Clock className="w-3.5 h-3.5 text-rose-500" />
-                          <span className="font-bold">Termin: {order.delivery_date || 'Dziś'} o godz. {order.delivery_time || '14:00'}</span>
+                          <span className="font-bold">Час вручення: {order.delivery_date || 'Сьогодні'} о {order.delivery_time || '14:00'}</span>
                         </div>
                       )}
                       {order.comment && (
@@ -309,7 +309,7 @@ export const OrdersList: React.FC = () => {
 
                     {/* Manual Status Changer */}
                     <div className="pt-2.5 flex items-center justify-between gap-2 flex-wrap border-t border-stone-200/60 dark:border-white/5">
-                      <span className="font-bold text-stone-500">Status ręczny:</span>
+                      <span className="font-bold text-stone-500">Змінити статус вручну:</span>
                       <div className="flex gap-1.5 flex-wrap">
                         {(['pending', 'assembling', 'ready_for_pickup', 'in_delivery', 'completed', 'cancelled'] as const).map((st) => (
                           <button
@@ -321,12 +321,12 @@ export const OrdersList: React.FC = () => {
                                 : 'bg-stone-200/80 dark:bg-slate-700 text-stone-700 dark:text-stone-300 hover:bg-stone-300'
                             }`}
                           >
-                            {st === 'pending' && 'Nowy'}
-                            {st === 'assembling' && 'Układanie'}
-                            {st === 'ready_for_pickup' && 'Gotowy'}
-                            {st === 'in_delivery' && 'W trasie'}
-                            {st === 'completed' && 'Doręczony'}
-                            {st === 'cancelled' && 'Anulowany'}
+                            {st === 'pending' && 'Нове'}
+                            {st === 'assembling' && 'Складання'}
+                            {st === 'ready_for_pickup' && 'Готовий'}
+                            {st === 'in_delivery' && 'У дорозі'}
+                            {st === 'completed' && 'Вручено'}
+                            {st === 'cancelled' && 'Скасовано'}
                           </button>
                         ))}
                       </div>

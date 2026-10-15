@@ -120,7 +120,7 @@ router.patch('/:id/status', (req: Request, res: Response) => {
 
     const allowed = ['pending', 'assembling', 'ready_for_pickup', 'in_delivery', 'completed', 'cancelled', 'paid'];
     if (!allowed.includes(status)) {
-      return res.status(400).json({ success: false, error: 'Недопустимый статус' });
+      return res.status(400).json({ success: false, error: 'Неприпустимий статус' });
     }
 
     db.prepare('UPDATE orders SET status = ? WHERE id = ?').run(status, id);

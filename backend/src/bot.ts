@@ -121,10 +121,10 @@ export async function notifyNewOrder(order: Order, items: any[]) {
     try {
       await bot.api.sendMessage(
         order.telegram_user_id,
-        `✅ **Twoje zamówienie #${order.id} zostało przyjęte!**\n\n` +
-        `📦 **Skład:**\n${itemsList}\n\n` +
-        `💰 **Do zapłaty:** **${order.total_price} zł**\n` +
-        `Nasi floryści wkrótce rozpoczną układanie bukietu!`,
+        `✅ **Ваше замовлення Flowers Lviv #${order.id} прийнято!**\n\n` +
+        `📦 **Склад:**\n${itemsList}\n\n` +
+        `💰 **До сплати:** **${Math.round(order.total_price)} ₴**\n` +
+        `Наші флористи незабаром розпочнуть складання вашого букета!`,
         { parse_mode: 'Markdown' }
       );
     } catch (e: any) {
@@ -141,41 +141,41 @@ export async function notifyOrderStatusChange(order: Order, newStatus: string) {
 
   switch (newStatus) {
     case 'assembling':
-      statusTitle = '🌸 Florysta układa bukiet';
-      statusDesc = 'Twój bukiet jest właśnie starannie układany z najświeższych kwiatów!';
+      statusTitle = '🌸 Флорист складає букет';
+      statusDesc = 'Ваш букет дбайливо створюється зі свіжих квітів у нашій майстерні!';
       break;
     case 'ready_for_pickup':
-      statusTitle = '📦 Bukiet gotowy do odbioru';
-      statusDesc = 'Kompozycja kwiatowa została przygotowana i czeka na kuriera.';
+      statusTitle = '📦 Букет готовий до видачі';
+      statusDesc = 'Квіткова композиція оформлена і чекає на кур\'єра або самовивіз (вул. Топольна, 4В).';
       break;
     case 'in_delivery':
-      statusTitle = '🚗 Kurier w drodze';
-      statusDesc = 'Kurier odebrał Twój bukiet i jedzie pod wskazany adres!';
+      statusTitle = '🚗 Кур\'єр у дорозі';
+      statusDesc = 'Кур\'єр забрав ваш букет і вже прямує за адресою доставки по Львову!';
       break;
     case 'completed':
-      statusTitle = '🎉 Bukiet doręczony!';
-      statusDesc = 'Kwiaty zostały pomyślnie wręczone odbiorcy. Dziękujemy za zaufanie!';
+      statusTitle = '🎉 Букет доставлено!';
+      statusDesc = 'Квіти успішно вручено одержувачу. Дякуємо, що обрали Flowers Lviv!';
       break;
     case 'cancelled':
-      statusTitle = '❌ Zamówienie anulowane';
-      statusDesc = 'Zamówienie zostało anulowane.';
+      statusTitle = '❌ Замовлення скасовано';
+      statusDesc = 'Замовлення було скасовано.';
       break;
     default:
-      statusTitle = `Status: ${newStatus}`;
-      statusDesc = 'Status Twojego zamówienia został zaktualizowany.';
+      statusTitle = `Статус: ${newStatus}`;
+      statusDesc = 'Статус вашого замовлення оновлено.';
   }
 
   const message =
-    `📋 **Aktualizacja zamówienia #${order.id}**\n\n` +
+    `📋 **Оновлення замовлення #${order.id}**\n\n` +
     `📌 **${statusTitle}**\n` +
     `${statusDesc}\n\n` +
-    `👤 **Odbiorca:** ${order.customer_name}\n` +
-    `💰 **Kwota:** ${order.total_price} zł`;
+    `👤 **Одержувач:** ${order.customer_name}\n` +
+    `💰 **Сума:** ${Math.round(order.total_price)} ₴`;
 
   // Send to admin chat
   if (adminChatId) {
     try {
-      await bot.api.sendMessage(adminChatId, `🔔 [ADMIN/FLORYSTA/KURIER]\n${message}`, { parse_mode: 'Markdown' });
+      await bot.api.sendMessage(adminChatId, `🔔 [ФЛОРИСТ / КУР'ЄР]\n${message}`, { parse_mode: 'Markdown' });
     } catch {}
   }
 

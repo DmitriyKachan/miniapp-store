@@ -56,7 +56,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product,
             />
           ) : (
             <div className="absolute inset-0 flex items-center justify-center text-stone-400">
-              🌸 Flora Atelier
+              🌸 Flowers Lviv Atelier
             </div>
           )}
 
@@ -125,7 +125,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product,
           {localized.description && (
             <div className="space-y-1.5 pt-1">
               <h4 className="text-[11px] font-bold uppercase tracking-wider text-stone-400 dark:text-stone-500">
-                {language === 'ua' ? 'Склад та опис букету' : language === 'pl' ? 'Skład i opis bukietu' : 'Состав и описание букета'}
+                Склад та опис букету
               </h4>
               <p className="text-xs sm:text-sm text-stone-600 dark:text-stone-300 leading-relaxed whitespace-pre-line">
                 {localized.description}

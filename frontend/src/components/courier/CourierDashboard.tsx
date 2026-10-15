@@ -19,7 +19,7 @@ import {
 import { hapticImpact } from '../../utils/telegram';
 
 export const CourierDashboard: React.FC = () => {
-  const { t, language, formatCurrency } = useLanguage();
+  const { t, formatCurrency } = useLanguage();
   const { showNotification } = useNotification();
   const [orders, setOrders] = useState<Order[]>([]);
   const [activeTab, setActiveTab] = useState<'to_deliver' | 'completed'>('to_deliver');
@@ -49,29 +49,29 @@ export const CourierDashboard: React.FC = () => {
 
       if (status === 'in_delivery') {
         showNotification(
-          `Курьер принял заказ #${orderId}`,
-          'Букет забран из мастерской, курьер выехал к получателю',
+          `Кур'єр прийняв замовлення #${orderId}`,
+          'Букет забрано з майстерні Flowers Lviv, кур\'єр вирушив до одержувача',
           'courier'
         );
         showNotification(
-          `Ваш букет уже едет к вам!`,
-          `Курьер выехал по указанному адресу доставки.`,
+          `Ваш букет вже прямує до вас!`,
+          `Кур'єр виїхав за вказаною адресою доставки по Львову.`,
           'client'
         );
       } else if (status === 'completed') {
         showNotification(
-          `Заказ #${orderId} успешно доставлен!`,
-          'Курьер подтвердил вручение букета получателю.',
+          `Замовлення #${orderId} успішно доставлено!`,
+          'Кур\'єр підтвердив вручення букета одержувачу.',
           'courier'
         );
         showNotification(
-          `Букет успешно доставлен!`,
-          'Получатель принял цветы. Спасибо за ваш заказ!',
+          `Букет успішно доставлено!`,
+          'Одержувач прийняв квіти. Дякуємо за замовлення у Flowers Lviv!',
           'client'
         );
       }
     } catch (err: any) {
-      alert(err.message || 'Error updating status');
+      alert(err.message || 'Помилка оновлення статусу');
     }
   };
 
@@ -96,7 +96,7 @@ export const CourierDashboard: React.FC = () => {
             <h2 className="text-base sm:text-lg font-black tracking-tight">{t.courierDashboardTitle}</h2>
           </div>
           <p className="text-xs text-indigo-200/80 font-medium">
-            {activeOrders.filter((o) => o.status === 'ready_for_pickup' || o.status === 'in_delivery').length} {language === 'ua' ? 'готові до швидкої доставки по Львову' : 'gotowe do doręczenia we Lwowie'}
+            {activeOrders.filter((o) => o.status === 'ready_for_pickup' || o.status === 'in_delivery').length} готові до швидкої доставки по Львову
           </p>
         </div>
 
@@ -106,7 +106,7 @@ export const CourierDashboard: React.FC = () => {
             loadOrders();
           }}
           className="p-3 rounded-2xl bg-white/10 hover:bg-white/20 text-white transition-all cursor-pointer active:scale-90"
-          title="Odśwież"
+          title="Оновити"
         >
           <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
         </button>
@@ -125,7 +125,7 @@ export const CourierDashboard: React.FC = () => {
               : 'text-stone-600 dark:text-stone-400'
           }`}
         >
-          Do doręczenia ({activeOrders.length})
+          До доставки ({activeOrders.length})
         </button>
         <button
           onClick={() => {
@@ -138,7 +138,7 @@ export const CourierDashboard: React.FC = () => {
               : 'text-stone-600 dark:text-stone-400'
           }`}
         >
-          Doręczone ({completedOrders.length})
+          Доставлені ({completedOrders.length})
         </button>
       </div>
 
@@ -151,7 +151,7 @@ export const CourierDashboard: React.FC = () => {
           <h3 className="text-sm sm:text-base font-black text-stone-900 dark:text-white">
             {t.courierNoDeliveries}
           </h3>
-          <p className="text-xs text-stone-400">Brak aktywnych tras w tym momencie</p>
+          <p className="text-xs text-stone-400">Немає активних маршрутів на цей момент</p>
         </div>
       ) : (
         <div className="space-y-3.5">
@@ -175,7 +175,7 @@ export const CourierDashboard: React.FC = () => {
                 <div className="flex items-center justify-between gap-2 border-b border-stone-100 dark:border-white/5 pb-3">
                   <div className="flex items-center gap-2">
                     <span className="text-sm font-black text-stone-900 dark:text-white">
-                      Zamówienie #{order.id}
+                      Замовлення #{order.id}
                     </span>
                     <span
                       className={`px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider ${
@@ -191,14 +191,14 @@ export const CourierDashboard: React.FC = () => {
                       }`}
                     >
                       {order.status === 'in_delivery'
-                        ? 'W drodze do klienta'
+                        ? 'В дорозі до клієнта'
                         : order.status === 'ready_for_pickup'
-                        ? 'Do odbioru w atelier'
+                        ? 'Готовий до видачі в майстерні'
                         : order.status === 'assembling'
-                        ? 'Florysta układa bukiet'
+                        ? 'Флорист складає букет'
                         : order.status === 'completed'
-                        ? 'Doręczone'
-                        : 'Nowe'}
+                        ? 'Доставлено'
+                        : 'Нове'}
                     </span>
                   </div>
 
@@ -213,7 +213,7 @@ export const CourierDashboard: React.FC = () => {
                     <div className="px-3 py-1 rounded-xl bg-stone-100 dark:bg-slate-800 text-[11px] font-bold text-stone-800 dark:text-stone-200 flex items-center gap-1.5 border border-stone-200/50 dark:border-white/5">
                       <Clock className="w-3.5 h-3.5 text-indigo-500 shrink-0" />
                       <span>
-                        {order.delivery_date || 'Dziś'} • {order.delivery_time || '14:00'}
+                        {order.delivery_date || 'Сьогодні'} • {order.delivery_time || '14:00'}
                       </span>
                     </div>
                   )}
@@ -221,14 +221,14 @@ export const CourierDashboard: React.FC = () => {
                   {order.is_surprise && (
                     <div className="px-3 py-1 rounded-xl bg-purple-500/10 text-purple-700 dark:text-purple-300 text-[11px] font-bold flex items-center gap-1.5 border border-purple-500/25">
                       <EyeOff className="w-3.5 h-3.5 shrink-0" />
-                      <span>Niespodzianka (Anonim)</span>
+                      <span>Сюрприз (Анонімно)</span>
                     </div>
                   )}
 
                   {order.need_call_recipient && (
                     <div className="px-3 py-1 rounded-xl bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 text-[11px] font-bold flex items-center gap-1.5 border border-emerald-500/25">
                       <PhoneCall className="w-3.5 h-3.5 shrink-0" />
-                      <span>Ustalić adres tel.</span>
+                      <span>Уточнити адресу телефоном</span>
                     </div>
                   )}
                 </div>
@@ -250,7 +250,7 @@ export const CourierDashboard: React.FC = () => {
                     </div>
                   )}
 
-                  {order.comment && order.comment.includes('💌 Bilecik') && (
+                  {order.comment && order.comment.includes('💌') && (
                     <div className="p-2.5 bg-rose-50/70 dark:bg-rose-950/20 rounded-2xl text-[11px] text-rose-800 dark:text-rose-300 italic border border-rose-200/50 dark:border-rose-900/30">
                       {order.comment.split('\n').find((l) => l.includes('💌'))}
                     </div>
@@ -261,7 +261,7 @@ export const CourierDashboard: React.FC = () => {
                 {order.items && order.items.length > 0 && (
                   <div className="p-3 bg-stone-50 dark:bg-slate-800/60 rounded-2xl space-y-1.5 border border-stone-200/50 dark:border-white/5">
                     <span className="text-[10px] uppercase font-bold text-stone-400 tracking-wider">
-                      Zawartość zamówienia:
+                      Склад замовлення:
                     </span>
                     <div className="space-y-1">
                       {order.items.map((it, idx) => (
@@ -285,7 +285,7 @@ export const CourierDashboard: React.FC = () => {
                       className="py-2.5 px-3 rounded-2xl bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border border-emerald-500/25 text-xs font-bold flex items-center justify-center gap-1.5 active:scale-95 transition-all text-center cursor-pointer hover:bg-emerald-500/20"
                     >
                       <Phone className="w-3.5 h-3.5 shrink-0" />
-                      <span>Zadzwoń</span>
+                      <span>Зателефонувати</span>
                     </a>
                   ) : (
                     <div />
@@ -300,7 +300,7 @@ export const CourierDashboard: React.FC = () => {
                       className="py-2.5 px-3 rounded-2xl bg-sky-500/10 text-sky-700 dark:text-sky-300 border border-sky-500/25 text-xs font-bold flex items-center justify-center gap-1.5 active:scale-95 transition-all text-center cursor-pointer hover:bg-sky-500/20"
                     >
                       <Navigation className="w-3.5 h-3.5 shrink-0" />
-                      <span>Nawiguj (Mapy)</span>
+                      <span>Навігатор (Карти)</span>
                     </a>
                   ) : (
                     <div />
@@ -314,7 +314,7 @@ export const CourierDashboard: React.FC = () => {
                     className="w-full py-3.5 px-4 bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-500 hover:to-blue-500 text-white rounded-2xl text-xs font-black flex items-center justify-center gap-2 shadow-md shadow-indigo-500/20 active:scale-[0.98] transition-all cursor-pointer"
                   >
                     <Truck className="w-4 h-4" />
-                    <span>Odbierz bukiet z atelier i ruszaj w trasę</span>
+                    <span>Забрати букет з майстерні та вирушити за адресою</span>
                   </button>
                 )}
 
@@ -324,14 +324,14 @@ export const CourierDashboard: React.FC = () => {
                     className="w-full py-4 px-4 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white rounded-2xl text-xs sm:text-sm font-black flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/25 active:scale-[0.98] transition-all cursor-pointer"
                   >
                     <CheckCircle2 className="w-4 h-4" />
-                    <span>Potwierdź doręczenie bukietu odbiorcy!</span>
+                    <span>Підтвердити вручення букета одержувачу!</span>
                   </button>
                 )}
 
                 {(order.status === 'pending' || order.status === 'assembling') && (
                   <div className="py-2.5 px-3 bg-stone-100 dark:bg-slate-800 text-stone-500 dark:text-stone-400 text-xs rounded-2xl flex items-center justify-center gap-1.5 border border-stone-200/40 dark:border-white/5">
                     <Sparkles className="w-3.5 h-3.5 text-purple-500 animate-spin" />
-                    <span>Florysta przygotowuje bukiet. Powiadomimy Cię o gotowości do odbioru.</span>
+                    <span>Флорист готує букет. Ми сповістимо вас про готовність до видачі.</span>
                   </div>
                 )}
               </div>

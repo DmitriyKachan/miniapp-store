@@ -66,7 +66,7 @@ const ShopContent: React.FC = () => {
       }
     } catch (err: any) {
       console.error('Failed to load shop data:', err);
-      setError(err.message || 'Błąd ładowania danych');
+      setError(err.message || 'Помилка завантаження даних');
     } finally {
       setIsLoading(false);
     }
@@ -117,11 +117,7 @@ const ShopContent: React.FC = () => {
                 <span>Flowers Lviv Atelier</span>
               </div>
               <h2 className="text-base sm:text-xl font-black tracking-tight leading-snug">
-                {language === 'ua'
-                  ? 'Свіжі авторські букети та доставка квітів по Львову'
-                  : language === 'pl'
-                  ? 'Świeże bukiety autorskie i dostawa kwiatów we Lwowie'
-                  : 'Свежие авторские букеты и доставка цветов по Львову'}
+                Свіжі авторські букети та доставка квітів по Львову
               </h2>
               <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-rose-100 font-medium">
                 <span className="flex items-center gap-1.5">

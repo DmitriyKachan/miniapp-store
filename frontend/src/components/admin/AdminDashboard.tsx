@@ -112,7 +112,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
           ...prev,
           isPublishing: false,
           isSuccess: true,
-          message: 'Букет успешно опубликован в группу с интерактивной кнопкой!',
+          message: 'Букет успішно опубліковано в канал із кнопкою замовлення!',
         }));
       } else {
         hapticNotification('error');
@@ -120,7 +120,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
           ...prev,
           isPublishing: false,
           isSuccess: false,
-          message: res.message || 'Ошибка отправки в Telegram',
+          message: res.message || 'Помилка відправлення в Telegram',
         }));
       }
     } catch (err: any) {
@@ -128,7 +128,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
         ...prev,
         isPublishing: false,
         isSuccess: false,
-        message: err.message || 'Ошибка',
+        message: err.message || 'Помилка',
       }));
     }
   };
@@ -154,10 +154,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
               <div className="w-8 h-8 rounded-xl bg-rose-500/30 border border-rose-400/40 flex items-center justify-center text-rose-300">
                 <Package className="w-4 h-4" />
               </div>
-              <h2 className="text-base sm:text-lg font-black tracking-tight">Panel Florysty (Atelier)</h2>
+              <h2 className="text-base sm:text-lg font-black tracking-tight">Панель флориста Flowers Lviv</h2>
             </div>
             <span className="px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-rose-500/20 text-rose-300 border border-rose-500/30">
-              Live Management
+              Студія на Топольній
             </span>
           </div>
 
@@ -170,7 +170,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                   : 'bg-white/5 border-white/10 hover:bg-white/10'
               }`}
             >
-              <div className="text-[10px] font-bold uppercase tracking-wider text-stone-400">Bukietów</div>
+              <div className="text-[10px] font-bold uppercase tracking-wider text-stone-400">Букетів</div>
               <div className="text-lg sm:text-2xl font-black mt-0.5">{products.length}</div>
             </div>
 
@@ -178,7 +178,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
               onClick={() => setIsCategoryModalOpen(true)}
               className="p-3 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all cursor-pointer"
             >
-              <div className="text-[10px] font-bold uppercase tracking-wider text-stone-400">Kategorii</div>
+              <div className="text-[10px] font-bold uppercase tracking-wider text-stone-400">Категорій</div>
               <div className="text-lg sm:text-2xl font-black mt-0.5">{categories.length}</div>
             </div>
 
@@ -190,8 +190,8 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                   : 'bg-white/5 border-white/10 hover:bg-white/10'
               }`}
             >
-              <div className="text-[10px] font-bold uppercase tracking-wider text-emerald-400">Zamówienia</div>
-              <div className="text-lg sm:text-2xl font-black mt-0.5 text-emerald-300">Zarządzaj</div>
+              <div className="text-[10px] font-bold uppercase tracking-wider text-emerald-400">Замовлення</div>
+              <div className="text-lg sm:text-2xl font-black mt-0.5 text-emerald-300">Керувати</div>
             </div>
           </div>
         </div>
@@ -363,10 +363,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                       <button
                         onClick={() => openPublishModal(prod)}
                         className="px-3 py-1.5 bg-sky-500/10 text-sky-600 dark:text-sky-400 rounded-xl text-xs font-bold flex items-center gap-1.5 hover:bg-sky-500/20 transition-colors active:scale-95 cursor-pointer border border-sky-500/20"
-                        title="Opublikuj w Telegramie"
+                        title="Опублікувати в Telegram-канал"
                       >
                         <Send className="w-3.5 h-3.5" />
-                        <span className="hidden sm:inline">Do kanału</span>
+                        <span className="hidden sm:inline">В канал</span>
                         <span className="sm:hidden">TG</span>
                       </button>
 
@@ -375,13 +375,13 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                         className="px-3 py-1.5 bg-stone-100 dark:bg-slate-800 text-stone-700 dark:text-stone-300 rounded-xl text-xs font-bold flex items-center gap-1.5 hover:bg-stone-200 dark:hover:bg-slate-700 transition-colors active:scale-95 cursor-pointer border border-stone-200/50 dark:border-white/5"
                       >
                         <Edit2 className="w-3.5 h-3.5 text-rose-500" />
-                        <span>Edytuj</span>
+                        <span>Редагувати</span>
                       </button>
 
                       <button
                         onClick={() => handleDeleteProduct(prod)}
                         className="p-1.5 text-stone-400 hover:text-red-600 hover:bg-red-500/10 rounded-xl transition-colors active:scale-95 cursor-pointer"
-                        title="Usuń"
+                        title="Видалити"
                       >
                         <Trash2 className="w-4 h-4" />
                       </button>
@@ -401,7 +401,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
             <div className="flex items-center justify-between pb-2 border-b border-stone-100 dark:border-white/5">
               <h3 className="text-sm sm:text-base font-black text-stone-900 dark:text-white flex items-center gap-2">
                 <Send className="w-4 h-4 text-sky-500" />
-                <span>Publikacja w Telegramie</span>
+                <span>Публікація в Telegram-канал</span>
               </h3>
               <button
                 onClick={() => setPublishModal((prev) => ({ ...prev, isOpen: false }))}
@@ -414,7 +414,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
             {/* Simulated Telegram Post Mockup */}
             <div className="bg-[#0f141c] text-white rounded-2xl p-3.5 space-y-2.5 border border-slate-800 shadow-md">
               <div className="text-[10px] uppercase font-bold text-sky-400 flex items-center gap-1">
-                <span>Podgląd posta w Telegramie:</span>
+                <span>Прев'ю публікації в Telegram:</span>
               </div>
               <div className="w-full h-36 rounded-xl overflow-hidden bg-slate-800">
                 <img
@@ -426,7 +426,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
               <div>
                 <h5 className="font-bold text-xs sm:text-sm text-white">{publishModal.product.title}</h5>
                 <p className="text-[11px] text-slate-300 mt-0.5 line-clamp-2">{publishModal.product.description}</p>
-                <div className="text-xs font-black text-rose-400 mt-1">Cena: {formatCurrency(publishModal.product.price)}</div>
+                <div className="text-xs font-black text-rose-400 mt-1">Ціна: {formatCurrency(publishModal.product.price)}</div>
               </div>
               {/* Telegram Native Inline Button */}
               <div className="pt-1">
@@ -438,7 +438,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
             <div>
               <label className="block text-xs font-bold text-stone-700 dark:text-stone-300 mb-1.5">
-                ID grupy / kanału (lub @username)
+                ID групи / каналу (або @username)
               </label>
               <input
                 type="text"
@@ -446,7 +446,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 onChange={(e) =>
                   setPublishModal((prev) => ({ ...prev, channelId: e.target.value }))
                 }
-                placeholder="-5431810394 lub @twoj_kanal"
+                placeholder="-5431810394 або @flowers___lviv"
                 className="w-full px-4 py-2.5 bg-stone-50 dark:bg-slate-800 text-xs sm:text-sm text-stone-900 dark:text-white rounded-2xl border border-stone-200/60 dark:border-white/5 focus:outline-none focus:ring-2 focus:ring-sky-500 font-mono shadow-inner"
               />
             </div>
@@ -474,7 +474,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
               ) : (
                 <>
                   <Send className="w-4 h-4" />
-                  <span>Opublikuj w kanale</span>
+                  <span>Опублікувати в каналі</span>
                 </>
               )}
             </button>

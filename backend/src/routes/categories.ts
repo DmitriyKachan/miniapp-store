@@ -63,14 +63,14 @@ router.delete('/:id', (req: Request, res: Response) => {
     const id = Number(req.params.id);
     const existing = db.prepare('SELECT * FROM categories WHERE id = ?').get(id);
     if (!existing) {
-      return res.status(404).json({ success: false, error: 'Категория не найдена' });
+      return res.status(404).json({ success: false, error: 'Категорію не знайдено' });
     }
 
     // Delete associated products or cascade
     db.prepare('DELETE FROM products WHERE category_id = ?').run(id);
     db.prepare('DELETE FROM categories WHERE id = ?').run(id);
 
-    res.json({ success: true, message: 'Категория и привязанные товары удалены' });
+    res.json({ success: true, message: 'Категорію та прив\'язані товари видалено' });
   } catch (error: any) {
     res.status(500).json({ success: false, error: error.message });
   }

@@ -97,13 +97,13 @@ export const CartView: React.FC<CartViewProps> = ({ onClose, onOrderSuccess }) =
       // Format comment with special badges
       let fullComment = address.trim();
       if (needCallRecipient) {
-        fullComment += '\n📞 [Уточнить точный адрес у получателя по телефону]';
+        fullComment += '\n📞 [Уточнити точну адресу у одержувача телефоном]';
       }
       if (isSurprise) {
-        fullComment += '\n🤫 [СЮРПРИЗ: Не раскрывать имя заказчика до вручения]';
+        fullComment += '\n🤫 [СЮРПРИЗ: Не розкривати ім\'я замовника до вручення]';
       }
       if (cardMessage.trim()) {
-        fullComment += `\n💌 Bilecik: "${cardMessage.trim()}"`;
+        fullComment += `\n💌 Листівка: "${cardMessage.trim()}"`;
       }
 
       const newOrder = await api.createOrder({
@@ -122,13 +122,13 @@ export const CartView: React.FC<CartViewProps> = ({ onClose, onOrderSuccess }) =
       });
 
       showNotification(
-        `Новый заказ #${newOrder.id}!`,
-        `Клиент ${customerName} оформил заказ на ${formatCurrency(totalPrice)}. Флорист может начинать сборку!`,
+        `Нове замовлення #${newOrder.id}!`,
+        `Клієнт ${customerName} оформив замовлення на ${formatCurrency(totalPrice)}. Флорист може розпочинати збірку!`,
         'florist'
       );
       showNotification(
-        `Заказ #${newOrder.id} успешно оформлен!`,
-        `Спасибо! Флористы уже приступили к подготовке букета.`,
+        `Замовлення #${newOrder.id} успішно оформлено!`,
+        `Дякуємо! Флористи вже розпочали підготовку вашого букета.`,
         'client'
       );
 
@@ -208,7 +208,7 @@ export const CartView: React.FC<CartViewProps> = ({ onClose, onOrderSuccess }) =
             {/* Cart Items List */}
             <div className="space-y-2.5">
               <div className="text-[11px] uppercase font-bold tracking-wider text-stone-400 dark:text-stone-500 px-1">
-                Wybrane kompozycje
+                Обрані букети
               </div>
               {cart.map((item) => {
                 const localized = getLocalizedProduct(item.product, language);
@@ -227,7 +227,7 @@ export const CartView: React.FC<CartViewProps> = ({ onClose, onOrderSuccess }) =
                         />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center text-xs text-stone-400">
-                          🌸 Flora
+                          🌸 Flowers Lviv
                         </div>
                       )}
                     </div>
@@ -265,7 +265,7 @@ export const CartView: React.FC<CartViewProps> = ({ onClose, onOrderSuccess }) =
                     <button
                       onClick={() => removeFromCart(item.product.id)}
                       className="p-1.5 text-stone-400 hover:text-red-500 transition-colors shrink-0 cursor-pointer"
-                      title="Usuń"
+                      title="Видалити"
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
@@ -274,7 +274,7 @@ export const CartView: React.FC<CartViewProps> = ({ onClose, onOrderSuccess }) =
               })}
             </div>
 
-            {/* UPSELL RECOMMENDATIONS: "Coś do bukietu? 🎁" */}
+            {/* UPSELL RECOMMENDATIONS: "Доповнити букет 🎁" */}
             <div className="bg-gradient-to-br from-rose-500/5 via-pink-500/5 to-amber-500/5 rounded-3xl border border-rose-200/60 dark:border-rose-900/30 p-4 space-y-3">
               <div className="flex items-center gap-2 text-rose-600 dark:text-rose-400">
                 <Gift className="w-4 h-4" />
@@ -303,7 +303,7 @@ export const CartView: React.FC<CartViewProps> = ({ onClose, onOrderSuccess }) =
                         </p>
                         <p className="text-xs font-extrabold text-rose-600 dark:text-rose-400 mt-0.5">
                           {localizedAcc.price === 0
-                            ? language === 'pl' ? 'Gratis 🎁' : language === 'ua' ? 'Безкоштовно 🎁' : 'Бесплатно 🎁'
+                            ? 'Безкоштовно 🎁'
                             : formatCurrency(localizedAcc.price)}
                         </p>
                       </div>
@@ -340,7 +340,7 @@ export const CartView: React.FC<CartViewProps> = ({ onClose, onOrderSuccess }) =
                   <span>{t.deliveryTimingTitle}</span>
                 </h3>
                 <span className="text-[10px] font-extrabold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 px-2 py-0.5 rounded-full">
-                  Gwarancja punktualności
+                  Гарантія пунктуальності
                 </span>
               </div>
 
@@ -518,7 +518,7 @@ export const CartView: React.FC<CartViewProps> = ({ onClose, onOrderSuccess }) =
                 <div className="flex justify-between text-xs text-stone-500 dark:text-stone-400">
                   <span>{t.itemsInOrder}</span>
                   <span className="font-bold text-stone-700 dark:text-stone-300">
-                    {totalCount} {language === 'ua' ? 'шт.' : language === 'pl' ? 'szt.' : 'шт.'}
+                    {totalCount} шт.
                   </span>
                 </div>
                 <div className="flex justify-between text-xs text-stone-500 dark:text-stone-400">

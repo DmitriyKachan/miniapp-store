@@ -535,7 +535,7 @@ export const api = {
   async publishToChannel(product: Product, channelUsername: string): Promise<{ success: boolean; message: string }> {
     const rawTarget = channelUsername.trim();
     if (!rawTarget) {
-      throw new Error('Укажите @username или ID группы');
+      throw new Error('Вкажіть @username або ID каналу');
     }
 
     setLocal(STORAGE_KEYS.CHANNEL_SETTINGS, rawTarget);
@@ -557,9 +557,9 @@ export const api = {
       if (res.ok) {
         const data = await res.json();
         if (data.success) {
-          return { success: true, message: 'Опубликовано через бэкенд' };
+          return { success: true, message: 'Опубліковано через бекенд' };
         } else {
-          throw new Error(data.error || 'Ошибка публикации');
+          throw new Error(data.error || 'Помилка публікації');
         }
       }
     } catch (e: any) {
@@ -568,7 +568,7 @@ export const api = {
 
     return {
       success: true,
-      message: `Товар сохранен. Настройте канал ${rawTarget} в Telegram.`,
+      message: `Товар збережено. Налаштуйте канал ${rawTarget} у Telegram.`,
     };
   },
 

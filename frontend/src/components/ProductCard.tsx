@@ -53,7 +53,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onOpenDetails
           />
         ) : (
           <div className="absolute inset-0 flex items-center justify-center text-stone-300 dark:text-stone-600 text-xs">
-            🌸 Flora
+            🌸 Flowers Lviv
           </div>
         )}
 
@@ -72,7 +72,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onOpenDetails
             <span className="px-2.5 py-1 rounded-full text-[10px] font-extrabold bg-stone-900/80 text-rose-300 backdrop-blur-md shadow-xs border border-rose-500/30">
               {t.outOfStock}
             </span>
-          ) : product.price >= 350 ? (
+          ) : product.price >= 2500 ? (
             <span className="px-2 py-0.5 rounded-full text-[9px] font-extrabold bg-amber-400 text-stone-950 backdrop-blur-md shadow-xs flex items-center gap-1">
               <Sparkles className="w-2.5 h-2.5" />
               <span>LUX</span>
@@ -98,7 +98,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onOpenDetails
         <div className="flex items-center justify-between pt-1 mt-auto">
           <div>
             <div className="text-[10px] uppercase font-bold tracking-wider text-stone-400 dark:text-stone-500">
-              Cena
+              Ціна
             </div>
             <div className="text-sm sm:text-base font-extrabold text-stone-900 dark:text-white tracking-tight">
               {formatCurrency(localized.price)}

@@ -43,11 +43,11 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({ 
   const getRoleBadge = (role: 'client' | 'florist' | 'courier') => {
     switch (role) {
       case 'florist':
-        return { label: 'Уведомление Флориста', icon: ShieldCheck, color: 'bg-rose-500 text-white' };
+        return { label: 'Сповіщення флориста', icon: ShieldCheck, color: 'bg-rose-500 text-white' };
       case 'courier':
-        return { label: 'Уведомление Курьера', icon: Truck, color: 'bg-indigo-600 text-white' };
+        return { label: 'Сповіщення кур\'єра', icon: Truck, color: 'bg-indigo-600 text-white' };
       default:
-        return { label: 'Уведомление Клиента', icon: User, color: 'bg-emerald-600 text-white' };
+        return { label: 'Сповіщення клієнта', icon: User, color: 'bg-emerald-600 text-white' };
     }
   };
 

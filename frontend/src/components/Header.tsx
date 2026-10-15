@@ -1,11 +1,10 @@
 import React from 'react';
-import { ShoppingBag, ShieldCheck, User, Search, X, Globe, Sparkles, Truck, ChevronDown } from 'lucide-react';
+import { ShoppingBag, ShieldCheck, User, Search, X, Sparkles, Truck, ChevronDown, MapPin } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../context/LanguageContext';
-import type { Language } from '../i18n/translations';
 import type { UserRole } from '../types';
-import { hapticImpact } from '../utils/telegram';
+import { hapticImpact, openExternalLink } from '../utils/telegram';
 
 interface HeaderProps {
   onOpenCart: () => void;
@@ -16,29 +15,14 @@ interface HeaderProps {
 export const Header: React.FC<HeaderProps> = ({ onOpenCart, searchQuery, onSearchChange }) => {
   const { totalCount } = useCart();
   const { mode, setMode, user } = useAuth();
-  const { language, setLanguage, t } = useLanguage();
+  const { t } = useLanguage();
   const [showSearch, setShowSearch] = React.useState(false);
-  const [showLangMenu, setShowLangMenu] = React.useState(false);
   const [showRoleMenu, setShowRoleMenu] = React.useState(false);
-
-  const selectLanguage = (lang: Language) => {
-    hapticImpact('light');
-    setLanguage(lang);
-    setShowLangMenu(false);
-  };
 
   const selectRole = (newRole: UserRole) => {
     hapticImpact('medium');
     setMode(newRole);
     setShowRoleMenu(false);
-  };
-
-  const getLangFlag = (lang: Language) => {
-    switch (lang) {
-      case 'pl': return 'PL';
-      case 'ua': return 'UA';
-      default: return 'RU';
-    }
   };
 
   const getRoleLabel = (r: UserRole) => {
@@ -69,18 +53,11 @@ export const Header: React.FC<HeaderProps> = ({ onOpenCart, searchQuery, onSearc
 
   const currentRoleInfo = getRoleLabel(mode);
 
-  const getGreeting = () => {
-    if (!user?.first_name) return t.subtitle;
-    if (language === 'ua') return `Вітаємо, ${user.first_name}!`;
-    if (language === 'pl') return `Witaj, ${user.first_name}!`;
-    return `Привет, ${user.first_name}!`;
-  };
-
   return (
     <header className="sticky top-0 z-30 bg-white/80 dark:bg-[#0b0f17]/85 backdrop-blur-xl border-b border-rose-100/60 dark:border-white/5 transition-all">
       <div className="max-w-4xl mx-auto px-3.5 sm:px-6 py-2.5 flex items-center justify-between gap-2.5">
         
-        {/* Left: Brand / Flower Boutique info */}
+        {/* Left: Brand info */}
         <div className="flex items-center gap-2.5">
           <div className="relative group">
             <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-gradient-to-tr from-rose-600 via-pink-500 to-amber-300 flex items-center justify-center text-white shadow-md shadow-rose-500/20 group-hover:scale-105 transition-transform duration-300">
@@ -94,11 +71,11 @@ export const Header: React.FC<HeaderProps> = ({ onOpenCart, searchQuery, onSearc
                 {t.appName}
               </h1>
               <span className="hidden sm:inline-block px-1.5 py-0.5 rounded text-[9px] font-bold tracking-widest uppercase bg-rose-100 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400">
-                Lviv
+                Львів
               </span>
             </div>
             <p className="text-[11px] text-rose-600/80 dark:text-rose-400 font-medium truncate mt-0.5">
-              {getGreeting()}
+              {user?.first_name ? `Вітаємо, ${user.first_name}!` : t.subtitle}
             </p>
           </div>
         </div>
@@ -106,44 +83,19 @@ export const Header: React.FC<HeaderProps> = ({ onOpenCart, searchQuery, onSearc
         {/* Right: Actions */}
         <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
           
-          {/* Language Switcher Pill */}
-          <div className="relative">
-            <button
-              onClick={() => {
-                hapticImpact('light');
-                setShowLangMenu(!showLangMenu);
-                setShowRoleMenu(false);
-              }}
-              className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-[11px] font-bold bg-stone-100/80 dark:bg-slate-800/80 text-stone-700 dark:text-stone-200 hover:bg-stone-200/70 dark:hover:bg-slate-700 transition-all border border-stone-200/50 dark:border-white/5 cursor-pointer active:scale-95"
-            >
-              <Globe className="w-3.5 h-3.5 text-rose-500" />
-              <span>{getLangFlag(language)}</span>
-              <ChevronDown className="w-3 h-3 text-stone-400" />
-            </button>
-
-            {showLangMenu && (
-              <div className="absolute right-0 mt-1.5 w-32 bg-white/95 dark:bg-[#141a24]/95 backdrop-blur-xl rounded-2xl shadow-xl border border-stone-200/60 dark:border-white/10 py-1.5 z-50 animate-in fade-in zoom-in-95 duration-150">
-                {[
-                  { key: 'ru' as Language, label: '🇷🇺 Русский' },
-                  { key: 'pl' as Language, label: '🇵🇱 Polski' },
-                  { key: 'ua' as Language, label: '🇺🇦 Українська' },
-                ].map((item) => (
-                  <button
-                    key={item.key}
-                    onClick={() => selectLanguage(item.key)}
-                    className={`w-full text-left px-3.5 py-2 text-xs font-semibold flex items-center justify-between hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors cursor-pointer ${
-                      language === item.key
-                        ? 'text-rose-600 dark:text-rose-400 font-bold bg-rose-50/50 dark:bg-rose-950/20'
-                        : 'text-stone-700 dark:text-stone-300'
-                    }`}
-                  >
-                    <span>{item.label}</span>
-                    {language === item.key && <span className="w-1.5 h-1.5 rounded-full bg-rose-500" />}
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
+          {/* Lviv Instagram Pill */}
+          <button
+            onClick={() => {
+              hapticImpact('light');
+              openExternalLink('https://www.instagram.com/flowers___lviv/');
+            }}
+            className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-[11px] font-bold bg-gradient-to-r from-amber-500/10 via-rose-500/10 to-purple-500/10 hover:from-amber-500/20 hover:to-purple-500/20 text-rose-600 dark:text-rose-400 border border-rose-300/40 dark:border-rose-500/20 transition-all cursor-pointer active:scale-95"
+            title="Instagram @flowers___lviv"
+          >
+            <MapPin className="w-3.5 h-3.5 text-rose-500" />
+            <span className="hidden sm:inline">Топольна, 4В</span>
+            <span className="sm:hidden">Львів</span>
+          </button>
 
           {/* Role Switcher Pill (Buyer / Admin / Courier) */}
           <div className="relative">
@@ -151,7 +103,6 @@ export const Header: React.FC<HeaderProps> = ({ onOpenCart, searchQuery, onSearc
               onClick={() => {
                 hapticImpact('light');
                 setShowRoleMenu(!showRoleMenu);
-                setShowLangMenu(false);
               }}
               className={`px-2.5 py-1.5 rounded-xl text-[11px] font-bold flex items-center gap-1.5 border backdrop-blur-sm transition-all cursor-pointer active:scale-95 ${currentRoleInfo.color}`}
             >
@@ -161,14 +112,14 @@ export const Header: React.FC<HeaderProps> = ({ onOpenCart, searchQuery, onSearc
             </button>
 
             {showRoleMenu && (
-              <div className="absolute right-0 mt-1.5 w-44 bg-white/95 dark:bg-[#141a24]/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-stone-200/60 dark:border-white/10 p-1.5 z-50 animate-in fade-in zoom-in-95 duration-150">
+              <div className="absolute right-0 mt-1.5 w-48 bg-white/95 dark:bg-[#141a24]/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-stone-200/60 dark:border-white/10 p-1.5 z-50 animate-in fade-in zoom-in-95 duration-150">
                 <div className="px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-stone-400 dark:text-stone-500">
-                  Режим работы:
+                  Режим перегляду:
                 </div>
                 {[
-                  { key: 'buyer' as UserRole, label: 'Клиент (Витрина)', icon: User, desc: 'Каталог и заказ цветов' },
-                  { key: 'admin' as UserRole, label: 'Флорист (Админ)', icon: ShieldCheck, desc: 'Букеты, склад и каналы' },
-                  { key: 'courier' as UserRole, label: 'Курьер', icon: Truck, desc: 'Маршруты и вручение' },
+                  { key: 'buyer' as UserRole, label: 'Клієнт (Вітрина)', icon: User, desc: 'Каталог та замовлення квітів' },
+                  { key: 'admin' as UserRole, label: 'Флорист (Адмін)', icon: ShieldCheck, desc: 'Букети, склад та канал' },
+                  { key: 'courier' as UserRole, label: "Кур'єр", icon: Truck, desc: 'Маршрути та доставка' },
                 ].map((item) => (
                   <button
                     key={item.key}
@@ -201,7 +152,7 @@ export const Header: React.FC<HeaderProps> = ({ onOpenCart, searchQuery, onSearc
                 setShowSearch(!showSearch);
                 if (showSearch) onSearchChange('');
               }}
-              aria-label="Search"
+              aria-label="Пошук"
               className={`w-9 h-9 rounded-xl flex items-center justify-center transition-all cursor-pointer active:scale-95 ${
                 showSearch
                   ? 'bg-rose-600 text-white shadow-sm'
