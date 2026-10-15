@@ -144,7 +144,7 @@ export const translations: Record<Language, TranslationDictionary> = {
     retry: 'Повторити',
     addToCart: 'У кошик',
     outOfStock: 'Немає в наявності',
-    inStock: 'В наявності в студії на Топольній',
+    inStock: 'В наявності',
     inCart: 'У кошику',
     cart: 'Квітковий кошик',
     cartEmptyTitle: 'У кошику поки немає квітів',

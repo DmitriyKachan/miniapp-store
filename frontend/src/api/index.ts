@@ -522,13 +522,13 @@ export const api = {
   async deleteProduct(id: number): Promise<void> {
     try {
       await fetch(`${API_BASE}/products/${id}`, { method: 'DELETE' });
-    } catch {}
+    } catch (e) {
+      console.warn(`Local deletion fallback for #${id}`);
+    }
 
     const products = getLocal<Product[]>(STORAGE_KEYS.PRODUCTS, INITIAL_PRODUCTS);
-    setLocal(
-      STORAGE_KEYS.PRODUCTS,
-      products.filter((p) => p.id !== id)
-    );
+    const updated = products.filter((p) => Number(p.id) !== Number(id));
+    setLocal(STORAGE_KEYS.PRODUCTS, updated);
   },
 
   // Telegram Group & Channel Publishing
