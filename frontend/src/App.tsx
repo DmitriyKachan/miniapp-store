@@ -89,7 +89,14 @@ const ShopContent: React.FC = () => {
     });
 
   return (
-    <div className="min-h-screen bg-[#faf7f5] dark:bg-[#0b0f17] text-stone-900 dark:text-stone-100 flex flex-col font-sans transition-colors pb-28">
+    <div
+      className="min-h-screen min-h-[100dvh] w-full max-w-full overflow-x-hidden bg-[#faf7f5] dark:bg-[#0b0f17] text-stone-900 dark:text-stone-100 flex flex-col font-sans transition-colors"
+      style={{
+        paddingBottom: mode === 'buyer' && totalCount > 0
+          ? 'calc(7.5rem + env(safe-area-inset-bottom, 16px))'
+          : 'calc(3.5rem + env(safe-area-inset-bottom, 16px))'
+      }}
+    >
       {/* Top Header */}
       <Header
         onOpenCart={() => setIsCartOpen(true)}
@@ -226,23 +233,28 @@ const ShopContent: React.FC = () => {
 
       {/* Floating Bottom Cart Bar */}
       {mode === 'buyer' && totalCount > 0 && !isCartOpen && (
-        <div className="fixed bottom-5 left-4 right-4 max-w-md mx-auto z-40 animate-in slide-in-from-bottom-8 duration-300">
+        <div
+          className="fixed left-3 sm:left-4 right-3 sm:right-4 max-w-md mx-auto z-40 animate-in slide-in-from-bottom-8 duration-300"
+          style={{
+            bottom: 'calc(1rem + env(safe-area-inset-bottom, 0px))',
+          }}
+        >
           <button
             onClick={() => {
               hapticImpact('medium');
               setIsCartOpen(true);
             }}
-            className="w-full bg-gradient-to-r from-rose-600 via-pink-600 to-rose-600 hover:from-rose-500 hover:to-pink-500 text-white p-4 rounded-3xl shadow-2xl shadow-rose-600/35 flex items-center justify-between active:scale-[0.99] transition-all cursor-pointer border border-white/20"
+            className="w-full bg-gradient-to-r from-rose-600 via-pink-600 to-rose-600 hover:from-rose-500 hover:to-pink-500 text-white p-3.5 sm:p-4 rounded-2xl sm:rounded-3xl shadow-2xl shadow-rose-600/35 flex items-center justify-between active:scale-[0.99] transition-all cursor-pointer border border-white/20"
           >
-            <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-2xl bg-white/25 flex items-center justify-center font-black text-xs backdrop-blur-xs">
+            <div className="flex items-center gap-2.5 sm:gap-3">
+              <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl sm:rounded-2xl bg-white/25 flex items-center justify-center font-black text-xs backdrop-blur-xs">
                 {totalCount}
               </div>
-              <span className="text-sm font-bold tracking-tight">{t.cart}</span>
+              <span className="text-xs sm:text-sm font-bold tracking-tight">Квітковий кошик</span>
             </div>
 
             <div className="flex items-center gap-2">
-              <span className="text-base font-black tracking-tight">
+              <span className="text-sm sm:text-base font-black tracking-tight">
                 {formatCurrency(totalPrice)}
               </span>
               <ArrowRight className="w-4 h-4" />

@@ -23,6 +23,12 @@ export function initTelegram() {
       if (webApp.enableClosingConfirmation) {
         webApp.enableClosingConfirmation();
       }
+      if (typeof webApp.setHeaderColor === 'function') {
+        webApp.setHeaderColor('#faf7f5');
+      }
+      if (typeof webApp.setBackgroundColor === 'function') {
+        webApp.setBackgroundColor('#faf7f5');
+      }
     } catch (e) {
       console.warn('Telegram WebApp init error:', e);
     }

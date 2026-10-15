@@ -30,6 +30,7 @@ export const Header: React.FC<HeaderProps> = ({ onOpenCart, searchQuery, onSearc
       case 'admin':
         return {
           label: t.roleAdmin,
+          shortLabel: 'Флорист',
           icon: ShieldCheck,
           color: 'text-rose-700 dark:text-rose-300 bg-rose-500/10 border-rose-500/25',
           dot: 'bg-rose-500',
@@ -37,6 +38,7 @@ export const Header: React.FC<HeaderProps> = ({ onOpenCart, searchQuery, onSearc
       case 'courier':
         return {
           label: t.roleCourier,
+          shortLabel: "Кур'єр",
           icon: Truck,
           color: 'text-indigo-700 dark:text-indigo-300 bg-indigo-500/10 border-indigo-500/25',
           dot: 'bg-indigo-500',
@@ -44,6 +46,7 @@ export const Header: React.FC<HeaderProps> = ({ onOpenCart, searchQuery, onSearc
       default:
         return {
           label: t.roleBuyer,
+          shortLabel: 'Клієнт',
           icon: User,
           color: 'text-stone-700 dark:text-stone-200 bg-stone-500/10 border-stone-300/30 dark:border-stone-700/50',
           dot: 'bg-rose-500',
@@ -55,27 +58,21 @@ export const Header: React.FC<HeaderProps> = ({ onOpenCart, searchQuery, onSearc
 
   return (
     <header className="sticky top-0 z-30 bg-white/80 dark:bg-[#0b0f17]/85 backdrop-blur-xl border-b border-rose-100/60 dark:border-white/5 transition-all">
-      <div className="max-w-4xl mx-auto px-3.5 sm:px-6 py-2.5 flex items-center justify-between gap-2.5">
+      <div className="max-w-4xl mx-auto px-3 sm:px-6 py-2.5 flex items-center justify-between gap-1.5 sm:gap-2.5">
         
         {/* Left: Brand info */}
-        <div className="flex items-center gap-2.5">
-          <div className="relative group">
-            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-gradient-to-tr from-rose-600 via-pink-500 to-amber-300 flex items-center justify-center text-white shadow-md shadow-rose-500/20 group-hover:scale-105 transition-transform duration-300">
-              <Sparkles className="w-5 h-5 text-white animate-pulse" />
+        <div className="flex items-center gap-2 min-w-0">
+          <div className="relative group shrink-0">
+            <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-2xl bg-gradient-to-tr from-rose-600 via-pink-500 to-amber-300 flex items-center justify-center text-white shadow-md shadow-rose-500/20">
+              <Sparkles className="w-4 h-4 sm:w-4.5 sm:h-4.5 text-white animate-pulse" />
             </div>
-            <div className="absolute -inset-1 rounded-2xl bg-gradient-to-tr from-rose-500 to-pink-500 opacity-20 blur-sm group-hover:opacity-40 transition-opacity pointer-events-none" />
           </div>
           <div className="min-w-0">
-            <div className="flex items-center gap-1.5">
-              <h1 className="text-sm sm:text-base font-extrabold tracking-tight leading-none text-stone-900 dark:text-white uppercase">
-                {t.appName}
-              </h1>
-              <span className="hidden sm:inline-block px-1.5 py-0.5 rounded text-[9px] font-bold tracking-widest uppercase bg-rose-100 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400">
-                Львів
-              </span>
-            </div>
-            <p className="text-[11px] text-rose-600/80 dark:text-rose-400 font-medium truncate mt-0.5">
-              {user?.first_name ? `Вітаємо, ${user.first_name}!` : t.subtitle}
+            <h1 className="text-xs sm:text-sm font-extrabold tracking-tight leading-none text-stone-900 dark:text-white uppercase truncate">
+              {t.appName}
+            </h1>
+            <p className="text-[10px] text-rose-600/80 dark:text-rose-400 font-medium truncate mt-0.5">
+              {user?.first_name ? `Вітаємо, ${user.first_name}!` : 'Студія квітів'}
             </p>
           </div>
         </div>
@@ -83,18 +80,17 @@ export const Header: React.FC<HeaderProps> = ({ onOpenCart, searchQuery, onSearc
         {/* Right: Actions */}
         <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
           
-          {/* Lviv Instagram Pill */}
+          {/* Lviv Address Pill - visible on md+ to prevent header crowding on mobile */}
           <button
             onClick={() => {
               hapticImpact('light');
               openExternalLink('https://www.instagram.com/flowers___lviv/');
             }}
-            className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-[11px] font-bold bg-gradient-to-r from-amber-500/10 via-rose-500/10 to-purple-500/10 hover:from-amber-500/20 hover:to-purple-500/20 text-rose-600 dark:text-rose-400 border border-rose-300/40 dark:border-rose-500/20 transition-all cursor-pointer active:scale-95"
+            className="hidden md:flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-[11px] font-bold bg-gradient-to-r from-amber-500/10 via-rose-500/10 to-purple-500/10 hover:from-amber-500/20 hover:to-purple-500/20 text-rose-600 dark:text-rose-400 border border-rose-300/40 dark:border-rose-500/20 transition-all cursor-pointer active:scale-95"
             title="Instagram @flowers___lviv"
           >
             <MapPin className="w-3.5 h-3.5 text-rose-500" />
-            <span className="hidden sm:inline">Топольна, 4В</span>
-            <span className="sm:hidden">Львів</span>
+            <span>вул. Топольна, 4В</span>
           </button>
 
           {/* Role Switcher Pill (Buyer / Admin / Courier) */}
@@ -104,10 +100,11 @@ export const Header: React.FC<HeaderProps> = ({ onOpenCart, searchQuery, onSearc
                 hapticImpact('light');
                 setShowRoleMenu(!showRoleMenu);
               }}
-              className={`px-2.5 py-1.5 rounded-xl text-[11px] font-bold flex items-center gap-1.5 border backdrop-blur-sm transition-all cursor-pointer active:scale-95 ${currentRoleInfo.color}`}
+              className={`px-2 sm:px-2.5 py-1.5 rounded-xl text-[11px] font-bold flex items-center gap-1 sm:gap-1.5 border backdrop-blur-sm transition-all cursor-pointer active:scale-95 ${currentRoleInfo.color}`}
             >
               <currentRoleInfo.icon className="w-3.5 h-3.5 shrink-0" />
-              <span>{currentRoleInfo.label}</span>
+              <span className="sm:hidden">{currentRoleInfo.shortLabel}</span>
+              <span className="hidden sm:inline">{currentRoleInfo.label}</span>
               <ChevronDown className="w-3 h-3 opacity-60" />
             </button>
 
@@ -153,13 +150,13 @@ export const Header: React.FC<HeaderProps> = ({ onOpenCart, searchQuery, onSearc
                 if (showSearch) onSearchChange('');
               }}
               aria-label="Пошук"
-              className={`w-9 h-9 rounded-xl flex items-center justify-center transition-all cursor-pointer active:scale-95 ${
+              className={`w-8 h-8 sm:w-9 sm:h-9 rounded-xl flex items-center justify-center transition-all cursor-pointer active:scale-95 shrink-0 ${
                 showSearch
                   ? 'bg-rose-600 text-white shadow-sm'
                   : 'bg-stone-100/80 dark:bg-slate-800/80 text-stone-600 dark:text-stone-300 hover:bg-stone-200 dark:hover:bg-slate-700'
               }`}
             >
-              {showSearch ? <X className="w-4 h-4" /> : <Search className="w-4 h-4" />}
+              {showSearch ? <X className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> : <Search className="w-3.5 h-3.5 sm:w-4 sm:h-4" />}
             </button>
           )}
 
@@ -170,11 +167,11 @@ export const Header: React.FC<HeaderProps> = ({ onOpenCart, searchQuery, onSearc
                 hapticImpact('medium');
                 onOpenCart();
               }}
-              className="relative w-9 h-9 rounded-xl bg-gradient-to-tr from-rose-600 to-pink-600 text-white flex items-center justify-center shadow-md shadow-rose-500/25 active:scale-95 transition-transform cursor-pointer"
+              className="relative w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-gradient-to-tr from-rose-600 to-pink-600 text-white flex items-center justify-center shadow-md shadow-rose-500/25 active:scale-95 transition-transform cursor-pointer shrink-0"
             >
-              <ShoppingBag className="w-4 h-4" />
+              <ShoppingBag className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
               {totalCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-amber-400 text-stone-950 text-[10px] font-black w-4.5 h-4.5 rounded-full flex items-center justify-center border-2 border-white dark:border-[#0b0f17] shadow-sm animate-bounce">
+                <span className="absolute -top-1 -right-1 bg-amber-400 text-stone-950 text-[10px] font-black w-4 h-4 rounded-full flex items-center justify-center border-2 border-white dark:border-[#0b0f17] shadow-sm">
                   {totalCount > 99 ? '99+' : totalCount}
                 </span>
               )}
