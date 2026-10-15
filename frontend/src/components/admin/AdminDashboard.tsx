@@ -3,7 +3,6 @@ import type { Product, Category } from '../../types';
 import { api, DEFAULT_GROUP_ID } from '../../api';
 import { CategoryManagerModal } from './CategoryManagerModal';
 import { ProductFormModal } from './ProductFormModal';
-import { DatabaseSettingsModal } from './DatabaseSettingsModal';
 import { OrdersList } from './OrdersList';
 import { useLanguage } from '../../context/LanguageContext';
 import {
@@ -17,7 +16,6 @@ import {
   X,
   AlertTriangle,
   RotateCcw,
-  Database,
 } from 'lucide-react';
 import { hapticImpact, hapticNotification } from '../../utils/telegram';
 
@@ -39,7 +37,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
   // Modals state
   const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
-  const [isDbModalOpen, setIsDbModalOpen] = useState(false);
   const [productModalState, setProductModalState] = useState<{
     isOpen: boolean;
     product: Product | null;
@@ -180,18 +177,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
         {/* Primary Action Buttons */}
         <div className="flex items-center gap-2 shrink-0">
-          <button
-            onClick={() => {
-              hapticImpact('light');
-              setIsDbModalOpen(true);
-            }}
-            className="py-2.5 px-3 bg-white hover:bg-[#f5f2eb] dark:bg-slate-800 dark:hover:bg-slate-700 text-stone-800 dark:text-stone-200 rounded-2xl text-xs font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer active:scale-95 border border-[#e8e4da] dark:border-white/5 shadow-2xs"
-            title="Єдина база даних & Cloud Sync"
-          >
-            <Database className="w-4 h-4 text-[#c5a880] shrink-0" />
-            <span className="hidden sm:inline">База даних</span>
-          </button>
-
           <button
             onClick={() => {
               hapticImpact('light');
@@ -642,14 +627,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
             setProductModalState({ isOpen: false, product: null });
             onRefreshData();
           }}
-        />
-      )}
-
-      {/* Database & Cloud Sync Modal */}
-      {isDbModalOpen && (
-        <DatabaseSettingsModal
-          onClose={() => setIsDbModalOpen(false)}
-          onRefresh={onRefreshData}
         />
       )}
     </div>

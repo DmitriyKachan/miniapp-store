@@ -1,25 +1,18 @@
 import type { Category, Product, Order } from '../types';
 
-export const SERVER_CONFIG_KEY = 'flowers_lviv_server_url';
+export const CENTRAL_API_URL = 'https://flowers-lviv-api.onrender.com/api';
 export const DEFAULT_GROUP_ID = '-5431810394';
 
 export function getApiBaseUrl(): string {
-  // 1. Manually saved in admin settings
-  const custom = localStorage.getItem(SERVER_CONFIG_KEY);
-  if (custom && custom.trim()) {
-    const clean = custom.trim().replace(/\/+$/, '');
-    return clean.endsWith('/api') ? clean : `${clean}/api`;
-  }
-
-  // 2. Build-time Vite env variable
+  // 1. Build-time Vite env variable if defined
   const envUrl = import.meta.env.VITE_API_URL;
   if (envUrl && envUrl.trim()) {
     const clean = envUrl.trim().replace(/\/+$/, '');
     return clean.endsWith('/api') ? clean : `${clean}/api`;
   }
 
-  // 3. Fallback to relative /api
-  return '/api';
+  // 2. Central unified live backend on Render (default for all users and devices)
+  return CENTRAL_API_URL;
 }
 
 // Flower boutique initial categories
@@ -331,11 +324,10 @@ export const UPSELL_ACCESSORIES: Product[] = [
 ];
 
 const STORAGE_KEYS = {
-  CATEGORIES: 'tg_flowers_lviv_categories_v2',
-  PRODUCTS: 'tg_flowers_lviv_products_v2',
-  ORDERS: 'tg_flowers_lviv_orders_v2',
-  CHANNEL_SETTINGS: 'tg_flowers_lviv_channel_v2',
-  INITIALIZED: 'tg_flowers_lviv_initialized_v2',
+  CATEGORIES: 'flowers_lviv_central_categories_v3',
+  PRODUCTS: 'flowers_lviv_central_products_v3',
+  ORDERS: 'flowers_lviv_central_orders_v3',
+  CHANNEL_SETTINGS: 'flowers_lviv_channel_v3',
 };
 
 function getLocal<T>(key: string, fallback: T): T {
@@ -355,38 +347,26 @@ function setLocal<T>(key: string, value: T): void {
   }
 }
 
-function ensureLocalCatalogSeed(): void {
-  if (!localStorage.getItem(STORAGE_KEYS.INITIALIZED)) {
-    localStorage.setItem(STORAGE_KEYS.INITIALIZED, 'true');
-    if (!localStorage.getItem(STORAGE_KEYS.PRODUCTS)) {
-      setLocal(STORAGE_KEYS.PRODUCTS, INITIAL_PRODUCTS);
-    }
-    if (!localStorage.getItem(STORAGE_KEYS.CATEGORIES)) {
-      setLocal(STORAGE_KEYS.CATEGORIES, INITIAL_CATEGORIES);
-    }
-  }
-}
-
 export const api = {
   // Categories
   async getCategories(): Promise<Category[]> {
-    ensureLocalCatalogSeed();
     const base = getApiBaseUrl();
     try {
       const res = await fetch(`${base}/categories`);
       if (res.ok) {
         const data = await res.json();
-        if (data.success && Array.isArray(data.data)) {
+        if (data.success && Array.isArray(data.data) && data.data.length > 0) {
           setLocal(STORAGE_KEYS.CATEGORIES, data.data);
           return data.data;
         }
       }
-    } catch {}
+    } catch (e) {
+      console.warn('Failed to fetch categories:', e);
+    }
     return getLocal<Category[]>(STORAGE_KEYS.CATEGORIES, INITIAL_CATEGORIES);
   },
 
   async createCategory(payload: { name: string; icon?: string; sort_order?: number }): Promise<Category> {
-    ensureLocalCatalogSeed();
     const base = getApiBaseUrl();
     try {
       const res = await fetch(`${base}/categories`, {
@@ -417,7 +397,6 @@ export const api = {
   },
 
   async updateCategory(id: number, payload: Partial<Category>): Promise<Category> {
-    ensureLocalCatalogSeed();
     const base = getApiBaseUrl();
     try {
       const res = await fetch(`${base}/categories/${id}`, {
@@ -461,7 +440,6 @@ export const api = {
     in_stock_only?: boolean;
     search?: string;
   }): Promise<Product[]> {
-    ensureLocalCatalogSeed();
     let products: Product[] = [];
     let fetchedFromServer = false;
     const base = getApiBaseUrl();
@@ -481,10 +459,12 @@ export const api = {
           fetchedFromServer = true;
         }
       }
-    } catch {}
+    } catch (e) {
+      console.warn('Central database products fetch failed:', e);
+    }
 
     if (!fetchedFromServer) {
-      products = getLocal<Product[]>(STORAGE_KEYS.PRODUCTS, INITIAL_PRODUCTS);
+      products = getLocal<Product[]>(STORAGE_KEYS.PRODUCTS, []);
     }
 
     const categories = await this.getCategories();
@@ -513,7 +493,6 @@ export const api = {
     payload: Omit<Product, 'id' | 'created_at'>,
     options?: { publish_to_channel?: boolean; channel_username?: string }
   ): Promise<Product> {
-    ensureLocalCatalogSeed();
     const base = getApiBaseUrl();
     try {
       const res = await fetch(`${base}/products`, {
@@ -524,14 +503,14 @@ export const api = {
       if (res.ok) {
         const data = await res.json();
         if (data.success && data.data) {
-          const products = getLocal<Product[]>(STORAGE_KEYS.PRODUCTS, INITIAL_PRODUCTS);
+          const products = getLocal<Product[]>(STORAGE_KEYS.PRODUCTS, []);
           setLocal(STORAGE_KEYS.PRODUCTS, [data.data, ...products.filter(p => p.id !== data.data.id)]);
           return data.data;
         }
       }
     } catch {}
 
-    const products = getLocal<Product[]>(STORAGE_KEYS.PRODUCTS, INITIAL_PRODUCTS);
+    const products = getLocal<Product[]>(STORAGE_KEYS.PRODUCTS, []);
     const categories = getLocal<Category[]>(STORAGE_KEYS.CATEGORIES, INITIAL_CATEGORIES);
     const cat = categories.find((c) => c.id === payload.category_id);
 
@@ -552,7 +531,6 @@ export const api = {
   },
 
   async updateProduct(id: number, payload: Partial<Product>): Promise<Product> {
-    ensureLocalCatalogSeed();
     const base = getApiBaseUrl();
     try {
       const res = await fetch(`${base}/products/${id}`, {
@@ -563,7 +541,7 @@ export const api = {
       if (res.ok) {
         const data = await res.json();
         if (data.success && data.data) {
-          const products = getLocal<Product[]>(STORAGE_KEYS.PRODUCTS, INITIAL_PRODUCTS);
+          const products = getLocal<Product[]>(STORAGE_KEYS.PRODUCTS, []);
           const updated = products.map((p) => (p.id === id ? data.data : p));
           setLocal(STORAGE_KEYS.PRODUCTS, updated);
           return data.data;
@@ -571,14 +549,13 @@ export const api = {
       }
     } catch {}
 
-    const products = getLocal<Product[]>(STORAGE_KEYS.PRODUCTS, INITIAL_PRODUCTS);
+    const products = getLocal<Product[]>(STORAGE_KEYS.PRODUCTS, []);
     const updated = products.map((p) => (p.id === id ? { ...p, ...payload } : p));
     setLocal(STORAGE_KEYS.PRODUCTS, updated);
     return updated.find((p) => p.id === id)!;
   },
 
   async toggleProductStock(id: number): Promise<Product> {
-    ensureLocalCatalogSeed();
     const base = getApiBaseUrl();
     try {
       const res = await fetch(`${base}/products/${id}/stock`, {
@@ -587,7 +564,7 @@ export const api = {
       if (res.ok) {
         const data = await res.json();
         if (data.success && data.data) {
-          const products = getLocal<Product[]>(STORAGE_KEYS.PRODUCTS, INITIAL_PRODUCTS);
+          const products = getLocal<Product[]>(STORAGE_KEYS.PRODUCTS, []);
           const updated = products.map((p) => (p.id === id ? { ...p, in_stock: data.data.in_stock } : p));
           setLocal(STORAGE_KEYS.PRODUCTS, updated);
           return updated.find((p) => p.id === id)!;
@@ -595,14 +572,13 @@ export const api = {
       }
     } catch {}
 
-    const products = getLocal<Product[]>(STORAGE_KEYS.PRODUCTS, INITIAL_PRODUCTS);
+    const products = getLocal<Product[]>(STORAGE_KEYS.PRODUCTS, []);
     const prod = products.find((p) => p.id === id);
     const newStock = prod ? (prod.in_stock === 1 ? 0 : 1) : 1;
     return this.updateProduct(id, { in_stock: newStock });
   },
 
   async deleteProduct(id: number): Promise<void> {
-    ensureLocalCatalogSeed();
     const base = getApiBaseUrl();
     try {
       await fetch(`${base}/products/${id}`, { method: 'DELETE' });
@@ -610,7 +586,7 @@ export const api = {
       console.warn(`Local deletion fallback for #${id}`);
     }
 
-    const products = getLocal<Product[]>(STORAGE_KEYS.PRODUCTS, INITIAL_PRODUCTS);
+    const products = getLocal<Product[]>(STORAGE_KEYS.PRODUCTS, []);
     const updated = products.filter((p) => Number(p.id) !== Number(id));
     setLocal(STORAGE_KEYS.PRODUCTS, updated);
   },
@@ -869,7 +845,6 @@ export const api = {
         const prodData = await prodRes.json();
         if (prodData.success && Array.isArray(prodData.data)) {
           setLocal(STORAGE_KEYS.PRODUCTS, prodData.data);
-          setLocal(STORAGE_KEYS.INITIALIZED, 'true');
         }
       }
     } catch (e) {

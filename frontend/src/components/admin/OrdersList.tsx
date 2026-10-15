@@ -39,6 +39,10 @@ export const OrdersList: React.FC = () => {
 
   useEffect(() => {
     fetchOrders();
+    const interval = setInterval(() => {
+      api.getOrders().then((data) => setOrders(data)).catch(() => {});
+    }, 8000);
+    return () => clearInterval(interval);
   }, []);
 
   const handleStatusChange = async (orderId: number, newStatus: OrderStatus) => {
