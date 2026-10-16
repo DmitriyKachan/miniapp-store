@@ -1,41 +1,28 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @layer base {
-  :root {
-    --tg-theme-bg-color: #f8f8f9;
-    --tg-theme-secondary-bg-color: #ffffff;
-    --tg-theme-text-color: #18181b;
-    --tg-theme-hint-color: #71717a;
-    --tg-theme-link-color: #18181b;
-    --tg-theme-button-color: #18181b;
-    --tg-theme-button-text-color: #ffffff;
-    --tg-theme-section-bg-color: #ffffff;
-    --tg-theme-section-separator-color: #e4e4e7;
-  }
-
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --tg-theme-bg-color: #0f1115;
-      --tg-theme-secondary-bg-color: #181b20;
-      --tg-theme-text-color: #f4f4f5;
-      --tg-theme-hint-color: #a1a1aa;
-      --tg-theme-link-color: #e4e4e7;
-      --tg-theme-button-color: #f4f4f5;
-      --tg-theme-button-text-color: #18181b;
-      --tg-theme-section-bg-color: #181b20;
-      --tg-theme-section-separator-color: #27272a;
-    }
-  }
-
-  html {
-    overflow-x: hidden;
-    max-width: 100vw;
-    width: 100%;
-  }
-
+  :root,
+  :root.dark,
+  html,
   body {
-    background-color: var(--tg-theme-bg-color);
-    color: var(--tg-theme-text-color);
+    color-scheme: dark;
+    --tg-theme-bg-color: #0f1115;
+    --tg-theme-secondary-bg-color: #181b20;
+    --tg-theme-text-color: #f4f4f5;
+    --tg-theme-hint-color: #a1a1aa;
+    --tg-theme-link-color: #e4e4e7;
+    --tg-theme-button-color: #f4f4f5;
+    --tg-theme-button-text-color: #18181b;
+    --tg-theme-section-bg-color: #181b20;
+    --tg-theme-section-separator-color: #27272a;
+    background-color: #0f1115;
+    color: #f4f4f5;
+  }
+
+  html,
+  body {
     font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -48,26 +35,26 @@
     min-height: 100dvh;
     user-select: none;
     -webkit-tap-highlight-color: transparent;
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+  }
+
+  body {
     padding-bottom: env(safe-area-inset-bottom, 0px);
   }
 }
 
-::-webkit-scrollbar {
-  width: 4px;
-  height: 4px;
-}
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-::-webkit-scrollbar-thumb {
-  background: rgba(113, 113, 122, 0.25);
-  border-radius: 9999px;
+/* Completely remove any scrollbar track or white strip on the right */
+html::-webkit-scrollbar,
+body::-webkit-scrollbar,
+*::-webkit-scrollbar {
+  display: none !important;
+  width: 0px !important;
+  height: 0px !important;
+  background: transparent !important;
 }
 
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-.no-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
+* {
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
 }

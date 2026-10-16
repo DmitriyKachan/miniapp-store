@@ -14,8 +14,40 @@ export function getTelegramWebApp() {
   return typeof window !== 'undefined' ? window.Telegram?.WebApp : undefined;
 }
 
+export function applyDarkTelegramFrame() {
+  if (typeof document !== 'undefined') {
+    const root = document.documentElement;
+    root.classList.add('dark');
+    root.style.colorScheme = 'dark';
+    root.style.backgroundColor = '#0f1115';
+  }
+
+  const webApp = getTelegramWebApp();
+  if (webApp) {
+    try {
+      if (typeof webApp.setHeaderColor === 'function') {
+        webApp.setHeaderColor('#181b20');
+      }
+    } catch {}
+
+    try {
+      if (typeof webApp.setBackgroundColor === 'function') {
+        webApp.setBackgroundColor('#0f1115');
+      }
+    } catch {}
+
+    try {
+      if (typeof webApp.setBottomBarColor === 'function') {
+        webApp.setBottomBarColor('#181b20');
+      }
+    } catch {}
+  }
+}
+
 export function initTelegram() {
   const webApp = getTelegramWebApp();
+  applyDarkTelegramFrame();
+
   if (webApp) {
     try {
       webApp.ready();
@@ -23,11 +55,9 @@ export function initTelegram() {
       if (webApp.enableClosingConfirmation) {
         webApp.enableClosingConfirmation();
       }
-      if (typeof webApp.setHeaderColor === 'function') {
-        webApp.setHeaderColor('#faf7f5');
-      }
-      if (typeof webApp.setBackgroundColor === 'function') {
-        webApp.setBackgroundColor('#faf7f5');
+      if (typeof webApp.onEvent === 'function') {
+        webApp.onEvent('themeChanged', applyDarkTelegramFrame);
+        webApp.onEvent('viewportChanged', applyDarkTelegramFrame);
       }
     } catch (e) {
       console.warn('Telegram WebApp init error:', e);
