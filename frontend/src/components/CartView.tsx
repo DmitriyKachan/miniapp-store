@@ -11,16 +11,10 @@ import {
   Plus,
   Minus,
   ArrowLeft,
-  CreditCard,
   ShoppingBag,
   AlertCircle,
   Check,
-  Calendar,
   Clock,
-  PhoneCall,
-  EyeOff,
-  Gift,
-  ChevronRight,
 } from 'lucide-react';
 import { hapticImpact, hapticNotification } from '../utils/telegram';
 
@@ -29,7 +23,6 @@ interface CartViewProps {
   onOrderSuccess: (order: Order) => void;
 }
 
-// Delivery time intervals from 10:00 to 20:00 (Flowers Lviv studio schedule)
 const TIME_SLOTS = [
   '10:00', '11:00', '12:00', '13:00', '14:00',
   '15:00', '16:00', '17:00', '18:00', '19:00', '20:00'
@@ -53,7 +46,6 @@ export const CartView: React.FC<CartViewProps> = ({ onClose, onOrderSuccess }) =
   const [address, setAddress] = useState('');
   const [cardMessage, setCardMessage] = useState('');
 
-  // Delivery timing & Surprise states
   const [deliveryDate, setDeliveryDate] = useState(todayStr);
   const [deliveryTime, setDeliveryTime] = useState('14:00');
   const [isSurprise, setIsSurprise] = useState(false);
@@ -109,7 +101,6 @@ export const CartView: React.FC<CartViewProps> = ({ onClose, onOrderSuccess }) =
         };
       });
 
-      // Format comment with special badges
       let fullComment = address.trim();
       if (needCallRecipient) {
         fullComment += '\n📞 [Уточнити точну адресу у одержувача телефоном]';
@@ -137,13 +128,13 @@ export const CartView: React.FC<CartViewProps> = ({ onClose, onOrderSuccess }) =
       });
 
       showNotification(
-        `Нове замовлення #${newOrder.id}!`,
-        `Клієнт ${customerName} оформив замовлення на ${formatCurrency(totalPrice)}. Флорист може розпочинати збірку!`,
+        `Нове замовлення #${newOrder.id}`,
+        `Клієнт ${customerName} оформив замовлення на ${formatCurrency(totalPrice)}.`,
         'florist'
       );
       showNotification(
-        `Замовлення #${newOrder.id} успішно оформлено!`,
-        `Дякуємо! Флористи вже розпочали підготовку вашого букета.`,
+        `Замовлення #${newOrder.id} оформлено`,
+        `Дякуємо! Ми вже готуємо ваше замовлення.`,
         'client'
       );
 
@@ -158,27 +149,27 @@ export const CartView: React.FC<CartViewProps> = ({ onClose, onOrderSuccess }) =
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-[#faf7f5] dark:bg-[#0b0f17] flex flex-col animate-in slide-in-from-right duration-250">
-      {/* Top Navigation */}
-      <div className="sticky top-0 z-20 bg-white/85 dark:bg-[#141a24]/85 backdrop-blur-xl border-b border-stone-200/60 dark:border-white/5 px-4 py-3 flex items-center justify-between">
+    <div className="fixed inset-0 z-50 bg-[#f8f8f9] dark:bg-[#0f1115] flex flex-col">
+      {/* Top Bar */}
+      <div className="sticky top-0 z-20 bg-white dark:bg-[#181b20] border-b border-zinc-200/80 dark:border-zinc-800 px-4 h-14 flex items-center justify-between">
         <button
           onClick={() => {
             hapticImpact('light');
             onClose();
           }}
-          className="flex items-center gap-1.5 text-xs sm:text-sm font-bold text-stone-700 dark:text-stone-200 hover:text-rose-600 dark:hover:text-rose-400 transition-colors cursor-pointer"
+          className="flex items-center gap-1.5 text-xs font-medium text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white cursor-pointer"
         >
           <ArrowLeft className="w-4 h-4" />
-          <span>{t.backToCatalog}</span>
+          <span>Назад</span>
         </button>
 
-        <div className="flex items-center gap-2">
-          <span className="text-sm font-extrabold text-stone-900 dark:text-white uppercase tracking-wider">
+        <div className="flex items-center gap-1.5">
+          <span className="text-sm font-bold text-zinc-900 dark:text-white">
             {t.cart}
           </span>
-          <span className="text-xs font-black px-2 py-0.5 rounded-full bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20">
-            {totalCount}
-          </span>
+          {totalCount > 0 && (
+            <span className="text-xs text-zinc-400">({totalCount})</span>
+          )}
         </div>
 
         {cart.length > 0 ? (
@@ -187,7 +178,7 @@ export const CartView: React.FC<CartViewProps> = ({ onClose, onOrderSuccess }) =
               hapticImpact('medium');
               clearCart();
             }}
-            className="text-xs font-semibold text-rose-500 hover:text-rose-600 transition-colors cursor-pointer"
+            className="text-xs font-medium text-zinc-400 hover:text-red-500 transition-colors cursor-pointer"
           >
             {t.clearCart}
           </button>
@@ -197,43 +188,39 @@ export const CartView: React.FC<CartViewProps> = ({ onClose, onOrderSuccess }) =
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 overflow-y-auto p-4 sm:p-6 max-w-xl mx-auto w-full space-y-5 pb-36 no-scrollbar">
+      <div className="flex-1 overflow-y-auto p-3.5 sm:p-6 max-w-xl mx-auto w-full space-y-4 pb-28 no-scrollbar">
         {cart.length === 0 ? (
-          <div className="py-24 flex flex-col items-center justify-center text-center space-y-4">
-            <div className="w-20 h-20 rounded-3xl bg-[#131d33]/5 dark:bg-white/5 border border-[#131d33]/15 flex items-center justify-center text-[#131d33] dark:text-[#f8fafc] shadow-inner">
-              <ShoppingBag className="w-9 h-9" />
+          <div className="py-24 flex flex-col items-center justify-center text-center space-y-3">
+            <div className="w-12 h-12 rounded-2xl bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center text-zinc-400">
+              <ShoppingBag className="w-6 h-6" />
             </div>
             <div className="space-y-1">
-              <h3 className="font-brand-serif text-lg sm:text-xl font-bold text-[#131d33] dark:text-white">
+              <h3 className="text-base font-semibold text-zinc-900 dark:text-white">
                 {t.cartEmptyTitle}
               </h3>
-              <p className="text-xs text-[#6e809f] max-w-xs leading-relaxed">
+              <p className="text-xs text-zinc-500 max-w-xs">
                 {t.cartEmptyDesc}
               </p>
             </div>
             <button
               onClick={onClose}
-              className="mt-3 px-7 py-3 bg-[#131d33] hover:bg-[#1b2946] text-white rounded-2xl text-xs font-bold shadow-lg shadow-[#131d33]/25 transition-all cursor-pointer active:scale-95"
+              className="mt-2 px-5 py-2.5 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 rounded-xl text-xs font-semibold cursor-pointer"
             >
               {t.goToCatalog}
             </button>
           </div>
         ) : (
           <>
-            {/* Cart Items List */}
-            <div className="space-y-2.5">
-              <div className="text-[11px] uppercase font-bold tracking-wider text-[#6e809f] px-1">
-                Обрані букети
-              </div>
+            {/* Cart Items */}
+            <div className="bg-white dark:bg-[#181b20] rounded-2xl border border-zinc-200/80 dark:border-zinc-800 divide-y divide-zinc-100 dark:divide-zinc-800">
               {cart.map((item) => {
                 const localized = getLocalizedProduct(item.product, language);
                 return (
                   <div
                     key={item.product.id}
-                    className="p-3.5 bg-white dark:bg-[#131b2d] rounded-2xl border border-[#e8e4da] dark:border-[#1f2b43] shadow-xs flex items-center gap-3.5 transition-all hover:border-[#131d33]/30"
+                    className="p-3 flex items-center gap-3"
                   >
-                    {/* Item Image */}
-                    <div className="w-16 h-16 rounded-xl bg-[#f5f2eb] dark:bg-slate-800 overflow-hidden shrink-0 border border-[#e8e4da] dark:border-white/5">
+                    <div className="w-14 h-14 rounded-xl bg-zinc-100 dark:bg-zinc-800 overflow-hidden shrink-0">
                       {localized.image_url ? (
                         <img
                           src={localized.image_url}
@@ -241,46 +228,42 @@ export const CartView: React.FC<CartViewProps> = ({ onClose, onOrderSuccess }) =
                           className="w-full h-full object-cover"
                         />
                       ) : (
-                        <div className="w-full h-full flex flex-col items-center justify-center p-2 text-center text-[10px] text-stone-400">
-                          <img src="./logo.png" alt="Flowers Lviv" className="w-6 h-6 object-contain opacity-60" />
+                        <div className="w-full h-full flex items-center justify-center">
+                          <img src="./logo.png" alt="" className="w-6 h-6 object-contain opacity-40" />
                         </div>
                       )}
                     </div>
 
-                    {/* Title and Price */}
                     <div className="flex-1 min-w-0">
-                      <h4 className="text-xs sm:text-sm font-bold text-[#131d33] dark:text-white line-clamp-1">
+                      <h4 className="text-xs sm:text-sm font-semibold text-zinc-900 dark:text-white truncate">
                         {localized.title}
                       </h4>
-                      <p className="text-xs font-extrabold text-[#131d33] dark:text-[#f8fafc] mt-1">
+                      <p className="text-xs font-bold text-zinc-900 dark:text-zinc-200 mt-0.5">
                         {formatCurrency(localized.price)}
                       </p>
                     </div>
 
-                    {/* Quantity Stepper */}
-                    <div className="flex items-center gap-1 bg-stone-100 dark:bg-slate-800/80 rounded-xl p-1 shrink-0 border border-stone-200/40 dark:border-white/5">
+                    <div className="flex items-center gap-1 bg-zinc-100 dark:bg-zinc-800 rounded-lg p-0.5 shrink-0">
                       <button
                         onClick={() => updateQuantity(item.product.id, item.quantity - 1)}
-                        className="w-7 h-7 rounded-lg bg-white dark:bg-[#141a24] text-stone-700 dark:text-stone-300 flex items-center justify-center shadow-xs active:scale-90 transition-transform cursor-pointer"
+                        className="w-6 h-6 rounded-md bg-white dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 flex items-center justify-center cursor-pointer"
                       >
                         <Minus className="w-3 h-3" />
                       </button>
-                      <span className="text-xs font-black text-stone-900 dark:text-white w-5 text-center">
+                      <span className="text-xs font-semibold text-zinc-900 dark:text-white w-5 text-center">
                         {item.quantity}
                       </span>
                       <button
                         onClick={() => updateQuantity(item.product.id, item.quantity + 1)}
-                        className="w-7 h-7 rounded-lg bg-[#131d33] text-white flex items-center justify-center shadow-xs active:scale-90 transition-transform cursor-pointer"
+                        className="w-6 h-6 rounded-md bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 flex items-center justify-center cursor-pointer"
                       >
                         <Plus className="w-3 h-3" />
                       </button>
                     </div>
 
-                    {/* Delete Button */}
                     <button
                       onClick={() => removeFromCart(item.product.id)}
-                      className="p-1.5 text-stone-400 hover:text-red-500 transition-colors shrink-0 cursor-pointer"
-                      title="Видалити"
+                      className="p-1 text-zinc-400 hover:text-red-500 transition-colors shrink-0 cursor-pointer"
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
@@ -289,58 +272,44 @@ export const CartView: React.FC<CartViewProps> = ({ onClose, onOrderSuccess }) =
               })}
             </div>
 
-            {/* UPSELL RECOMMENDATIONS: "Доповнити букет 🎁" - only from real database */}
+            {/* Dynamic Upsells (if any in database) */}
             {upsellProducts.length > 0 && (
-              <div className="bg-[#faf8f5] dark:bg-[#131b2d] rounded-3xl border border-[#e8e4da] dark:border-[#1f2b43] p-4 space-y-3">
-                <div className="flex items-center gap-2 text-[#131d33] dark:text-white">
-                  <Gift className="w-4 h-4 text-[#c5a880]" />
-                  <div>
-                    <h4 className="text-xs font-black uppercase tracking-wider">{t.upsellTitle}</h4>
-                    <p className="text-[11px] text-[#6e809f] dark:text-[#8fa0ba]">{t.upsellSubtitle}</p>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
+              <div className="bg-white dark:bg-[#181b20] rounded-2xl border border-zinc-200/80 dark:border-zinc-800 p-3.5 space-y-2.5">
+                <h4 className="text-xs font-semibold text-zinc-900 dark:text-white">
+                  {t.upsellTitle}
+                </h4>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   {upsellProducts.map((acc) => {
                     const localizedAcc = getLocalizedProduct(acc, language);
                     const inCart = cart.some((c) => c.product.id === acc.id);
                     return (
                       <div
                         key={acc.id}
-                        className="p-3 bg-white dark:bg-[#0f1523] rounded-2xl border border-[#e8e4da] dark:border-white/5 flex items-center justify-between gap-2.5 shadow-2xs hover:shadow-sm transition-shadow"
+                        className="p-2.5 rounded-xl border border-zinc-200/70 dark:border-zinc-800 flex items-center justify-between gap-2.5"
                       >
-                        <div className="w-11 h-11 rounded-xl overflow-hidden shrink-0 bg-stone-100 dark:bg-slate-800">
-                          <img src={localizedAcc.image_url} alt={localizedAcc.title} className="w-full h-full object-cover" />
+                        <div className="w-10 h-10 rounded-lg overflow-hidden shrink-0 bg-zinc-100 dark:bg-zinc-800">
+                          {localizedAcc.image_url && (
+                            <img src={localizedAcc.image_url} alt={localizedAcc.title} className="w-full h-full object-cover" />
+                          )}
                         </div>
-
                         <div className="flex-1 min-w-0">
-                          <p className="text-xs font-bold text-stone-900 dark:text-white line-clamp-1">
+                          <p className="text-xs font-medium text-zinc-900 dark:text-white truncate">
                             {localizedAcc.title}
                           </p>
-                          <p className="text-xs font-extrabold text-[#131d33] dark:text-[#f8fafc] mt-0.5">
-                            {localizedAcc.price === 0
-                              ? 'Безкоштовно 🎁'
-                              : formatCurrency(localizedAcc.price)}
+                          <p className="text-xs font-bold text-zinc-600 dark:text-zinc-400">
+                            {formatCurrency(localizedAcc.price)}
                           </p>
                         </div>
-
                         <button
                           type="button"
                           onClick={() => handleAddUpsell(acc)}
-                          className={`px-3 py-1.5 rounded-xl text-xs font-bold shrink-0 transition-all flex items-center gap-1 cursor-pointer active:scale-95 ${
+                          className={`px-2.5 py-1.5 rounded-lg text-xs font-medium shrink-0 flex items-center gap-1 cursor-pointer ${
                             inCart
-                              ? 'bg-[#131d33]/10 dark:bg-white/10 text-[#131d33] dark:text-white border border-[#131d33]/20'
-                              : 'bg-[#131d33] hover:bg-[#1a2846] text-white shadow-xs'
+                              ? 'bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300'
+                              : 'bg-zinc-900 dark:bg-white text-white dark:text-zinc-900'
                           }`}
                         >
-                          {inCart ? (
-                            <>
-                              <Check className="w-3.5 h-3.5 text-[#c5a880]" />
-                              <span>{t.addedToOrder}</span>
-                            </>
-                          ) : (
-                            <span>{t.addToOrder}</span>
-                          )}
+                          {inCart ? <Check className="w-3.5 h-3.5" /> : <span>+</span>}
                         </button>
                       </div>
                     );
@@ -349,47 +318,40 @@ export const CartView: React.FC<CartViewProps> = ({ onClose, onOrderSuccess }) =
               </div>
             )}
 
-            {/* Delivery Timing & Date Picker Card */}
-            <div className="bg-white dark:bg-[#141a24] rounded-3xl border border-stone-200/60 dark:border-white/5 p-4 sm:p-5 space-y-4 shadow-xs">
-              <div className="flex items-center justify-between">
-                <h3 className="text-xs font-bold uppercase tracking-wider text-stone-500 dark:text-stone-400 flex items-center gap-1.5">
-                  <Calendar className="w-3.5 h-3.5 text-rose-500" />
-                  <span>{t.deliveryTimingTitle}</span>
-                </h3>
-                <span className="text-[10px] font-extrabold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 px-2 py-0.5 rounded-full">
-                  Гарантія пунктуальності
-                </span>
-              </div>
+            {/* Delivery Date & Time */}
+            <div className="bg-white dark:bg-[#181b20] rounded-2xl border border-zinc-200/80 dark:border-zinc-800 p-4 space-y-3">
+              <h3 className="text-xs font-semibold text-zinc-900 dark:text-white">
+                {t.deliveryTimingTitle}
+              </h3>
 
-              {/* Quick Date Tabs */}
               <div className="grid grid-cols-2 gap-2">
                 <button
                   type="button"
                   onClick={() => setDeliveryDate(todayStr)}
-                  className={`py-2 px-3 rounded-xl text-xs font-bold border transition-all cursor-pointer ${
+                  className={`py-2 px-3 rounded-xl text-xs font-medium border transition-colors cursor-pointer ${
                     deliveryDate === todayStr
-                      ? 'bg-[#131d33] text-white border-[#131d33] shadow-xs'
-                      : 'bg-white dark:bg-slate-800 text-stone-700 dark:text-stone-300 border-[#e8e4da] dark:border-white/5'
+                      ? 'bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 border-zinc-900 dark:border-white font-semibold'
+                      : 'bg-transparent text-zinc-600 dark:text-zinc-300 border-zinc-200 dark:border-zinc-800'
                   }`}
                 >
-                  {t.today} ({todayStr.slice(5)})
+                  {t.today}
                 </button>
                 <button
                   type="button"
                   onClick={() => setDeliveryDate(tomorrowStr)}
-                  className={`py-2 px-3 rounded-xl text-xs font-bold border transition-all cursor-pointer ${
+                  className={`py-2 px-3 rounded-xl text-xs font-medium border transition-colors cursor-pointer ${
                     deliveryDate === tomorrowStr
-                      ? 'bg-[#131d33] text-white border-[#131d33] shadow-xs'
-                      : 'bg-white dark:bg-slate-800 text-stone-700 dark:text-stone-300 border-[#e8e4da] dark:border-white/5'
+                      ? 'bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 border-zinc-900 dark:border-white font-semibold'
+                      : 'bg-transparent text-zinc-600 dark:text-zinc-300 border-zinc-200 dark:border-zinc-800'
                   }`}
                 >
-                  {t.tomorrow} ({tomorrowStr.slice(5)})
+                  {t.tomorrow}
                 </button>
               </div>
 
-              <div className="grid grid-cols-2 gap-3 pt-1">
+              <div className="grid grid-cols-2 gap-2.5">
                 <div>
-                  <label className="text-[11px] font-semibold text-stone-500 dark:text-stone-400 mb-1.5 block">
+                  <label className="text-[11px] text-zinc-500 mb-1 block">
                     {t.deliveryDateLabel}
                   </label>
                   <input
@@ -398,19 +360,19 @@ export const CartView: React.FC<CartViewProps> = ({ onClose, onOrderSuccess }) =
                     min={todayStr}
                     value={deliveryDate}
                     onChange={(e) => setDeliveryDate(e.target.value)}
-                    className="w-full h-11 px-3.5 bg-stone-50 dark:bg-slate-800/80 rounded-2xl text-xs font-bold text-stone-900 dark:text-white border border-stone-200/60 dark:border-white/5 focus:border-rose-500 focus:outline-none transition-colors"
+                    className="w-full h-10 px-3 bg-zinc-50 dark:bg-zinc-800/80 rounded-xl text-xs font-medium text-zinc-900 dark:text-white border border-zinc-200 dark:border-zinc-700 focus:outline-none"
                   />
                 </div>
 
                 <div>
-                  <label className="text-[11px] font-semibold text-stone-500 dark:text-stone-400 mb-1.5 block">
+                  <label className="text-[11px] text-zinc-500 mb-1 block">
                     {t.deliveryTimeLabel}
                   </label>
                   <div className="relative">
                     <select
                       value={deliveryTime}
                       onChange={(e) => setDeliveryTime(e.target.value)}
-                      className="w-full h-11 px-3.5 bg-stone-50 dark:bg-slate-800/80 rounded-2xl text-xs font-bold text-stone-900 dark:text-white border border-stone-200/60 dark:border-white/5 focus:border-rose-500 focus:outline-none transition-colors appearance-none pr-8 cursor-pointer"
+                      className="w-full h-10 px-3 bg-zinc-50 dark:bg-zinc-800/80 rounded-xl text-xs font-medium text-zinc-900 dark:text-white border border-zinc-200 dark:border-zinc-700 focus:outline-none appearance-none pr-8 cursor-pointer"
                     >
                       {TIME_SLOTS.map((slot) => (
                         <option key={slot} value={slot}>
@@ -418,60 +380,47 @@ export const CartView: React.FC<CartViewProps> = ({ onClose, onOrderSuccess }) =
                         </option>
                       ))}
                     </select>
-                    <Clock className="w-3.5 h-3.5 absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-stone-400" />
+                    <Clock className="w-3.5 h-3.5 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-zinc-400" />
                   </div>
                 </div>
               </div>
 
-              {/* Special options (Surprise & Call Recipient) */}
-              <div className="space-y-2 pt-2 border-t border-stone-100 dark:border-white/5">
-                <label className="p-3 rounded-2xl bg-stone-50/70 dark:bg-slate-800/50 border border-stone-200/60 dark:border-white/5 flex items-start gap-3 cursor-pointer select-none hover:bg-stone-100/60 dark:hover:bg-slate-800 transition-colors">
+              <div className="space-y-2 pt-1">
+                <label className="flex items-center gap-2.5 cursor-pointer select-none">
                   <input
                     type="checkbox"
                     checked={isSurprise}
                     onChange={(e) => setIsSurprise(e.target.checked)}
-                    className="mt-0.5 w-4 h-4 text-rose-600 rounded focus:ring-rose-500 cursor-pointer shrink-0 accent-rose-600"
+                    className="w-4 h-4 rounded accent-zinc-900 dark:accent-white cursor-pointer shrink-0"
                   />
-                  <div>
-                    <span className="text-xs font-bold text-stone-900 dark:text-white flex items-center gap-1.5">
-                      <EyeOff className="w-3.5 h-3.5 text-purple-500 shrink-0" />
-                      <span>{t.surpriseDeliveryTitle}</span>
-                    </span>
-                    <p className="text-[11px] text-stone-500 dark:text-stone-400 mt-0.5 leading-snug">
-                      {t.surpriseDeliveryDesc}
-                    </p>
-                  </div>
+                  <span className="text-xs text-zinc-700 dark:text-zinc-300">
+                    {t.surpriseDeliveryTitle}
+                  </span>
                 </label>
 
-                <label className="p-3 rounded-2xl bg-stone-50/70 dark:bg-slate-800/50 border border-stone-200/60 dark:border-white/5 flex items-start gap-3 cursor-pointer select-none hover:bg-stone-100/60 dark:hover:bg-slate-800 transition-colors">
+                <label className="flex items-center gap-2.5 cursor-pointer select-none">
                   <input
                     type="checkbox"
                     checked={needCallRecipient}
                     onChange={(e) => setNeedCallRecipient(e.target.checked)}
-                    className="mt-0.5 w-4 h-4 text-rose-600 rounded focus:ring-rose-500 cursor-pointer shrink-0 accent-rose-600"
+                    className="w-4 h-4 rounded accent-zinc-900 dark:accent-white cursor-pointer shrink-0"
                   />
-                  <div>
-                    <span className="text-xs font-bold text-stone-900 dark:text-white flex items-center gap-1.5">
-                      <PhoneCall className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
-                      <span>{t.needCallRecipientTitle}</span>
-                    </span>
-                    <p className="text-[11px] text-stone-500 dark:text-stone-400 mt-0.5 leading-snug">
-                      {t.needCallRecipientDesc}
-                    </p>
-                  </div>
+                  <span className="text-xs text-zinc-700 dark:text-zinc-300">
+                    {t.needCallRecipientTitle}
+                  </span>
                 </label>
               </div>
             </div>
 
-            {/* Customer Details Form */}
+            {/* Contact Form */}
             <form onSubmit={handleCheckout} className="space-y-4">
-              <div className="bg-white dark:bg-[#141a24] rounded-3xl border border-stone-200/60 dark:border-white/5 p-4 sm:p-5 space-y-3.5 shadow-xs">
-                <h3 className="text-xs font-bold uppercase tracking-wider text-stone-500 dark:text-stone-400">
+              <div className="bg-white dark:bg-[#181b20] rounded-2xl border border-zinc-200/80 dark:border-zinc-800 p-4 space-y-3">
+                <h3 className="text-xs font-semibold text-zinc-900 dark:text-white">
                   {t.contactInfo}
                 </h3>
 
                 <div>
-                  <label className="block text-xs font-semibold text-stone-700 dark:text-stone-300 mb-1">
+                  <label className="block text-[11px] text-zinc-500 mb-1">
                     {t.customerName} *
                   </label>
                   <input
@@ -480,12 +429,12 @@ export const CartView: React.FC<CartViewProps> = ({ onClose, onOrderSuccess }) =
                     placeholder={t.customerNamePlaceholder}
                     value={customerName}
                     onChange={(e) => setCustomerName(e.target.value)}
-                    className="w-full px-4 py-2.5 bg-stone-50 dark:bg-slate-800/80 rounded-2xl text-xs sm:text-sm text-stone-900 dark:text-white border border-stone-200/60 dark:border-white/5 focus:border-rose-500 focus:outline-none transition-colors placeholder:text-stone-400"
+                    className="w-full px-3.5 py-2.5 bg-zinc-50 dark:bg-zinc-800/80 rounded-xl text-xs sm:text-sm text-zinc-900 dark:text-white border border-zinc-200 dark:border-zinc-700 focus:border-zinc-400 focus:outline-none placeholder:text-zinc-400"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-stone-700 dark:text-stone-300 mb-1">
+                  <label className="block text-[11px] text-zinc-500 mb-1">
                     {t.phoneNumber}
                   </label>
                   <input
@@ -493,13 +442,13 @@ export const CartView: React.FC<CartViewProps> = ({ onClose, onOrderSuccess }) =
                     placeholder={t.phoneNumberPlaceholder}
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
-                    className="w-full px-4 py-2.5 bg-stone-50 dark:bg-slate-800/80 rounded-2xl text-xs sm:text-sm text-stone-900 dark:text-white border border-stone-200/60 dark:border-white/5 focus:border-rose-500 focus:outline-none transition-colors placeholder:text-stone-400"
+                    className="w-full px-3.5 py-2.5 bg-zinc-50 dark:bg-zinc-800/80 rounded-xl text-xs sm:text-sm text-zinc-900 dark:text-white border border-zinc-200 dark:border-zinc-700 focus:border-zinc-400 focus:outline-none placeholder:text-zinc-400"
                   />
                 </div>
 
                 {!needCallRecipient && (
                   <div>
-                    <label className="block text-xs font-semibold text-stone-700 dark:text-stone-300 mb-1">
+                    <label className="block text-[11px] text-zinc-500 mb-1">
                       {t.addressComment}
                     </label>
                     <textarea
@@ -507,78 +456,65 @@ export const CartView: React.FC<CartViewProps> = ({ onClose, onOrderSuccess }) =
                       placeholder={t.addressCommentPlaceholder}
                       value={address}
                       onChange={(e) => setAddress(e.target.value)}
-                      className="w-full px-4 py-2.5 bg-stone-50 dark:bg-slate-800/80 rounded-2xl text-xs sm:text-sm text-stone-900 dark:text-white border border-stone-200/60 dark:border-white/5 focus:border-rose-500 focus:outline-none transition-colors placeholder:text-stone-400 resize-none"
+                      className="w-full px-3.5 py-2 bg-zinc-50 dark:bg-zinc-800/80 rounded-xl text-xs sm:text-sm text-zinc-900 dark:text-white border border-zinc-200 dark:border-zinc-700 focus:border-zinc-400 focus:outline-none placeholder:text-zinc-400 resize-none"
                     />
-                    <div className="mt-2 p-2.5 rounded-xl bg-amber-50/80 dark:bg-amber-950/30 border border-amber-200/50 dark:border-amber-800/30 text-[11px] text-amber-800 dark:text-amber-200 flex items-center gap-1.5 font-medium">
-                      <span>📍</span>
-                      <span>{t.pickupInfo}</span>
-                    </div>
+                    <p className="mt-1 text-[11px] text-zinc-400">
+                      {t.pickupInfo}
+                    </p>
                   </div>
                 )}
 
                 <div>
-                  <label className="block text-xs font-semibold text-stone-700 dark:text-stone-300 mb-1">
-                    💌 {t.cardMessage}
+                  <label className="block text-[11px] text-zinc-500 mb-1">
+                    {t.cardMessage}
                   </label>
                   <textarea
                     rows={2}
                     placeholder={t.cardMessagePlaceholder}
                     value={cardMessage}
                     onChange={(e) => setCardMessage(e.target.value)}
-                    className="w-full px-4 py-2.5 bg-rose-50/50 dark:bg-rose-950/20 rounded-2xl text-xs sm:text-sm text-stone-900 dark:text-white border border-rose-200/60 dark:border-rose-900/30 focus:border-rose-500 focus:outline-none transition-colors placeholder:text-stone-400 resize-none italic"
+                    className="w-full px-3.5 py-2 bg-zinc-50 dark:bg-zinc-800/80 rounded-xl text-xs sm:text-sm text-zinc-900 dark:text-white border border-zinc-200 dark:border-zinc-700 focus:border-zinc-400 focus:outline-none placeholder:text-zinc-400 resize-none"
                   />
                 </div>
               </div>
 
-              {/* Order Summary & Pricing breakdown */}
-              <div className="bg-white dark:bg-[#141a24] rounded-3xl border border-stone-200/60 dark:border-white/5 p-4 sm:p-5 space-y-2.5 shadow-xs">
-                <div className="flex justify-between text-xs text-stone-500 dark:text-stone-400">
+              {/* Summary */}
+              <div className="bg-white dark:bg-[#181b20] rounded-2xl border border-zinc-200/80 dark:border-zinc-800 p-4 space-y-2">
+                <div className="flex justify-between text-xs text-zinc-500">
                   <span>{t.itemsInOrder}</span>
-                  <span className="font-bold text-stone-700 dark:text-stone-300">
-                    {totalCount} шт.
-                  </span>
+                  <span>{totalCount} шт.</span>
                 </div>
-                <div className="flex justify-between text-xs text-stone-500 dark:text-stone-400">
+                <div className="flex justify-between text-xs text-zinc-500">
                   <span>{t.delivery}</span>
-                  <span className="text-emerald-600 dark:text-emerald-400 font-bold">{t.freeDelivery}</span>
+                  <span className="text-zinc-900 dark:text-zinc-200 font-medium">{t.freeDelivery}</span>
                 </div>
-                <div className="border-t border-dashed border-[#e8e4da] dark:border-white/10 pt-2.5 flex justify-between items-baseline">
-                  <span className="text-sm font-black text-stone-900 dark:text-white">{t.totalToPay}</span>
-                  <span className="text-xl font-black text-[#131d33] dark:text-[#f8fafc]">
+                <div className="border-t border-zinc-100 dark:border-zinc-800 pt-2 flex justify-between items-baseline">
+                  <span className="text-sm font-semibold text-zinc-900 dark:text-white">{t.totalToPay}</span>
+                  <span className="text-lg font-bold text-zinc-900 dark:text-white">
                     {formatCurrency(totalPrice)}
                   </span>
                 </div>
               </div>
 
               {error && (
-                <div className="p-3.5 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800 text-red-600 dark:text-red-400 text-xs rounded-2xl flex items-center gap-2">
+                <div className="p-3 bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-900 text-red-600 dark:text-red-400 text-xs rounded-xl flex items-center gap-2">
                   <AlertCircle className="w-4 h-4 shrink-0" />
                   <span>{error}</span>
                 </div>
               )}
 
-              {/* Floating Bottom Checkout Button */}
-              <div className="fixed bottom-0 left-0 right-0 p-4 bg-white/90 dark:bg-[#0b0f17]/90 backdrop-blur-xl border-t border-[#e8e4da] dark:border-white/5 z-30">
+              {/* Bottom Checkout Bar */}
+              <div className="fixed bottom-0 left-0 right-0 p-3.5 bg-white/95 dark:bg-[#181b20]/95 backdrop-blur-md border-t border-zinc-200/80 dark:border-zinc-800 z-30">
                 <div className="max-w-xl mx-auto">
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full py-4 px-5 bg-[#131d33] hover:bg-[#1a2846] text-white rounded-2xl font-black text-sm sm:text-base shadow-xl shadow-[#131d33]/25 flex items-center justify-between active:scale-[0.99] transition-all disabled:opacity-70 cursor-pointer border border-[#2b3c5c]"
+                    className="w-full py-3.5 px-5 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 rounded-xl font-semibold text-sm flex items-center justify-between active:scale-[0.99] transition-transform disabled:opacity-60 cursor-pointer"
                   >
-                    <div className="flex items-center gap-2">
-                      <CreditCard className="w-5 h-5 text-[#c5a880]" />
-                      <span className="font-brand-serif tracking-wider uppercase">{t.proceedToCheckout}</span>
-                    </div>
-                    <div className="flex items-center gap-1.5 font-black text-base text-[#f1f5f9]">
-                      {isSubmitting ? (
-                        <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                      ) : (
-                        <>
-                          <span>{formatCurrency(totalPrice)}</span>
-                          <ChevronRight className="w-4 h-4 text-[#c5a880]" />
-                        </>
-                      )}
-                    </div>
+                    <span>{t.proceedToCheckout}</span>
+                    <span className="font-bold">
+                      {isSubmitting ? '...' : formatCurrency(totalPrice)}
+                    </span>
                   </button>
                 </div>
               </div>

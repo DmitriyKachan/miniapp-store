@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useCallback } from 'react';
-import { ShieldCheck, Truck, User, X } from 'lucide-react';
+import { X } from 'lucide-react';
 import { hapticNotification } from '../utils/telegram';
 
 export interface AppNotification {
@@ -29,68 +29,39 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({ 
       createdAt: Date.now(),
     };
 
-    setNotifications((prev) => [newNotif, ...prev.slice(0, 2)]);
+    setNotifications((prev) => [newNotif, ...prev.slice(0, 1)]);
 
     setTimeout(() => {
       setNotifications((prev) => prev.filter((n) => n.id !== newNotif.id));
-    }, 5500);
+    }, 3500);
   }, []);
 
   const dismiss = (id: string) => {
     setNotifications((prev) => prev.filter((n) => n.id !== id));
   };
 
-  const getRoleBadge = (role: 'client' | 'florist' | 'courier') => {
-    switch (role) {
-      case 'florist':
-        return { label: 'Сповіщення флориста', icon: ShieldCheck, color: 'bg-rose-500 text-white' };
-      case 'courier':
-        return { label: 'Сповіщення кур\'єра', icon: Truck, color: 'bg-indigo-600 text-white' };
-      default:
-        return { label: 'Сповіщення клієнта', icon: User, color: 'bg-emerald-600 text-white' };
-    }
-  };
-
   return (
     <NotificationContext.Provider value={{ showNotification }}>
       {children}
 
-      {/* Floating Live Notification Toasts for Testing */}
-      <div className="fixed top-14 left-3 right-3 sm:left-auto sm:right-4 sm:w-96 z-50 pointer-events-none space-y-2">
-        {notifications.map((notif) => {
-          const badge = getRoleBadge(notif.role);
-          return (
-            <div
-              key={notif.id}
-              className="pointer-events-auto bg-white/95 dark:bg-[#18222d]/95 backdrop-blur-md rounded-2xl p-3.5 shadow-2xl border border-gray-100 dark:border-gray-700 animate-in slide-in-from-top-4 duration-300 flex items-start gap-3 ring-1 ring-black/5"
-            >
-              <div className={`p-2 rounded-xl shrink-0 ${badge.color}`}>
-                <badge.icon className="w-4 h-4" />
-              </div>
-
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-1.5">
-                  <span className="text-[10px] uppercase font-extrabold tracking-wider text-gray-500 dark:text-gray-400">
-                    {badge.label}
-                  </span>
-                </div>
-                <h4 className="text-xs font-bold text-gray-900 dark:text-white mt-0.5">
-                  {notif.title}
-                </h4>
-                <p className="text-[11px] text-gray-600 dark:text-gray-300 mt-0.5 leading-snug">
-                  {notif.message}
-                </p>
-              </div>
-
-              <button
-                onClick={() => dismiss(notif.id)}
-                className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 p-1 shrink-0 cursor-pointer"
-              >
-                <X className="w-3.5 h-3.5" />
-              </button>
+      <div className="fixed top-16 left-3.5 right-3.5 sm:left-auto sm:right-4 sm:w-80 z-50 pointer-events-none space-y-2">
+        {notifications.map((notif) => (
+          <div
+            key={notif.id}
+            className="pointer-events-auto bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 rounded-xl px-3.5 py-2.5 shadow-lg flex items-center justify-between gap-3"
+          >
+            <div className="min-w-0 flex-1">
+              <h4 className="text-xs font-semibold truncate">{notif.title}</h4>
+              <p className="text-[11px] opacity-80 truncate">{notif.message}</p>
             </div>
-          );
-        })}
+            <button
+              onClick={() => dismiss(notif.id)}
+              className="opacity-60 hover:opacity-100 p-0.5 shrink-0 cursor-pointer"
+            >
+              <X className="w-3.5 h-3.5" />
+            </button>
+          </div>
+        ))}
       </div>
     </NotificationContext.Provider>
   );

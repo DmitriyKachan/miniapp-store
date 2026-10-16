@@ -14,7 +14,7 @@ import { CourierDashboard } from './components/courier/CourierDashboard';
 import type { Category, Product, Order } from './types';
 import { api } from './api';
 import { getLocalizedProduct } from './i18n/translations';
-import { ShoppingBag, ArrowRight, RefreshCw, AlertCircle, MapPin, Clock, Truck, ExternalLink } from 'lucide-react';
+import { ShoppingBag, ArrowRight, RefreshCw, AlertCircle, Clock, Truck, ExternalLink } from 'lucide-react';
 import { hapticImpact, getTelegramWebApp, openExternalLink } from './utils/telegram';
 
 const ShopContent: React.FC = () => {
@@ -90,11 +90,12 @@ const ShopContent: React.FC = () => {
 
   return (
     <div
-      className="min-h-screen min-h-[100dvh] w-full max-w-full overflow-x-hidden bg-[#faf7f5] dark:bg-[#0b0f17] text-stone-900 dark:text-stone-100 flex flex-col font-sans transition-colors"
+      className="min-h-screen min-h-[100dvh] w-full max-w-full overflow-x-hidden bg-[#f8f8f9] dark:bg-[#0f1115] text-zinc-900 dark:text-zinc-100 flex flex-col font-sans"
       style={{
-        paddingBottom: mode === 'buyer' && totalCount > 0
-          ? 'calc(7.5rem + env(safe-area-inset-bottom, 16px))'
-          : 'calc(3.5rem + env(safe-area-inset-bottom, 16px))'
+        paddingBottom:
+          mode === 'buyer' && totalCount > 0
+            ? 'calc(6rem + env(safe-area-inset-bottom, 16px))'
+            : 'calc(2.5rem + env(safe-area-inset-bottom, 16px))',
       }}
     >
       {/* Top Header */}
@@ -114,54 +115,30 @@ const ShopContent: React.FC = () => {
       ) : mode === 'courier' ? (
         <CourierDashboard />
       ) : (
-        <main className="max-w-4xl mx-auto w-full px-3.5 sm:px-6 py-4 flex-1 flex flex-col space-y-4">
-          
-          {/* Flowers Lviv Brand & Atelier Showcase Banner */}
-          <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#101726] via-[#152238] to-[#1c2c48] text-white p-5 sm:p-6 shadow-xl shadow-[#131d33]/25 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5 border border-[#243452]">
-            <div className="space-y-3 z-10 max-w-lg">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md text-[10px] font-black tracking-widest uppercase text-[#c5a880] border border-[#c5a880]/30 shadow-xs">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#c5a880] animate-pulse" />
-                <span className="font-brand-serif">Flowers Lviv Atelier</span>
-              </div>
-              <h2 className="font-brand-serif text-lg sm:text-2xl font-black tracking-wide leading-snug text-white">
-                Авторські букети та доставка квітів по Львову
-              </h2>
-              <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-[#a3b3cc] font-medium">
-                <span className="flex items-center gap-1.5">
-                  <MapPin className="w-3.5 h-3.5 text-[#c5a880] shrink-0" />
-                  <span>вул. Топольна, 4В</span>
-                </span>
-                <span className="flex items-center gap-1.5">
-                  <Clock className="w-3.5 h-3.5 text-[#c5a880] shrink-0" />
-                  <span>10:00 – 20:00</span>
-                </span>
-                <span className="flex items-center gap-1.5">
-                  <Truck className="w-3.5 h-3.5 text-[#c5a880] shrink-0" />
-                  <span>від 60 хв</span>
-                </span>
-              </div>
+        <main className="max-w-4xl mx-auto w-full px-3.5 sm:px-6 py-3.5 flex-1 flex flex-col space-y-3.5">
+          {/* Compact Info Bar */}
+          <div className="flex items-center justify-between gap-2 px-3.5 py-2.5 rounded-xl bg-white dark:bg-[#181b20] border border-zinc-200/80 dark:border-zinc-800 text-xs text-zinc-600 dark:text-zinc-400">
+            <div className="flex flex-wrap items-center gap-x-3.5 gap-y-1">
+              <span className="flex items-center gap-1.5">
+                <Clock className="w-3.5 h-3.5 text-zinc-400 shrink-0" />
+                <span>10:00 – 20:00</span>
+              </span>
+              <span className="flex items-center gap-1.5">
+                <Truck className="w-3.5 h-3.5 text-zinc-400 shrink-0" />
+                <span>Доставка від 60 хв</span>
+              </span>
             </div>
 
-            <div className="flex items-center gap-3 z-10 w-full sm:w-auto justify-between sm:justify-end">
-              <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl overflow-hidden bg-white p-1 shadow-lg shrink-0 border border-white/20">
-                <img src="./logo.png" alt="Flowers Lviv Logo" className="w-full h-full object-cover" />
-              </div>
-              
-              <button
-                onClick={() => {
-                  hapticImpact('light');
-                  openExternalLink('https://www.instagram.com/flowers___lviv/');
-                }}
-                className="px-4 py-2.5 rounded-2xl bg-white/10 hover:bg-white/20 text-[#f1f5f9] border border-white/20 font-bold text-xs shadow-md active:scale-95 transition-all flex items-center gap-2 shrink-0 cursor-pointer backdrop-blur-md"
-              >
-                <span>@flowers___lviv</span>
-                <ExternalLink className="w-3.5 h-3.5 text-[#c5a880]" />
-              </button>
-            </div>
-
-            {/* Subtle background botanical ambient glows */}
-            <div className="absolute -right-12 -top-12 w-56 h-56 bg-[#6e809f]/15 rounded-full blur-3xl pointer-events-none" />
-            <div className="absolute left-1/3 -bottom-16 w-48 h-48 bg-[#c5a880]/10 rounded-full blur-2xl pointer-events-none" />
+            <button
+              onClick={() => {
+                hapticImpact('light');
+                openExternalLink('https://www.instagram.com/flowers___lviv/');
+              }}
+              className="text-zinc-900 dark:text-zinc-200 font-medium hover:underline flex items-center gap-1 shrink-0 cursor-pointer"
+            >
+              <span>Instagram</span>
+              <ExternalLink className="w-3 h-3 text-zinc-400" />
+            </button>
           </div>
 
           {/* Categories Horizontal Scroll */}
@@ -173,14 +150,14 @@ const ShopContent: React.FC = () => {
 
           {/* Error Banner */}
           {error && (
-            <div className="p-4 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800/80 rounded-2xl flex items-center justify-between gap-3 text-xs text-red-600 dark:text-red-400">
+            <div className="p-3.5 bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-900/50 rounded-xl flex items-center justify-between gap-3 text-xs text-red-600 dark:text-red-400">
               <div className="flex items-center gap-2">
                 <AlertCircle className="w-4 h-4 shrink-0" />
                 <span>{error}</span>
               </div>
               <button
                 onClick={loadData}
-                className="px-3.5 py-1.5 bg-rose-600 text-white rounded-xl font-bold hover:bg-rose-700 flex items-center gap-1.5 cursor-pointer"
+                className="px-3 py-1.5 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 rounded-lg font-medium flex items-center gap-1.5 cursor-pointer shrink-0"
               >
                 <RefreshCw className="w-3.5 h-3.5" />
                 <span>{t.retry}</span>
@@ -190,21 +167,21 @@ const ShopContent: React.FC = () => {
 
           {/* Loading Indicator */}
           {isLoading ? (
-            <div className="py-28 flex flex-col items-center justify-center space-y-3">
-              <div className="w-9 h-9 border-3 border-rose-600 border-t-transparent rounded-full animate-spin" />
-              <p className="text-xs text-stone-400 font-medium">{t.loadingCatalog}</p>
+            <div className="py-24 flex flex-col items-center justify-center space-y-2.5">
+              <div className="w-6 h-6 border-2 border-zinc-900 dark:border-white border-t-transparent rounded-full animate-spin" />
+              <p className="text-xs text-zinc-400">{t.loadingCatalog}</p>
             </div>
           ) : filteredProducts.length === 0 ? (
             /* Empty State */
-            <div className="py-24 text-center space-y-3.5 bg-white dark:bg-[#141a24] rounded-3xl border border-stone-200/60 dark:border-white/5 p-8 shadow-xs">
-              <div className="w-16 h-16 rounded-3xl bg-rose-500/10 dark:bg-rose-950/40 flex items-center justify-center text-rose-500 mx-auto">
-                <ShoppingBag className="w-8 h-8" />
+            <div className="py-16 text-center space-y-3 bg-white dark:bg-[#181b20] rounded-2xl border border-zinc-200/80 dark:border-zinc-800 p-6">
+              <div className="w-11 h-11 rounded-xl bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center text-zinc-400 mx-auto">
+                <ShoppingBag className="w-5 h-5" />
               </div>
               <div className="space-y-1">
-                <h3 className="text-base font-black text-stone-900 dark:text-white">
+                <h3 className="text-sm font-semibold text-zinc-900 dark:text-white">
                   {t.emptyProductsTitle}
                 </h3>
-                <p className="text-xs text-stone-500 max-w-xs mx-auto leading-relaxed">
+                <p className="text-xs text-zinc-500 max-w-xs mx-auto">
                   {searchQuery
                     ? `${t.emptyProductsDesc}: «${searchQuery}»`
                     : t.emptyProductsDesc}
@@ -216,15 +193,15 @@ const ShopContent: React.FC = () => {
                     setSearchQuery('');
                     setSelectedCategoryId(null);
                   }}
-                  className="mt-2 px-4 py-2 bg-stone-100 dark:bg-slate-800 text-xs font-bold text-rose-600 dark:text-rose-400 rounded-xl hover:bg-rose-50 transition-colors cursor-pointer"
+                  className="mt-1 px-3.5 py-1.5 bg-zinc-100 dark:bg-zinc-800 text-xs font-medium text-zinc-900 dark:text-zinc-200 rounded-lg hover:bg-zinc-200/70 transition-colors cursor-pointer"
                 >
                   {t.resetFilters}
                 </button>
               )}
             </div>
           ) : (
-            /* Products Grid with optimal responsive spacing */
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 sm:gap-4">
+            /* Products Grid */
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2.5 sm:gap-3.5">
               {filteredProducts.map((product) => (
                 <ProductCard
                   key={product.id}
@@ -240,9 +217,9 @@ const ShopContent: React.FC = () => {
       {/* Floating Bottom Cart Bar */}
       {mode === 'buyer' && totalCount > 0 && !isCartOpen && (
         <div
-          className="fixed left-3 sm:left-4 right-3 sm:right-4 max-w-md mx-auto z-40 animate-in slide-in-from-bottom-8 duration-300"
+          className="fixed left-3.5 right-3.5 max-w-md mx-auto z-40"
           style={{
-            bottom: 'calc(1rem + env(safe-area-inset-bottom, 0px))',
+            bottom: 'calc(0.75rem + env(safe-area-inset-bottom, 0px))',
           }}
         >
           <button
@@ -250,20 +227,20 @@ const ShopContent: React.FC = () => {
               hapticImpact('medium');
               setIsCartOpen(true);
             }}
-            className="w-full bg-[#131d33] hover:bg-[#1a2846] text-white p-3.5 sm:p-4 rounded-2xl sm:rounded-3xl shadow-2xl shadow-[#131d33]/40 flex items-center justify-between active:scale-[0.99] transition-all cursor-pointer border border-[#2b3c5c]"
+            className="w-full bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 px-4 py-3.5 rounded-xl shadow-lg flex items-center justify-between active:scale-[0.99] transition-transform cursor-pointer"
           >
-            <div className="flex items-center gap-2.5 sm:gap-3">
-              <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl sm:rounded-2xl bg-[#c5a880] text-[#131d33] flex items-center justify-center font-black text-xs shadow-xs">
+            <div className="flex items-center gap-2.5">
+              <span className="w-6 h-6 rounded-md bg-white/15 dark:bg-zinc-900/10 flex items-center justify-center font-semibold text-xs">
                 {totalCount}
-              </div>
-              <span className="font-brand-serif text-xs sm:text-sm font-bold tracking-wider uppercase">Квітковий кошик</span>
+              </span>
+              <span className="text-sm font-semibold">Кошик</span>
             </div>
 
             <div className="flex items-center gap-2">
-              <span className="text-sm sm:text-base font-black tracking-tight text-[#f1f5f9]">
+              <span className="text-sm font-bold">
                 {formatCurrency(totalPrice)}
               </span>
-              <ArrowRight className="w-4 h-4 text-[#c5a880]" />
+              <ArrowRight className="w-4 h-4 opacity-75" />
             </div>
           </button>
         </div>

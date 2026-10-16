@@ -2,34 +2,28 @@
 
 @layer base {
   :root {
-    --tg-theme-bg-color: #faf8f5;
+    --tg-theme-bg-color: #f8f8f9;
     --tg-theme-secondary-bg-color: #ffffff;
-    --tg-theme-text-color: #131d33;
-    --tg-theme-hint-color: #6e809f;
-    --tg-theme-link-color: #131d33;
-    --tg-theme-button-color: #131d33;
+    --tg-theme-text-color: #18181b;
+    --tg-theme-hint-color: #71717a;
+    --tg-theme-link-color: #18181b;
+    --tg-theme-button-color: #18181b;
     --tg-theme-button-text-color: #ffffff;
     --tg-theme-section-bg-color: #ffffff;
-    --tg-theme-section-separator-color: #e8e4da;
-    
-    --brand-ink: #131d33;
-    --brand-ink-light: #1e2d4a;
-    --brand-slate: #6e809f;
-    --brand-cream: #faf8f5;
-    --brand-gold: #c5a880;
+    --tg-theme-section-separator-color: #e4e4e7;
   }
 
   @media (prefers-color-scheme: dark) {
     :root {
-      --tg-theme-bg-color: #0b111d;
-      --tg-theme-secondary-bg-color: #131b2d;
-      --tg-theme-text-color: #f8fafc;
-      --tg-theme-hint-color: #8fa0ba;
-      --tg-theme-link-color: #8fa0ba;
-      --tg-theme-button-color: #1e2d4a;
-      --tg-theme-button-text-color: #ffffff;
-      --tg-theme-section-bg-color: #131b2d;
-      --tg-theme-section-separator-color: #1f2b43;
+      --tg-theme-bg-color: #0f1115;
+      --tg-theme-secondary-bg-color: #181b20;
+      --tg-theme-text-color: #f4f4f5;
+      --tg-theme-hint-color: #a1a1aa;
+      --tg-theme-link-color: #e4e4e7;
+      --tg-theme-button-color: #f4f4f5;
+      --tg-theme-button-text-color: #18181b;
+      --tg-theme-section-bg-color: #181b20;
+      --tg-theme-section-separator-color: #27272a;
     }
   }
 
@@ -58,85 +52,16 @@
   }
 }
 
-/* Font classes */
-.font-brand-serif {
-  font-family: 'Cinzel', 'Cormorant Garamond', Georgia, serif;
-}
-
-.font-editorial {
-  font-family: 'Cormorant Garamond', Georgia, serif;
-}
-
-/* Botanical brand paper texture & watermark effects */
-.bg-porcelain {
-  background-color: #faf8f5;
-}
-
-.dark .bg-porcelain {
-  background-color: #0b111d;
-}
-
-/* Luxury ambient and glass styling */
-.glass-surface {
-  background: rgba(255, 255, 255, 0.88);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-}
-
-.dark .glass-surface {
-  background: rgba(19, 27, 45, 0.88);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-}
-
-.glass-pill {
-  background: rgba(255, 255, 255, 0.75);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-}
-
-.dark .glass-pill {
-  background: rgba(25, 36, 58, 0.75);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-}
-
-/* Subtle Shimmer Animation */
-@keyframes shimmer {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(100%); }
-}
-
-.animate-shimmer {
-  position: relative;
-  overflow: hidden;
-}
-
-.animate-shimmer::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);
-  animation: shimmer 2.5s infinite;
-}
-
-/* Smooth custom scrollbars in slate ink */
 ::-webkit-scrollbar {
-  width: 5px;
-  height: 5px;
+  width: 4px;
+  height: 4px;
 }
 ::-webkit-scrollbar-track {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(110, 128, 159, 0.25);
+  background: rgba(113, 113, 122, 0.25);
   border-radius: 9999px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(19, 29, 51, 0.4);
 }
 
 .no-scrollbar::-webkit-scrollbar {

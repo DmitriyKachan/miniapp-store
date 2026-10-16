@@ -8,12 +8,8 @@ import {
   MapPin,
   Phone,
   Clock,
-  EyeOff,
-  PhoneCall,
-  CheckCircle2,
   Navigation,
   RefreshCw,
-  Sparkles,
   User,
 } from 'lucide-react';
 import { hapticImpact } from '../../utils/telegram';
@@ -50,24 +46,14 @@ export const CourierDashboard: React.FC = () => {
       if (status === 'in_delivery') {
         showNotification(
           `Кур'єр прийняв замовлення #${orderId}`,
-          'Букет забрано з майстерні Flowers Lviv, кур\'єр вирушив до одержувача',
+          'Кур\'єр вирушив за адресою',
           'courier'
-        );
-        showNotification(
-          `Ваш букет вже прямує до вас!`,
-          `Кур'єр виїхав за вказаною адресою доставки по Львову.`,
-          'client'
         );
       } else if (status === 'completed') {
         showNotification(
-          `Замовлення #${orderId} успішно доставлено!`,
-          'Кур\'єр підтвердив вручення букета одержувачу.',
+          `Замовлення #${orderId} доставлено`,
+          'Кур\'єр підтвердив вручення',
           'courier'
-        );
-        showNotification(
-          `Букет успішно доставлено!`,
-          'Одержувач прийняв квіти. Дякуємо за замовлення у Flowers Lviv!',
-          'client'
         );
       }
     } catch (err: any) {
@@ -75,7 +61,6 @@ export const CourierDashboard: React.FC = () => {
     }
   };
 
-  // Orders relevant to courier
   const activeOrders = orders.filter(
     (o) => o.status === 'ready_for_pickup' || o.status === 'in_delivery' || o.status === 'assembling' || o.status === 'pending'
   );
@@ -84,20 +69,36 @@ export const CourierDashboard: React.FC = () => {
   const displayedOrders = activeTab === 'to_deliver' ? activeOrders : completedOrders;
 
   return (
-    <div className="max-w-4xl mx-auto w-full px-3.5 sm:px-6 py-4 space-y-4 animate-in fade-in duration-200 pb-20">
-      
-      {/* Top Courier Stats Banner */}
-      <div className="p-5 rounded-3xl bg-gradient-to-br from-indigo-950 via-slate-900 to-stone-950 text-white shadow-xl flex items-center justify-between border border-indigo-500/20">
-        <div className="space-y-1">
-          <div className="flex items-center gap-2">
-            <div className="w-9 h-9 rounded-2xl bg-indigo-500/20 border border-indigo-400/40 flex items-center justify-center text-indigo-300">
-              <Truck className="w-4.5 h-4.5" />
-            </div>
-            <h2 className="text-base sm:text-lg font-black tracking-tight">{t.courierDashboardTitle}</h2>
-          </div>
-          <p className="text-xs text-indigo-200/80 font-medium">
-            {activeOrders.filter((o) => o.status === 'ready_for_pickup' || o.status === 'in_delivery').length} готові до швидкої доставки по Львову
-          </p>
+    <div className="max-w-4xl mx-auto w-full px-3.5 sm:px-6 py-3.5 space-y-3.5 pb-20">
+      {/* Top Bar */}
+      <div className="flex items-center justify-between gap-2">
+        <div className="flex items-center bg-zinc-200/70 dark:bg-zinc-800 p-1 rounded-xl">
+          <button
+            onClick={() => {
+              hapticImpact('light');
+              setActiveTab('to_deliver');
+            }}
+            className={`px-3.5 py-1.5 text-xs font-semibold rounded-lg transition-colors cursor-pointer ${
+              activeTab === 'to_deliver'
+                ? 'bg-white dark:bg-[#181b20] text-zinc-900 dark:text-white shadow-2xs'
+                : 'text-zinc-600 dark:text-zinc-400'
+            }`}
+          >
+            Активні ({activeOrders.length})
+          </button>
+          <button
+            onClick={() => {
+              hapticImpact('light');
+              setActiveTab('completed');
+            }}
+            className={`px-3.5 py-1.5 text-xs font-semibold rounded-lg transition-colors cursor-pointer ${
+              activeTab === 'completed'
+                ? 'bg-white dark:bg-[#181b20] text-zinc-900 dark:text-white shadow-2xs'
+                : 'text-zinc-600 dark:text-zinc-400'
+            }`}
+          >
+            Доставлені ({completedOrders.length})
+          </button>
         </div>
 
         <button
@@ -105,234 +106,130 @@ export const CourierDashboard: React.FC = () => {
             hapticImpact('light');
             loadOrders();
           }}
-          className="p-3 rounded-2xl bg-white/10 hover:bg-white/20 text-white transition-all cursor-pointer active:scale-90"
+          className="h-9 w-9 rounded-xl bg-white dark:bg-[#181b20] border border-zinc-200/80 dark:border-zinc-800 flex items-center justify-center text-zinc-600 dark:text-zinc-300 cursor-pointer"
           title="Оновити"
         >
           <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
         </button>
       </div>
 
-      {/* Segmented Tab Controls */}
-      <div className="flex items-center bg-stone-200/60 dark:bg-slate-800/80 p-1.5 rounded-2xl border border-stone-200/40 dark:border-white/5">
-        <button
-          onClick={() => {
-            hapticImpact('light');
-            setActiveTab('to_deliver');
-          }}
-          className={`flex-1 py-2.5 text-xs font-black uppercase tracking-wider rounded-xl transition-all cursor-pointer ${
-            activeTab === 'to_deliver'
-              ? 'bg-white dark:bg-[#141a24] text-stone-900 dark:text-white shadow-sm ring-1 ring-black/5 dark:ring-white/10'
-              : 'text-stone-600 dark:text-stone-400'
-          }`}
-        >
-          До доставки ({activeOrders.length})
-        </button>
-        <button
-          onClick={() => {
-            hapticImpact('light');
-            setActiveTab('completed');
-          }}
-          className={`flex-1 py-2.5 text-xs font-black uppercase tracking-wider rounded-xl transition-all cursor-pointer ${
-            activeTab === 'completed'
-              ? 'bg-white dark:bg-[#141a24] text-stone-900 dark:text-white shadow-sm ring-1 ring-black/5 dark:ring-white/10'
-              : 'text-stone-600 dark:text-stone-400'
-          }`}
-        >
-          Доставлені ({completedOrders.length})
-        </button>
-      </div>
-
       {/* Deliveries List */}
       {displayedOrders.length === 0 ? (
-        <div className="py-20 text-center space-y-3 bg-white dark:bg-[#141a24] rounded-3xl border border-stone-200/60 dark:border-white/5 p-8 shadow-xs">
-          <div className="w-16 h-16 rounded-3xl bg-indigo-500/10 dark:bg-indigo-950/40 flex items-center justify-center text-indigo-500 mx-auto">
-            <Truck className="w-8 h-8" />
-          </div>
-          <h3 className="text-sm sm:text-base font-black text-stone-900 dark:text-white">
+        <div className="py-16 text-center space-y-2 bg-white dark:bg-[#181b20] rounded-2xl border border-zinc-200/80 dark:border-zinc-800 p-6">
+          <Truck className="w-8 h-8 text-zinc-300 dark:text-zinc-600 mx-auto" />
+          <h3 className="text-sm font-semibold text-zinc-900 dark:text-white">
             {t.courierNoDeliveries}
           </h3>
-          <p className="text-xs text-stone-400">Немає активних маршрутів на цей момент</p>
         </div>
       ) : (
-        <div className="space-y-3.5">
+        <div className="space-y-2.5">
           {displayedOrders.map((order) => {
-            const isCurrentlyInDelivery = order.status === 'in_delivery';
-            const isReadyForPickup = order.status === 'ready_for_pickup';
-            const cleanAddress = (order.address || order.comment || '').split('\n')[0].replace(/^(📞|🤫|💌).*$/, '').trim();
+            const cleanAddress = (order.address || order.comment || '')
+              .split('\n')[0]
+              .replace(/^(📞|🤫|💌).*$/, '')
+              .trim();
 
             return (
               <div
                 key={order.id}
-                className={`p-4 sm:p-5 rounded-3xl border transition-all space-y-3.5 ${
-                  isCurrentlyInDelivery
-                    ? 'bg-indigo-500/10 dark:bg-indigo-950/30 border-indigo-500/40 shadow-lg ring-2 ring-indigo-500/20'
-                    : isReadyForPickup
-                    ? 'bg-amber-500/10 dark:bg-amber-950/20 border-amber-500/30 shadow-xs'
-                    : 'bg-white dark:bg-[#141a24] border-stone-200/60 dark:border-white/5 shadow-xs'
-                }`}
+                className="p-4 rounded-2xl bg-white dark:bg-[#181b20] border border-zinc-200/80 dark:border-zinc-800 space-y-3"
               >
-                {/* Header: Order ID, Status & Price */}
-                <div className="flex items-center justify-between gap-2 border-b border-stone-100 dark:border-white/5 pb-3">
+                <div className="flex items-center justify-between gap-2 border-b border-zinc-100 dark:border-zinc-800 pb-2.5">
                   <div className="flex items-center gap-2">
-                    <span className="text-sm font-black text-stone-900 dark:text-white">
-                      Замовлення #{order.id}
+                    <span className="text-sm font-bold text-zinc-900 dark:text-white">
+                      #{order.id}
                     </span>
-                    <span
-                      className={`px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider ${
-                        order.status === 'in_delivery'
-                          ? 'bg-indigo-600 text-white shadow-xs animate-pulse'
-                          : order.status === 'ready_for_pickup'
-                          ? 'bg-amber-500 text-white font-black'
-                          : order.status === 'assembling'
-                          ? 'bg-purple-600 text-white'
-                          : order.status === 'completed'
-                          ? 'bg-emerald-600 text-white'
-                          : 'bg-stone-400 text-white'
-                      }`}
-                    >
+                    <span className="px-2 py-0.5 rounded-md text-[10px] font-semibold bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300">
                       {order.status === 'in_delivery'
-                        ? 'В дорозі до клієнта'
+                        ? 'У дорозі'
                         : order.status === 'ready_for_pickup'
-                        ? 'Готовий до видачі в майстерні'
+                        ? 'Готовий до видачі'
                         : order.status === 'assembling'
-                        ? 'Флорист складає букет'
+                        ? 'Складається'
                         : order.status === 'completed'
                         ? 'Доставлено'
                         : 'Нове'}
                     </span>
                   </div>
 
-                  <span className="text-sm font-black text-[#131d33] dark:text-[#f8fafc]">
+                  <span className="text-sm font-bold text-zinc-900 dark:text-white">
                     {formatCurrency(order.total_price)}
                   </span>
                 </div>
 
-                {/* Timing & Badges */}
-                <div className="flex items-center gap-2 flex-wrap">
+                {/* Details */}
+                <div className="space-y-1.5 text-xs text-zinc-600 dark:text-zinc-300">
+                  <div className="flex items-center gap-2 font-medium text-zinc-900 dark:text-white">
+                    <User className="w-3.5 h-3.5 text-zinc-400 shrink-0" />
+                    <span>{order.customer_name}</span>
+                  </div>
+
                   {(order.delivery_date || order.delivery_time) && (
-                    <div className="px-3 py-1 rounded-xl bg-stone-100 dark:bg-slate-800 text-[11px] font-bold text-stone-800 dark:text-stone-200 flex items-center gap-1.5 border border-stone-200/50 dark:border-white/5">
-                      <Clock className="w-3.5 h-3.5 text-indigo-500 shrink-0" />
+                    <div className="flex items-center gap-2">
+                      <Clock className="w-3.5 h-3.5 text-zinc-400 shrink-0" />
                       <span>
                         {order.delivery_date || 'Сьогодні'} • {order.delivery_time || '14:00'}
                       </span>
                     </div>
                   )}
 
-                  {order.is_surprise && (
-                    <div className="px-3 py-1 rounded-xl bg-purple-500/10 text-purple-700 dark:text-purple-300 text-[11px] font-bold flex items-center gap-1.5 border border-purple-500/25">
-                      <EyeOff className="w-3.5 h-3.5 shrink-0" />
-                      <span>Сюрприз (Анонімно)</span>
-                    </div>
-                  )}
-
-                  {order.need_call_recipient && (
-                    <div className="px-3 py-1 rounded-xl bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 text-[11px] font-bold flex items-center gap-1.5 border border-emerald-500/25">
-                      <PhoneCall className="w-3.5 h-3.5 shrink-0" />
-                      <span>Уточнити адресу телефоном</span>
-                    </div>
-                  )}
-                </div>
-
-                {/* Recipient details & Address */}
-                <div className="space-y-1.5 text-xs">
-                  <div className="flex items-center gap-2 text-stone-900 dark:text-stone-100 font-bold">
-                    <User className="w-3.5 h-3.5 text-stone-400 shrink-0" />
-                    <span>{order.customer_name}</span>
-                    {order.customer_username && (
-                      <span className="text-stone-400 text-[11px] font-normal">(@{order.customer_username})</span>
-                    )}
-                  </div>
-
                   {cleanAddress && (
-                    <div className="flex items-start gap-1.5 text-stone-600 dark:text-stone-300">
-                      <MapPin className="w-3.5 h-3.5 text-rose-500 shrink-0 mt-0.5" />
-                      <span className="leading-snug font-medium">{cleanAddress}</span>
-                    </div>
-                  )}
-
-                  {order.comment && order.comment.includes('💌') && (
-                    <div className="p-2.5 bg-rose-50/70 dark:bg-rose-950/20 rounded-2xl text-[11px] text-rose-800 dark:text-rose-300 italic border border-rose-200/50 dark:border-rose-900/30">
-                      {order.comment.split('\n').find((l) => l.includes('💌'))}
+                    <div className="flex items-start gap-2">
+                      <MapPin className="w-3.5 h-3.5 text-zinc-400 shrink-0 mt-0.5" />
+                      <span>{cleanAddress}</span>
                     </div>
                   )}
                 </div>
 
-                {/* Items in Bouquet */}
-                {order.items && order.items.length > 0 && (
-                  <div className="p-3 bg-stone-50 dark:bg-slate-800/60 rounded-2xl space-y-1.5 border border-stone-200/50 dark:border-white/5">
-                    <span className="text-[10px] uppercase font-bold text-stone-400 tracking-wider">
-                      Склад замовлення:
-                    </span>
-                    <div className="space-y-1">
-                      {order.items.map((it, idx) => (
-                        <div key={idx} className="flex items-center justify-between text-xs text-stone-700 dark:text-stone-300">
-                          <span className="truncate max-w-[240px] font-medium">
-                            • {it.title}
-                          </span>
-                          <span className="font-bold">x{it.quantity}</span>
-                        </div>
-                      ))}
-                    </div>
+                {/* Quick Call & Map */}
+                {(order.phone || cleanAddress) && (
+                  <div className="grid grid-cols-2 gap-2 pt-1">
+                    {order.phone ? (
+                      <a
+                        href={`tel:${order.phone.replace(/\s+/g, '')}`}
+                        onClick={() => hapticImpact('light')}
+                        className="py-2 px-3 rounded-xl bg-zinc-100 dark:bg-zinc-800 text-zinc-800 dark:text-zinc-200 text-xs font-medium flex items-center justify-center gap-1.5"
+                      >
+                        <Phone className="w-3.5 h-3.5" />
+                        <span>Дзвінок</span>
+                      </a>
+                    ) : (
+                      <div />
+                    )}
+
+                    {cleanAddress ? (
+                      <a
+                        href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(cleanAddress)}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={() => hapticImpact('light')}
+                        className="py-2 px-3 rounded-xl bg-zinc-100 dark:bg-zinc-800 text-zinc-800 dark:text-zinc-200 text-xs font-medium flex items-center justify-center gap-1.5"
+                      >
+                        <Navigation className="w-3.5 h-3.5" />
+                        <span>Карта</span>
+                      </a>
+                    ) : (
+                      <div />
+                    )}
                   </div>
                 )}
 
-                {/* Action Buttons: Map Navigator & Call */}
-                <div className="grid grid-cols-2 gap-2 pt-1">
-                  {order.phone ? (
-                    <a
-                      href={`tel:${order.phone.replace(/\s+/g, '')}`}
-                      onClick={() => hapticImpact('light')}
-                      className="py-2.5 px-3 rounded-2xl bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border border-emerald-500/25 text-xs font-bold flex items-center justify-center gap-1.5 active:scale-95 transition-all text-center cursor-pointer hover:bg-emerald-500/20"
-                    >
-                      <Phone className="w-3.5 h-3.5 shrink-0" />
-                      <span>Зателефонувати</span>
-                    </a>
-                  ) : (
-                    <div />
-                  )}
-
-                  {cleanAddress ? (
-                    <a
-                      href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(cleanAddress)}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      onClick={() => hapticImpact('light')}
-                      className="py-2.5 px-3 rounded-2xl bg-sky-500/10 text-sky-700 dark:text-sky-300 border border-sky-500/25 text-xs font-bold flex items-center justify-center gap-1.5 active:scale-95 transition-all text-center cursor-pointer hover:bg-sky-500/20"
-                    >
-                      <Navigation className="w-3.5 h-3.5 shrink-0" />
-                      <span>Навігатор (Карти)</span>
-                    </a>
-                  ) : (
-                    <div />
-                  )}
-                </div>
-
-                {/* Bottom Delivery Lifecycle Flow Action Buttons */}
                 {order.status === 'ready_for_pickup' && (
                   <button
                     onClick={() => handleUpdateStatus(order.id, 'in_delivery')}
-                    className="w-full py-3.5 px-4 bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-500 hover:to-blue-500 text-white rounded-2xl text-xs font-black flex items-center justify-center gap-2 shadow-md shadow-indigo-500/20 active:scale-[0.98] transition-all cursor-pointer"
+                    className="w-full py-2.5 px-4 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 rounded-xl text-xs font-semibold cursor-pointer"
                   >
-                    <Truck className="w-4 h-4" />
-                    <span>Забрати букет з майстерні та вирушити за адресою</span>
+                    Вирушити на доставку
                   </button>
                 )}
 
                 {order.status === 'in_delivery' && (
                   <button
                     onClick={() => handleUpdateStatus(order.id, 'completed')}
-                    className="w-full py-4 px-4 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white rounded-2xl text-xs sm:text-sm font-black flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/25 active:scale-[0.98] transition-all cursor-pointer"
+                    className="w-full py-2.5 px-4 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 rounded-xl text-xs font-semibold cursor-pointer"
                   >
-                    <CheckCircle2 className="w-4 h-4" />
-                    <span>Підтвердити вручення букета одержувачу!</span>
+                    Підтвердити доставку
                   </button>
-                )}
-
-                {(order.status === 'pending' || order.status === 'assembling') && (
-                  <div className="py-2.5 px-3 bg-stone-100 dark:bg-slate-800 text-stone-500 dark:text-stone-400 text-xs rounded-2xl flex items-center justify-center gap-1.5 border border-stone-200/40 dark:border-white/5">
-                    <Sparkles className="w-3.5 h-3.5 text-purple-500 animate-spin" />
-                    <span>Флорист готує букет. Ми сповістимо вас про готовність до видачі.</span>
-                  </div>
                 )}
               </div>
             );
